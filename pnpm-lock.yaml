@@ -10,6 +10,9 @@ specifiers:
   eslint: 8.32.0
   eslint-config-next: 13.1.5
   eslint-config-prettier: ^8.6.0
+  kysely: ^0.23.4
+  kysely-codegen: ^0.9.0
+  kysely-planetscale: ^1.2.1
   mysql2: ^3.0.1
   next: 13.1.5
   postcss: ^8.4.21
@@ -28,6 +31,8 @@ dependencies:
   '@types/react-dom': 18.0.10
   eslint: 8.32.0
   eslint-config-next: 13.1.5_7uibuqfxkfaozanbtbziikiqje
+  kysely: 0.23.4
+  kysely-planetscale: 1.2.1_3b4ga6arylazwmj6lzyyulo5vq
   next: 13.1.5_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -36,6 +41,7 @@ dependencies:
 devDependencies:
   autoprefixer: 10.4.13_postcss@8.4.21
   eslint-config-prettier: 8.6.0_eslint@8.32.0
+  kysely-codegen: 0.9.0_kysely@0.23.4+mysql2@3.0.1
   mysql2: 3.0.1
   postcss: 8.4.21
   prettier: 2.8.3
@@ -614,6 +620,11 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: false
 
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
+    dev: false
+
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -720,6 +731,11 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
+
+  /dotenv/16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+    dev: true
 
   /electron-to-chromium/1.4.284:
     resolution: {integrity: sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==}
@@ -1596,6 +1612,45 @@ packages:
       array-includes: 3.1.6
       object.assign: 4.1.4
     dev: false
+
+  /kysely-codegen/0.9.0_kysely@0.23.4+mysql2@3.0.1:
+    resolution: {integrity: sha512-VCkrEY0WPwObvT4LGJkwLn29DXmvwG2oAv94qa+yAXDPAWtYTfO8NQSqyeEiNHEWmuKI+Sl+ANSn63by2Xn1tw==}
+    hasBin: true
+    peerDependencies:
+      better-sqlite3: '>=7.6.2'
+      kysely: '>=0.19.12'
+      mysql2: ^2.3.3
+      pg: ^8.8.0
+    peerDependenciesMeta:
+      better-sqlite3:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+    dependencies:
+      chalk: 4.1.2
+      dotenv: 16.0.3
+      kysely: 0.23.4
+      micromatch: 4.0.5
+      minimist: 1.2.7
+      mysql2: 3.0.1
+    dev: true
+
+  /kysely-planetscale/1.2.1_3b4ga6arylazwmj6lzyyulo5vq:
+    resolution: {integrity: sha512-tPgyTSSkU0dwFbwSnWITU4VcuuQfsBA+HfGMYPFcUDBIjMDrzWE4Lbky7ue1NqqF58GyYPn9kOm2e61T9BVwww==}
+    peerDependencies:
+      '@planetscale/database': '*'
+      kysely: '*'
+    dependencies:
+      '@planetscale/database': 1.5.0
+      date-fns: 2.29.3
+      kysely: 0.23.4
+    dev: false
+
+  /kysely/0.23.4:
+    resolution: {integrity: sha512-3icLnj1fahUtZsP9zzOvF4DcdhekGsLX4ZaoBaIz0ZeHegyRDdbwpJD7zezAJ+KwQZNDeKchel6MikFNLsSZIA==}
+    engines: {node: '>=14.0.0'}
 
   /language-subtag-registry/0.3.22:
     resolution: {integrity: sha512-tN0MCzyWnoz/4nHS6uxdlFWoUZT7ABptwKPQ52Ea7URk6vll88bWBVhodtnlfEuCcKWNGoc+uGbw1cwa9IKh/w==}

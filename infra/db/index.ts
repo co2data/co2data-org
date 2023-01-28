@@ -1,20 +1,18 @@
-import mysql, { RowDataPacket } from 'mysql2/promise'
+import { createPool } from 'mysql2'
+import { Kysely, MysqlDialect } from 'kysely'
+import { DB } from './types'
+import { PlanetScaleDialect } from 'kysely-planetscale'
 
-const pool = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'password',
-  database: 'mydb',
-})
+const dialect =
+  process.env.NODE_ENV === 'development'
+    ? new MysqlDialect({
+        pool: createPool({
+          host: '127.0.0.1',
+          user: 'root',
+          password: 'password',
+          database: 'mydb',
+        }),
+      })
+    : new PlanetScaleDialect({ url: process.env.DB_URL })
 
-const mkSelect =
-  (deps: { conn: mysql.Pool }) =>
-  async <T>(query: string, args?: any[]) => {
-    const [rows] = await deps.conn.execute<Array<T & RowDataPacket>>(
-      query,
-      args
-    )
-    return rows
-  }
-
-export const select = mkSelect({ conn: pool })
+export const db = new Kysely<DB>({ dialect })
