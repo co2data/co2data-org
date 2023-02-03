@@ -13,6 +13,6 @@ const dialect =
           database: 'mydb',
         }),
       })
-    : new PlanetScaleDialect({ url: process.env.DB_URL })
+    : new PlanetScaleDialect({ url: process.env.DATABASE_URL })
 
 export const db = new Kysely<DB>({ dialect })
