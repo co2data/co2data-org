@@ -1,11 +1,12 @@
 import { Co2Average } from '@/domain/repository'
+import Link from 'next/link'
 
 type Props = { co2Average: Co2Average }
 const Co2Average = ({ co2Average }: Props) => {
   return (
     <li key={co2Average.slug} className="rounded border p-8">
       <p>
-        <a href={`/c/${co2Average.slug}`}>{co2Average.title}</a>
+        <Link href={`/c/${co2Average.slug}`}>{co2Average.title}</Link>
       </p>
       <p>
         Possible CO<sub>2</sub>e per person-year
