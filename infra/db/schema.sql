@@ -43,8 +43,7 @@ CREATE TABLE `co2_producers` (
   `times_per_year_average` double NOT NULL,
   `slug` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`),
-  CONSTRAINT `co2_producers_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+  KEY `category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `sources` (
@@ -57,7 +56,8 @@ CREATE TABLE `sources` (
   `description` text NOT NULL,
   `user_id` char(36) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY index_co2_producers (co2_producer_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `users` (
@@ -69,8 +69,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `co2_average` AS select `co2`.`title` AS `title`,`co2`.`slug` AS `slug`,`co2`.`unit` AS `unit`,((`co2`.`single_consumption_average` * `co2`.`times_per_year_average`) * avg(`sources`.`g_co2e`)) AS `avg_per_year`,avg(`sources`.`g_co2e`) AS `avg_per_unit` from (`co2_producers` `co2` join `sources` on((`co2`.`id` = `sources`.`co2_producer_id`))) group by `sources`.`co2_producer_id`;
-
+CREATE VIEW `co2_average` AS select `co2`.`title` AS `title`,`co2`.`slug` AS `slug`,`co2`.`unit` AS `unit`,((`co2`.`single_consumption_average` * `co2`.`times_per_year_average`) * avg(`sources`.`g_co2e`)) AS `avg_per_year`,avg(`sources`.`g_co2e`) AS `avg_per_unit` from (`co2_producers` `co2` join `sources` on((`co2`.`id` = `sources`.`co2_producer_id`))) group by `sources`.`co2_producer_id`;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
