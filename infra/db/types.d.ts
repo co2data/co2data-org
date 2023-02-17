@@ -1,5 +1,7 @@
 import type { ColumnType } from "kysely";
 
+export type Decimal = ColumnType<string, string | number, string | number>;
+
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
@@ -11,10 +13,11 @@ export interface Categories {
 }
 
 export interface Co2Average {
+  id: Generated<string>;
   title: string;
   slug: string;
   unit: "gram" | "hour" | "kilogram" | "kilometer" | "liter" | "meter" | "minute";
-  avg_per_year: number | null;
+  avg_per_year: Decimal | null;
   avg_per_unit: number | null;
 }
 
@@ -44,7 +47,7 @@ export interface Sources {
   per: number;
   description: string;
   user_id: string;
-  name: Generated<string>;
+  name: string;
 }
 
 export interface Users {

@@ -7,6 +7,7 @@
         docker
         nodejs-18_x
         nodePackages.pnpm
+        pscale
       ];
     };
   });

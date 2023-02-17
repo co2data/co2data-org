@@ -1,4 +1,6 @@
-import { getCo2AverageBySlug } from '@/domain/repository'
+import Source from '@/components/source'
+import { getCo2AverageBySlug } from '@/domain/co2'
+import { getAllSourcesByCo2ProducerId } from '@/domain/source'
 import Link from 'next/link'
 
 export default async function Home({ params }: { params: { slug: string } }) {
@@ -11,6 +13,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
       </main>
     )
   }
+  const sources = await getAllSourcesByCo2ProducerId(co2Average?.id)
 
   return (
     <main className="space-y-8">
@@ -33,29 +36,39 @@ export default async function Home({ params }: { params: { slug: string } }) {
           </small>
         </h1>
       </header>
-      <p className="text-4xl">
-        <span>1 {co2Average.unit}</span>
-        <svg className="inline-block h-6 w-12" viewBox="-40 0 140 120">
-          <path
-            fill="transparent"
-            stroke="black"
-            strokeWidth="10"
-            d="M -10,50 L 90,50 M 50,10 L 90,50 L 50,90"
-          ></path>
-        </svg>{' '}
-        <span>{co2Average.avg_per_unit}</span>{' '}
-        <span className="text-base">
-          g CO<sub>2</sub>e
-        </span>
-      </p>
-      <p>
-        Possible CO<sub>2</sub>e per person-year
-        <br />
-        <span className="font-bold">
-          {+parseFloat(((co2Average.avg_per_year ?? 1) / 1000).toFixed(3))}
-        </span>{' '}
-        <span className="text-sm font-normal">kg</span>
-      </p>
+      <section className="space-y-8">
+        <p className="text-4xl">
+          <span>1 {co2Average.unit}</span>
+          <svg className="inline-block h-6 w-12" viewBox="-40 0 140 120">
+            <path
+              fill="transparent"
+              stroke="black"
+              strokeWidth="10"
+              d="M -10,50 L 90,50 M 50,10 L 90,50 L 50,90"
+            ></path>
+          </svg>{' '}
+          <span className="font-bold">
+            {+parseFloat(((co2Average.avg_per_unit ?? 1) / 1000).toFixed(3))}
+          </span>{' '}
+          <span className="text-base">
+            kg CO<sub>2</sub>e
+          </span>
+        </p>
+        <p>
+          Possible CO<sub>2</sub>e per person-year
+          <br />
+          <span className="font-bold">
+            {+parseFloat(((co2Average.avg_per_year ?? 1) / 1000).toFixed(3))}
+          </span>{' '}
+          <span className="text-sm font-normal">kg</span>
+        </p>
+      </section>
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold ">Sources</h2>
+        {sources.map((source) => (
+          <Source key={source.id} source={source} unit={co2Average.unit} />
+        ))}
+      </section>
     </main>
   )
 }

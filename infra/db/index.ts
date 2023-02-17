@@ -10,7 +10,7 @@ const dialect =
           host: '127.0.0.1',
           user: 'root',
           password: 'password',
-          database: 'mydb',
+          database: 'co2data-org',
         }),
       })
     : new PlanetScaleDialect({ url: process.env.DATABASE_URL })
