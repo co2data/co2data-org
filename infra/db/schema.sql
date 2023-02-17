@@ -69,7 +69,14 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE VIEW `co2_average` AS select `co2`.`title` AS `title`,`co2`.`slug` AS `slug`,`co2`.`unit` AS `unit`,((`co2`.`single_consumption_average` * `co2`.`times_per_year_average`) * avg(`sources`.`g_co2e`)) AS `avg_per_year`,avg(`sources`.`g_co2e`) AS `avg_per_unit` from (`co2_producers` `co2` join `sources` on((`co2`.`id` = `sources`.`co2_producer_id`))) group by `sources`.`co2_producer_id`;
+CREATE VIEW `co2_average` AS select `co2`.`title` AS `title`,
+  `co2`.`slug` AS `slug`,
+  `co2`.`unit` AS `unit`,
+  cast(`co2`.`single_consumption_average` * `co2`.`times_per_year_average` * AVG(`sources`.`g_co2e`) as DECIMAL(16,2)) as avg_per_year,
+  avg(`sources`.`g_co2e`) AS `avg_per_unit` 
+  from (`co2_producers` `co2` 
+    join `sources` on((`co2`.`id` = `sources`.`co2_producer_id`))) 
+  group by `sources`.`co2_producer_id`;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
