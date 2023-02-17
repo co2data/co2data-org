@@ -1,5 +1,6 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import { AnalyticsWrapper } from './analytics'
 import './globals.css'
 
 export default function RootLayout({
@@ -18,6 +19,7 @@ export default function RootLayout({
         <Header />
         <div className="container mx-auto flex-1 px-4 py-16">{children}</div>
         <Footer />
+        <AnalyticsWrapper />
       </body>
     </html>
   )
