@@ -1,3 +1,4 @@
+import Footer from '@/components/footer'
 import Header from '@/components/header'
 import './globals.css'
 
@@ -13,9 +14,10 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>
+      <body className="flex min-h-screen flex-col">
         <Header />
-        <div className="container mx-auto px-4 py-16">{children}</div>
+        <div className="container mx-auto flex-1 px-4 py-16">{children}</div>
+        <Footer />
       </body>
     </html>
   )
