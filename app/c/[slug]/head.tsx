@@ -1,7 +1,9 @@
-export default function Head() {
+export default async function Head({ params }: { params: { slug: string } }) {
+  const title = `${makeTitle(params.slug)} CO₂ emissions | co2data.org`
+
   return (
     <>
-      <title>co2data.org</title>
+      <title>{title}</title>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
       <meta
         name="description"
@@ -35,7 +37,16 @@ export default function Head() {
         content="What are the CO₂ emissions of things."
       />
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://co2data.org" />
+      <meta
+        property="og:url"
+        content={`https://co2data.org/c/${params.slug}`}
+      />
     </>
   )
+}
+
+function makeTitle(slug: string) {
+  return slug.replace(/-/g, ' ').replace(/\b[a-z]/g, function () {
+    return arguments[0].toUpperCase()
+  })
 }
