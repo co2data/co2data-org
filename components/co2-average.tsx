@@ -6,9 +6,9 @@ const Co2Average = ({ co2Average }: Props) => {
   return (
     <li
       key={co2Average.slug}
-      className="rounded border-4 border-blue-700 bg-blue-100"
+      className="rounded border-4 border-sky-600 bg-sky-100"
     >
-      <p className="bg-blue-700 px-4 py-2 font-bold text-white">
+      <p className="bg-sky-600 px-4 py-2 font-bold text-white">
         <Link href={`/c/${co2Average.slug}`}>{co2Average.title}</Link>
       </p>
       <p className="px-4 py-2 text-xs ">

@@ -13,8 +13,8 @@ export default async function Home({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <main className="container mx-auto space-y-6 px-4">
-      <header className="space-y-6">
+    <main className="space-y-8">
+      <header className="space-y-8">
         <nav>
           <ol className="flex gap-3">
             <li>
