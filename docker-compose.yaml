@@ -4,7 +4,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mydb
+      MYSQL_DATABASE: co2data-org
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
