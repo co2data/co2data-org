@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-db-types": "kysely-codegen --out-file ./infra/db/types.d.ts"
+    "generate-db-types": "kysely-codegen --out-file ./infra/db/types.d.ts",
+    "connect-to-prod-db": "pscale connect co2data-org main --role reader",
+    "connect-to-db": "pscale connect co2data-org"
   },
   "dependencies": {
     "@next/font": "13.1.5",
