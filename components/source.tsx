@@ -2,7 +2,7 @@ import { Source } from '@/domain/source'
 
 const Source = ({ source, unit }: { source: Source; unit: string }) => {
   return (
-    <li className="max-w-sm list-none rounded border-4 border-sky-600 bg-sky-100">
+    <li className="max-w-sm list-none overflow-hidden rounded border-4 border-sky-600 bg-sky-100">
       <h3 className="bg-sky-600 px-4 py-2 text-white">
         {source.name}
         {source.region && (

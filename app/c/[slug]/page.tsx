@@ -23,9 +23,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
             <li>
               <Link href="/">Contributors</Link>
             </li>
-            <li style={{ listStyle: "'>'" }} className="ml-2 pl-2">
-              {co2Average.title}
-            </li>
+            <li className="ml-2 list-['>'] pl-2">{co2Average.title}</li>
           </ol>
         </nav>
         <h1 className="text-4xl font-bold leading-6">
