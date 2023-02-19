@@ -78,7 +78,13 @@ SELECT
 	cast(
 		`co2`.`single_consumption_average` * `co2`.`times_per_year_average` * AVG(`sources`.`g_co2e`) AS DECIMAL (16, 2)) AS avg_per_year,
 	avg(
-		`sources`.`g_co2e`) AS `avg_per_unit`
+		`sources`.`g_co2e`) AS `avg_per_unit`,
+  `co2`.`single_consumption_from`,
+  `co2`.`single_consumption_to`,
+  `co2`.`single_consumption_average`,
+  `co2`.`times_per_year_from`,
+  `co2`.`times_per_year_to`,
+  `co2`.`times_per_year_average`
 FROM (
 	`co2_producers` `co2`
 	JOIN `sources` ON ((`co2`.`id` = `sources`.`co2_producer_id`)))

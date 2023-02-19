@@ -19,6 +19,12 @@ export interface Co2Average {
   unit: "gram" | "hour" | "kilogram" | "kilometer" | "liter" | "meter" | "minute";
   avg_per_year: Decimal | null;
   avg_per_unit: number | null;
+  single_consumption_from: number;
+  single_consumption_to: number;
+  single_consumption_average: number;
+  times_per_year_from: number;
+  times_per_year_to: number;
+  times_per_year_average: number;
 }
 
 export interface Co2Producers {
@@ -47,7 +53,7 @@ export interface Sources {
   per: number;
   description: string;
   user_id: string;
-  name: string;
+  name: Generated<string>;
 }
 
 export interface Users {

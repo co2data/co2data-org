@@ -1,3 +1,4 @@
+import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { getCo2AverageBySlug } from '@/domain/co2'
 import { getAllSourcesByCo2ProducerId } from '@/domain/source'
@@ -16,7 +17,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
   const sources = await getAllSourcesByCo2ProducerId(co2Average?.id)
 
   return (
-    <main className="space-y-8">
+    <main className="">
       <header className="space-y-8">
         <nav>
           <ol className="flex gap-3">
@@ -34,7 +35,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
           </small>
         </h1>
       </header>
-      <section className="space-y-8">
+      <section className="mt-16 space-y-8">
         <p className="text-4xl">
           <span>1 {co2Average.unit}</span>
           <svg className="inline-block h-6 w-12" viewBox="-40 0 140 120">
@@ -52,21 +53,18 @@ export default async function Home({ params }: { params: { slug: string } }) {
             kg CO<sub>2</sub>e
           </span>
         </p>
-        <p>
-          Possible CO<sub>2</sub>e per person-year
-          <br />
-          <span className="font-bold">
-            {+parseFloat(((co2Average.avg_per_year ?? 1) / 1000).toFixed(3))}
-          </span>{' '}
-          <span className="text-sm font-normal">kg</span>
-        </p>
       </section>
-      <section className="space-y-4">
-        <h2 className="text-xl font-bold ">Sources</h2>
-        {sources.map((source) => (
-          <Source key={source.id} source={source} unit={co2Average.unit} />
-        ))}
-      </section>
+      <div className="mt-32 gap-32 lg:flex">
+        <section>
+          <PersonalCo2 co2Average={co2Average} />
+        </section>
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold ">Sources</h2>
+          {sources.map((source) => (
+            <Source key={source.id} source={source} unit={co2Average.unit} />
+          ))}
+        </section>
+      </div>
     </main>
   )
 }

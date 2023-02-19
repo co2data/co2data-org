@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './range.css';
+
 @layer base {
   a {
     @apply hover:underline;
   }
+  svg {
+    fill: currentColor;
+  }
+}
+.stroke-linejoin-round {
+  stroke-linejoin: round;
 }
