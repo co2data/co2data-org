@@ -34,7 +34,7 @@ export default function PersonalCo2({
   console.log('render', factorOfPersonYearFootprint, parts)
 
   return (
-    <div className="max-w-sm rounded-lg border border-sky-600 bg-sky-50 p-8">
+    <div className="max-w-sm overflow-hidden rounded-lg border border-sky-600 bg-sky-50 p-8">
       <h2 className="text-lg font-bold">
         Personal CO<sub>2</sub> footprint
       </h2>
@@ -97,7 +97,7 @@ export default function PersonalCo2({
             </p>
           </div>
         </div>
-        <div className="mt-8 block">
+        <div className="mt-8 block touch-pan-y">
           <label htmlFor="amountInput">
             <div className="flex justify-between">
               <div>Single consmuption</div>
@@ -110,7 +110,7 @@ export default function PersonalCo2({
           <input
             id="amountInput"
             type="range"
-            className="range text-sky-600"
+            className="range touch-pan-x text-sky-600"
             min={co2Average.single_consumption_from}
             max={co2Average.single_consumption_to}
             step={
@@ -133,7 +133,7 @@ export default function PersonalCo2({
           <input
             id="timesPerYearInput"
             type="range"
-            className="range text-sky-600"
+            className="range touch-pan-x text-sky-600"
             min={co2Average.times_per_year_from}
             max={co2Average.times_per_year_to}
             step={
