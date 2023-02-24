@@ -28,7 +28,7 @@ INSERT INTO `categories` (`id`, `title`, `slug`) VALUES
 INSERT INTO `co2_producers` (`id`, `title`, `description`, `category_id`, `image`, `user_id`, `unit`, `single_consumption_from`, `single_consumption_to`, `single_consumption_average`, `times_per_year_from`, `times_per_year_to`, `times_per_year_average`, `slug`) VALUES
 ('05e9b91f-fe9e-4679-86c7-fe60fa13fae4', 'Gasoline', NULL, 'd20e8aa8-384e-405a-90a2-bf30554bf9bb', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'liter', 0, 100, 40, 0, 100, 62, 'gasoline'),
 ('258aaa11-a891-4f9a-b29b-67086edd53e6', 'Pork', 'Pig meat', '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilogram', 0, 1, 0.1, 0, 300, 100, 'pork'),
-('2a3fd46e-f20d-4961-a89e-11b9236448e4', 'Poultry Meat', NULL, '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilometer', 0, 1, 0.1, 0, 300, 50, 'poultry-meat'),
+('2a3fd46e-f20d-4961-a89e-11b9236448e4', 'Poultry Meat', NULL, '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilogram', 0, 1, 0.1, 0, 300, 50, 'poultry-meat'),
 ('34669972-a53e-4bee-a2cc-2c8414014a39', 'Tofu', NULL, '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilogram', 0, 0.5, 0.1, 0, 100, 1, 'tofu'),
 ('3570f84b-fcc7-45c5-b415-ec19a56c77ea', 'Nuts', NULL, '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilogram', 0, 0.5, 0.05, 0, 100, 20, 'nuts'),
 ('3fcf0a84-a438-440c-bb90-1221907caa8a', 'Beef (dairy herd)', 'Beef from dairy herd.', '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilogram', 0, 1, 0.1, 0, 360, 120, 'beef-dairy-herd'),
