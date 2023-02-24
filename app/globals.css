@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import './range.css';
+@import './tooltip.css';
 
 @layer base {
   a {

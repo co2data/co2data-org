@@ -1,0 +1,33 @@
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip-container span[role='button'] {
+  display: inline-block;
+  padding: 0.5em;
+  font-style: normal;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: help;
+}
+
+.tooltip-container .tooltip {
+  display: none;
+  position: absolute;
+  margin-top: 0.5em;
+  padding: 1em;
+  background: currentColor;
+  border: 1px solid currentColor;
+  border-radius: 0.2em;
+  box-shadow: 0 5px 20px 1px rgba(0, 0, 0, 0.334);
+  z-index: 100;
+}
+
+.tooltip-container .tooltip p {
+  color: white;
+}
+
+.tooltip-container span[role='button']:hover ~ div.tooltip,
+.tooltip-container span[role='button']:focus ~ div.tooltip {
+  display: block;
+}
