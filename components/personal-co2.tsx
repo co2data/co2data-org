@@ -111,10 +111,9 @@ export default function PersonalCo2({
           </div>
         </div>
         <div className="flex-1">
-          <h3 className="text-center text-lg font-bold">
-            Percentage of average footprint
+          <h3 className="text-center font-bold">
+            Percentage of yearly average
           </h3>
-
           <div className="flex justify-around px-12">
             <svg className="absolute h-0 w-0">
               <defs>
@@ -139,15 +138,18 @@ export default function PersonalCo2({
           <div className="tooltip-container text-center">
             <b>{Math.round(co2PerYear / 60000)} %</b>
             <br />
-            of the <b>total</b> CO<sub>2</sub>e Footprint of a{' '}
-            <svg
-              viewBox="0 -2 20 55"
-              className="inline-block h-6 w-2 -translate-y-1"
-            >
-              <circle cx="9" cy="9" r="4" />
-              <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
-            </svg>
-            .
+            of the <b>total</b> CO<sub>2</sub>e Footprint{' '}
+            <span className="whitespace-nowrap">
+              of a{' '}
+              <svg
+                viewBox="0 -2 20 55"
+                className="inline-block h-6 w-2 -translate-y-1"
+              >
+                <circle cx="9" cy="9" r="4" />
+                <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
+              </svg>
+              .
+            </span>
             <span
               role="button"
               aria-label="More information"

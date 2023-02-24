@@ -28,12 +28,11 @@ export default async function Home({ params }: { params: { slug: string } }) {
           </ol>
         </nav>
         <div className="space-y-4 rounded-lg border border-sky-600 bg-sky-50 p-8">
-          <h1 className="text-4xl font-bold leading-6">
-            {co2Average.title}
-            <br />
-            <small className="text-sm font-normal">
+          <h1 className="text-4xl font-bold">
+            <div>{co2Average.title}</div>
+            <div className="text-sm font-normal">
               CO<sub>2</sub> emissions
-            </small>
+            </div>
           </h1>
           <p className="text-4xl">
             <span>1 {co2Average.unit}</span>
