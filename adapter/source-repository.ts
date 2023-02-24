@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { SourceRepository } from '@/domain/source'
 import { db } from '@/infra/db'
 import { remark } from 'remark'
@@ -5,7 +6,7 @@ import html from 'remark-html'
 
 function makeSourceRepository(deps = { db }): SourceRepository {
   return {
-    getAllSourcesByCo2ProducerId: async (id: string) => {
+    getAllSourcesByCo2ProducerId: cache(async (id: string) => {
       const data = await deps.db
         .selectFrom('sources')
         .selectAll()
@@ -16,7 +17,7 @@ function makeSourceRepository(deps = { db }): SourceRepository {
         description: await markdownToHtml(source.description),
       }))
       return Promise.all(mappedData)
-    },
+    }),
   }
 }
 

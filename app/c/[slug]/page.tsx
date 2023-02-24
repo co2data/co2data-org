@@ -2,17 +2,21 @@ import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { getCo2AverageBySlug } from '@/domain/co2'
 import { getAllSourcesByCo2ProducerId } from '@/domain/source'
+import type { Metadata } from 'next/types'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
-export default async function Home({ params }: { params: { slug: string } }) {
+type Params = {
+  params: {
+    slug: string
+  }
+}
+
+export default async function Home({ params }: Params) {
   const co2Average = await getCo2AverageBySlug(params.slug)
 
   if (!co2Average) {
-    return (
-      <main>
-        <h1>No Data found.</h1>
-      </main>
-    )
+    return notFound()
   }
   const sources = await getAllSourcesByCo2ProducerId(co2Average?.id)
 
@@ -55,7 +59,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
         </div>
       </header>
 
-      <div className="mt-8 space-y-16">
+      <div className="mt-4 space-y-16">
         <section>
           <PersonalCo2 co2Average={co2Average} />
         </section>
@@ -68,4 +72,27 @@ export default async function Home({ params }: { params: { slug: string } }) {
       </div>
     </main>
   )
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const co2Average = await getCo2AverageBySlug(params.slug)
+  if (!co2Average) return {}
+
+  const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
+    co2Average.title
+  }" are ${+parseFloat(
+    ((co2Average.avg_per_unit ?? 1) / 1000).toFixed(3)
+  )} kg CO₂e`
+
+  return {
+    title: co2Average.title,
+    description,
+    openGraph: {
+      description,
+      url: `https://co2data.org/c/${params.slug}`,
+    },
+    alternates: {
+      canonical: `https://co2data.org/c/${params.slug}`,
+    },
+  }
 }

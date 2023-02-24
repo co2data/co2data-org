@@ -1,17 +1,18 @@
+import { cache } from 'react'
 import { Co2Repository } from '@/domain/co2'
 import { db } from '@/infra/db'
 
 function makeCo2Repository(deps = { db }): Co2Repository {
   return {
-    getAllCo2Averages: async () => {
+    getAllCo2Averages: cache(async () => {
       const data = await deps.db.selectFrom('co2_average').selectAll().execute()
       return data.map((co2Average) => ({
         ...co2Average,
         avg_per_year: Number(co2Average.avg_per_year ?? 1),
         avg_per_unit: co2Average.avg_per_unit ?? 1,
       }))
-    },
-    getCo2AverageBySlug: async (slug: string) => {
+    }),
+    getCo2AverageBySlug: cache(async (slug: string) => {
       const data = await deps.db
         .selectFrom('co2_average')
         .selectAll()
@@ -23,7 +24,7 @@ function makeCo2Repository(deps = { db }): Co2Repository {
         avg_per_year: Number(data.avg_per_year ?? 1),
         avg_per_unit: data.avg_per_unit ?? 1,
       }
-    },
+    }),
   }
 }
 

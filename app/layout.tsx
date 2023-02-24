@@ -2,6 +2,7 @@ import Footer from '@/components/footer'
 import Header from '@/components/header'
 import { AnalyticsWrapper } from './analytics'
 import './globals.css'
+// import type { Metadata } from 'next/types'
 
 export default function RootLayout({
   children,
@@ -23,4 +24,39 @@ export default function RootLayout({
       </body>
     </html>
   )
+}
+
+export const metadata = {
+  title: {
+    default: 'co2data.org',
+    template: '%s | co2data.org',
+  },
+  description: 'What are the CO₂ emissions of things.',
+  icons: {
+    icon: [
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#3982C2',
+      },
+    ],
+  },
+  manifest: '/site.webmanifest',
+  themeColor: '#3982C2',
+  openGraph: {
+    title: 'co2data.org',
+    description: 'What are the CO₂ emissions of things.',
+    url: 'https://co2data.org',
+    siteName: 'CO₂ Data',
+    locale: 'en-US',
+    type: 'website',
+  },
+  alternates: {
+    canonical: `https://co2data.org`,
+  },
 }

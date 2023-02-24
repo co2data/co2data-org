@@ -114,7 +114,7 @@ export default function PersonalCo2({
           <h3 className="text-center font-bold">
             Percentage of yearly average
           </h3>
-          <div className="flex justify-around px-12">
+          <div className="mx-auto flex max-w-md justify-around px-12">
             <svg className="absolute h-0 w-0">
               <defs>
                 <mask id="segmentMask">
