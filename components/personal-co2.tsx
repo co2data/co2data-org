@@ -40,6 +40,81 @@ export default function PersonalCo2({
           <h2 className="text-lg font-bold">
             Personal CO<sub>2</sub> footprint
           </h2>
+
+          <div className="mt-4">
+            <div className="flex items-baseline justify-between">
+              <p>
+                CO<sub>2</sub>e per consumption
+              </p>
+              <p className="text-2xl">
+                <b>{+parseFloat((co2PerConsumption / 1000).toFixed(1))}</b>
+                &nbsp;kg
+              </p>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <p>
+                CO
+                <sub>2</sub>e per year
+              </p>
+              <p className="text-2xl">
+                <b>{+parseFloat((co2PerYear / 1000).toFixed(1))}</b>&nbsp;kg
+              </p>
+            </div>
+          </div>
+          <div className="mt-8 block touch-pan-y">
+            <label htmlFor="amountInput">
+              <div className="flex justify-between">
+                <div>Single consumption</div>
+                <div>
+                  <b>{consumption}</b>&ensp;
+                  {co2Average.unit}
+                </div>
+              </div>
+            </label>
+            <input
+              id="amountInput"
+              type="range"
+              className="range touch-pan-x text-sky-600"
+              min={co2Average.single_consumption_from}
+              max={co2Average.single_consumption_to}
+              step={
+                (co2Average.single_consumption_to -
+                  co2Average.single_consumption_from) /
+                50
+              }
+              value={consumption}
+              onChange={(e) => setConsumption(Number(e.target.value))}
+            />
+            <label htmlFor="timesPerYearInput" className="mt-2 block">
+              <div className="flex justify-between">
+                <div>Times per year</div>
+                <div>
+                  ×&nbsp;<b>{Math.round(times)}</b>
+                </div>
+              </div>
+            </label>
+            <input
+              id="timesPerYearInput"
+              type="range"
+              className="range touch-pan-x text-sky-600"
+              min={co2Average.times_per_year_from}
+              max={co2Average.times_per_year_to}
+              step={
+                (co2Average.times_per_year_to -
+                  co2Average.times_per_year_from) /
+                50
+              }
+              value={times}
+              // onInput={(e) => setTimes(e)}
+              onChange={(e) => setTimes(Number(e.target.value))}
+            />
+          </div>
+        </div>
+        <div className="flex-1">
+          <h3 className="text-center text-lg font-bold">
+            Percentage of average footprint
+          </h3>
+
           <div className="flex justify-around px-12">
             <svg className="absolute h-0 w-0">
               <defs>
@@ -99,76 +174,6 @@ export default function PersonalCo2({
                 </small>
               </p>
             </div>
-          </div>
-        </div>
-        <div className="flex-[2]">
-          <div className="ml-auto mr-auto max-w-xs lg:mr-0">
-            <div className="flex items-baseline justify-between">
-              <p>
-                CO<sub>2</sub>e per consumption
-              </p>
-              <p className="text-2xl">
-                <b>{+parseFloat((co2PerConsumption / 1000).toFixed(1))}</b>
-                &nbsp;kg
-              </p>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <p>
-                CO
-                <sub>2</sub>e per year
-              </p>
-              <p className="text-2xl">
-                <b>{+parseFloat((co2PerYear / 1000).toFixed(1))}</b>&nbsp;kg
-              </p>
-            </div>
-          </div>
-          <div className="mt-8 block touch-pan-y">
-            <label htmlFor="amountInput">
-              <div className="flex justify-between">
-                <div>Single consumption</div>
-                <div>
-                  <b>{consumption}</b>&ensp;
-                  {co2Average.unit}
-                </div>
-              </div>
-            </label>
-            <input
-              id="amountInput"
-              type="range"
-              className="range touch-pan-x text-sky-600"
-              min={co2Average.single_consumption_from}
-              max={co2Average.single_consumption_to}
-              step={
-                (co2Average.single_consumption_to -
-                  co2Average.single_consumption_from) /
-                50
-              }
-              value={consumption}
-              onChange={(e) => setConsumption(Number(e.target.value))}
-            />
-            <label htmlFor="timesPerYearInput" className="mt-4 block">
-              <div className="flex justify-between">
-                <div>Times per year</div>
-                <div>
-                  ×&nbsp;<b>{Math.round(times)}</b>
-                </div>
-              </div>
-            </label>
-            <input
-              id="timesPerYearInput"
-              type="range"
-              className="range touch-pan-x text-sky-600"
-              min={co2Average.times_per_year_from}
-              max={co2Average.times_per_year_to}
-              step={
-                (co2Average.times_per_year_to -
-                  co2Average.times_per_year_from) /
-                50
-              }
-              value={times}
-              // onInput={(e) => setTimes(e)}
-              onChange={(e) => setTimes(Number(e.target.value))}
-            />
           </div>
         </div>
       </div>
