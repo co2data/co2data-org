@@ -48,5 +48,5 @@ export default async function Head({ params }: { params: { slug: string } }) {
 function makeTitle(slug: string) {
   return slug.replace(/-/g, ' ').replace(/\b[a-z]/g, function () {
     return arguments[0].toUpperCase()
-  })
+  });
 }
