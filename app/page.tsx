@@ -1,3 +1,3 @@
-import ContributerList from '@/components/contributer-list'
+import ContributorPage from '@/components/contributor-page'
 
-export default ContributerList
+export default ContributorPage
