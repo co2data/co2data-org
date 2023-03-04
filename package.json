@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest",
     "lint": "next lint",
+    "ci": "vitest run && next build",
     "generate-db-types": "kysely-codegen --out-file ./infra/db/types.d.ts",
     "connect-to-prod-db": "pscale connect co2data-org main --role reader",
     "connect-to-db": "pscale connect co2data-org"
