@@ -36,3 +36,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .direnv
+/test-results/
+/playwright-report/
+/playwright/.cache/
