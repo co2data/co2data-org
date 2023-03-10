@@ -77,18 +77,6 @@ INSERT INTO `sources` (`id`, `co2_producer_id`, `region`, `year`, `g_co2e`, `per
 ('f2080f15-f195-4661-b0fb-7a5c4bbb7f2d', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2013, 67600, 1, '67,6kg CO2-eq/kg product of beef (carcass weight and does not include post-harvest emissions.) \n\n[fao.org (PDF)](https://www.fao.org/3/i3437e/i3437e.pdf) Page 24', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Tackling Climate Change Through Livestock'),
 ('fbf38fe8-5591-4ff5-b166-258a2c928a5e', '684b6b08-8b7d-4012-b24b-fafc7464a510', 'UK', 2020, 112.86, 1, '[Excel](<https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2020#:~:text=Conversion%20factors%202020:%20condensed%20set%20(for%20most%20users)>) Sheet Business travel- sea', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Greenhouse gas reporting: conversion factors 2020');
 
-INSERT INTO `users` (`id`, `email`, `password_hash`, `locked_at`, `failed_login_attempts`) VALUES
-('22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'phi.sch@hotmail.ch', 'sha256|17|DVPYf4lLTwOEsFVGOLVn8Q==|YcfndxwJ1BJiaUSKobGghhoa+F3PXQ1kEJCfw8MDBOU=', NULL, 0),
-('4460617b-bdee-4c51-aa2e-b5b8ef1773cd', 'pwangdu9462@gmail.com', 'sha256|17|6rvLvyQnhu1UgigZWWkqqg==|e5WypNyaqYO/qB7/mCmybVsgxYNfnyh5Ppex2e5jA2M=', NULL, 0),
-('4dac7b4c-0d77-43e7-abb1-c54a6f4587f1', 'debaroti.geo1@gmail.com', 'sha256|17|oozAYIuwVD86C6eVzap2lA==|KIbixBOgTXsC3cmCifmRLvRe88fSIF9izMf8kAN9GCA=', NULL, 0),
-('536aac91-8e64-454e-a992-3718c2606f0c', 'ilia@notifyparty.ru', 'sha256|17|Dmgy6dn6MiShsai02ss3ZQ==|CEVDTucoS+Gn2BWzhJvLWq/YTzyr9KRxGMYHxdIB0d0=', NULL, 0),
-('597d8b65-0cad-4173-b215-85e46fb1ffaf', 'factoryamar@gmail.com', 'sha256|17|8/sLjK2ylJOdGnYhRi+ZzA==|cFLCMUzSvjwpbvTLWUa6rEtLmaE7KoyyMZnrJQsQUag=', NULL, 0),
-('a23b95c0-ef95-44b5-8f62-851dfc06b242', 'dhanunor1982@mail.ru', 'sha256|17|m0Gbx5IyJCLB6+lOULmC/Q==|gW1rLyH+TsZHg0mY/VANqn/v+zIV1CD4Xvu4DuZ5Yp0=', NULL, 0),
-('a93813b2-6fee-44f2-9dab-2844b69c4517', 'likax9yev@mail.ru', 'sha256|17|SnZqFv8+BCQum+1YnvXfpg==|SBa3WRnD4K1Fg9rvH5/KdbLYCem1EYY9Ng4BUbWgLfg=', NULL, 0),
-('d6bd2c38-3e77-47df-855a-028885b941e6', 'teste@com.br', 'sha256|17|pmCngEq8h6mcQm6g8SAw0A==|MJ19wCv0bMSXS+8fZDh1R3ZIDU14ysq8MHxS01guEuA=', NULL, 0);
-
-
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
