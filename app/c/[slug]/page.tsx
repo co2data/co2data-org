@@ -5,6 +5,7 @@ import { getAllSourcesByCo2ProducerId } from '@/domain/source'
 import type { Metadata } from 'next/types'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { baseUrl } from '@/app/config'
 
 type Params = {
   params: {
@@ -89,10 +90,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     description,
     openGraph: {
       description,
-      url: `https://co2data.org/c/${params.slug}`,
+      url: `${baseUrl}/c/${params.slug}`,
     },
     alternates: {
-      canonical: `https://co2data.org/c/${params.slug}`,
+      canonical: `${baseUrl}/c/${params.slug}`,
     },
   }
 }
