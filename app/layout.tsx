@@ -1,6 +1,7 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import { AnalyticsWrapper } from './analytics'
+import { baseUrl } from './config'
 import './globals.css'
 // import type { Metadata } from 'next/types'
 
@@ -51,12 +52,12 @@ export const metadata = {
   openGraph: {
     title: 'co2data.org',
     description: 'What are the CO₂ emissions of things.',
-    url: 'https://co2data.org',
+    url: baseUrl,
     siteName: 'CO₂ Data',
     locale: 'en-US',
     type: 'website',
   },
   alternates: {
-    canonical: `https://co2data.org`,
+    canonical: baseUrl,
   },
 }

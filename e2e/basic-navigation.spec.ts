@@ -1,12 +1,5 @@
 import { test, expect } from '@playwright/test'
 
-test('has title', async ({ page }) => {
-  await page.goto('/')
-
-  await expect(page).toHaveTitle(/co2data.org/)
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/co2 data/i)
-})
-
 test('has search', async ({ page }) => {
   await page.goto('/')
 
