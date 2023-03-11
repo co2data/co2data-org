@@ -4,6 +4,12 @@ export const config = {
   runtime: 'edge',
 }
 
+const formatter = new Intl.NumberFormat('en', {
+  style: 'unit',
+  unit: 'kilogram',
+  notation: 'compact',
+})
+
 export default function OG(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
@@ -23,6 +29,28 @@ export default function OG(req: NextRequest) {
 
     const hasAllContributorData = !!contributor && !!unit && !!avgPerUnit
 
+    const formattedAvg = formatter
+      .formatToParts((avgPerUnit ?? 1) / 1000)
+      .map(({ type, value }) => {
+        switch (type) {
+          case 'integer':
+            return (
+              <p key={type} tw="flex text-[40] leading-[0.75]">
+                {value}
+              </p>
+            )
+          case 'unit':
+          case 'literal':
+            return <></>
+          default:
+            return (
+              <p key={type} tw="flex text-8xl mb-1">
+                {value}
+              </p>
+            )
+        }
+      })
+
     return new ImageResponse(
       (
         <div
@@ -31,14 +59,14 @@ export default function OG(req: NextRequest) {
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            padding: '3em',
+            padding: '3em 5em',
             color: 'white',
             background: '#3982C2',
           }}
         >
           <div tw="flex flex-col grow">
             <div tw="flex grow justify-between">
-              <div tw="flex flex-col text-center justify-center items-center rounded min-w-20 min-h-20 self-start p-3 text-xl leading-4 font-bold bg-white text-sky-600">
+              <div tw="flex flex-col text-center justify-center items-center rounded-lg min-w-20 min-h-20 self-start p-3 text-xl leading-4 font-bold bg-white text-sky-600">
                 CO₂
                 <br />
                 Data
@@ -46,16 +74,15 @@ export default function OG(req: NextRequest) {
               <div tw="text-4xl">co2data.org</div>
             </div>
             {hasAllContributorData ? (
-              <div tw="flex flex-col">
+              <div tw="flex flex-col mt-8">
                 <div tw="flex justify-between items-end">
-                  <div tw="flex flex-col mb-2 shrink max-w-140 max-h-80">
-                    <div tw="flex flex-col text-4xl">Emissons of</div>
-                    <div tw="flex flex-col text-4xl">1 {unit}</div>
-                    <div tw="flex flex-col text-8xl">{contributor}</div>
+                  <div tw="flex flex-col shrink mr-12">
+                    <div tw="flex flex-col text-4xl">Emissions of 1 {unit}</div>
+                    <p tw="flex flex-col text-8xl leading-[0.9]">
+                      {contributor}
+                    </p>
                   </div>
-                  <div tw="flex flex-col text-[40] leading-[0.9]">
-                    {(avgPerUnit ?? 1) / 1000}
-                  </div>
+                  <div tw="flex shrink-0 items-end">{formattedAvg}</div>
                 </div>
                 <div tw="flex flex-col text-4xl mb-4 ml-4 self-end">
                   kg CO₂e
