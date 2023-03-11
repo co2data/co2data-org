@@ -56,6 +56,13 @@ export const metadata = {
     siteName: 'CO₂ Data',
     locale: 'en-US',
     type: 'website',
+    images: [
+      {
+        url: `${baseUrl}/api/og`,
+        width: 1200,
+        height: 600,
+      },
+    ],
   },
   alternates: {
     canonical: baseUrl,
