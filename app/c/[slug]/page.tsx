@@ -85,10 +85,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     ((co2Average.avg_per_unit ?? 1) / 1000).toFixed(3)
   )} kg CO₂e`
 
-  const ogImageUrl = `${baseUrl}/api/og?contributor=${encodeURIComponent(
-    co2Average.title
-  )}&unit=${co2Average.unit}&avg_per_unit=${co2Average.avg_per_unit}`
-
   return {
     title: co2Average.title,
     description,
@@ -97,7 +93,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       url: `${baseUrl}/c/${params.slug}`,
       images: [
         {
-          url: ogImageUrl,
+          url: `${baseUrl}/api/og/${co2Average.slug}`,
           width: 1200,
           height: 600,
         },
