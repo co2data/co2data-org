@@ -10,7 +10,7 @@ export default function OgImageFrame({
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        padding: '4em 9em 5em',
+        padding: '4em 8em 5em',
         color: 'white',
         background: '#3982C2',
       }}
