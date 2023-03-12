@@ -56,7 +56,7 @@ export default async function OG(req: NextRequest) {
                 {co2Avg.title}
               </div>
             </div>
-            <div tw="flex shrink-0 text-[42] leading-[0.75]">
+            <div tw="flex shrink-0 text-[42] leading-[0.75] ml-2">
               {formattedInteger}
             </div>
             <div tw="flex flex-col text-4xl justify-end">
