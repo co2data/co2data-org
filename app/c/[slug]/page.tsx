@@ -91,6 +91,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     openGraph: {
       description,
       url: `${baseUrl}/c/${params.slug}`,
+      images: [
+        {
+          url: `${baseUrl}/api/og/${co2Average.slug}`,
+          width: 1200,
+          height: 600,
+        },
+      ],
     },
     alternates: {
       canonical: `${baseUrl}/c/${params.slug}`,
