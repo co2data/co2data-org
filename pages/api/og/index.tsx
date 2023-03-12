@@ -1,4 +1,4 @@
-import OgImageFrame from '@/components/og'
+import OgImageFrame from '@/components/og-image-frame'
 import { ImageResponse } from '@vercel/og'
 import type { NextRequest } from 'next/server'
 
