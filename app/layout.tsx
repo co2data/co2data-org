@@ -60,7 +60,7 @@ export const metadata = {
       {
         url: `${baseUrl}/api/og`,
         width: 1200,
-        height: 600,
+        height: 630,
       },
     ],
   },

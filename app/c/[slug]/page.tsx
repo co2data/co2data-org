@@ -95,7 +95,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         {
           url: `${baseUrl}/api/og/${co2Average.slug}`,
           width: 1200,
-          height: 600,
+          height: 630,
         },
       ],
     },
