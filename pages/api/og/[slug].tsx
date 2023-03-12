@@ -22,42 +22,47 @@ export default async function OG(req: NextRequest) {
     const co2Avg = await getCo2AverageBySlug(slug)
     if (!co2Avg) throw Error(`Didn\'t find co2 data with slug "${slug}".`)
 
-    const formattedAvg = formatter
-      .formatToParts((co2Avg.avg_per_unit ?? 1) / 1000)
-      .map(({ type, value }) => {
-        switch (type) {
-          case 'integer':
-            return (
-              <p key={type} tw="flex text-[40] leading-[0.75]">
-                {value}
-              </p>
-            )
-          case 'unit':
-          case 'literal':
-            return <Fragment key={type} />
-          default:
-            return (
-              <p key={type} tw="flex text-8xl mb-1">
-                {value}
-              </p>
-            )
-        }
-      })
+    const formattedParts = formatter.formatToParts(
+      (co2Avg.avg_per_unit ?? 1) / 1000
+    )
+
+    const formattedInteger = formattedParts.find(
+      (part) => part.type === 'integer'
+    )?.value
+    const formattedAvgRest = formattedParts.map(({ type, value }) => {
+      switch (type) {
+        case 'integer':
+        case 'unit':
+        case 'literal':
+          return <Fragment key={type} />
+        default:
+          return (
+            <div key={type} tw="flex text-8xl leading-[0.8] mt-1">
+              {value}
+            </div>
+          )
+      }
+    })
 
     return new ImageResponse(
       (
         <OgImageFrame>
-          <div tw="flex flex-col mt-8">
-            <div tw="flex justify-between items-end">
-              <div tw="flex flex-col shrink mr-12">
-                <div tw="flex flex-col text-4xl">
-                  Emissions of 1 {co2Avg.unit}
-                </div>
-                <p tw="flex flex-col text-8xl leading-[0.9]">{co2Avg.title}</p>
+          <div tw="flex justify-between items-end mt-8">
+            <div tw="flex flex-col shrink flex-1 -mb-1">
+              <div tw="flex flex-col text-4xl">
+                Emissions of 1 {co2Avg.unit}
               </div>
-              <div tw="flex shrink-0 items-end">{formattedAvg}</div>
+              <div tw="flex flex-col text-8xl leading-[0.9] -ml-1">
+                {co2Avg.title}
+              </div>
             </div>
-            <div tw="flex flex-col text-4xl mb-4 ml-4 self-end">kg CO₂e</div>
+            <div tw="flex shrink-0 text-[42] leading-[0.75]">
+              {formattedInteger}
+            </div>
+            <div tw="flex flex-col text-4xl justify-end">
+              <div tw="flex flex-col ml-4 self-end">kg CO₂e</div>
+              <div tw="flex">{formattedAvgRest}</div>
+            </div>
           </div>
         </OgImageFrame>
       ),
