@@ -5,6 +5,12 @@ import { PlanetScaleDialect } from 'kysely-planetscale'
 const dialect = () => {
   switch (process.env.NODE_ENV) {
     case 'development': {
+      console.log(
+        `Loading MySQL driver for local development environment @${
+          process.env.DATABASE_URL?.split('@')[1]
+        }`
+      )
+
       const { createPool } = require('mysql2')
       return new MysqlDialect({
         pool: createPool({
@@ -16,8 +22,9 @@ const dialect = () => {
       })
     }
 
-    default:
+    default: {
       return new PlanetScaleDialect({ url: process.env.DATABASE_URL })
+    }
   }
 }
 
