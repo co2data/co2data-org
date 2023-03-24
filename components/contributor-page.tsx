@@ -1,8 +1,9 @@
-import Co2Average from '@/components/co2-average'
-import { getAllCo2Averages } from '@/domain/co2'
+import { repository } from '@/domain/co2'
 import ContributorList from './contributor-list'
 
 export default async function ContributorPage() {
+  const { getAllCo2Averages } = repository()
+
   const co2Averages = await getAllCo2Averages()
 
   return (

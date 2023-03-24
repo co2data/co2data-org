@@ -1,6 +1,6 @@
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
-import { getCo2AverageBySlug } from '@/domain/co2'
+import { repository } from '@/domain/co2'
 import { getAllSourcesByCo2ProducerId } from '@/domain/source'
 import type { Metadata } from 'next/types'
 import Link from 'next/link'
@@ -14,6 +14,8 @@ type Params = {
 }
 
 export default async function Home({ params }: Params) {
+  const { getCo2AverageBySlug } = repository()
+
   const co2Average = await getCo2AverageBySlug(params.slug)
 
   if (!co2Average) {
@@ -76,6 +78,8 @@ export default async function Home({ params }: Params) {
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { getCo2AverageBySlug } = repository()
+
   const co2Average = await getCo2AverageBySlug(params.slug)
   if (!co2Average) return {}
 

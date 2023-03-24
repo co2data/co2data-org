@@ -11,7 +11,9 @@ test('finds a contributor', async ({ page }) => {
 
   await page.getByLabel('Search').fill('Pork')
 
-  await expect(page.getByRole('main').getByRole('link')).toHaveText('Pork')
+  await expect(
+    page.getByRole('main').getByRole('link', { name: 'Pork' })
+  ).toBeInViewport()
 })
 
 test('opens a contributor', async ({ page }) => {

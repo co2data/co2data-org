@@ -4,7 +4,7 @@ import { db } from '@/infra/db'
 import { remark } from 'remark'
 import html from 'remark-html'
 
-function makeSourceRepository(deps = { db }): SourceRepository {
+export function makeSourceRepository(deps = { db }): SourceRepository {
   return {
     getAllSourcesByCo2ProducerId: cache(async (id: string) => {
       const data = await deps.db
@@ -26,4 +26,4 @@ async function markdownToHtml(markdown: string) {
   return result.toString()
 }
 
-export default makeSourceRepository
+export default makeSourceRepository()

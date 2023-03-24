@@ -1,4 +1,4 @@
-import makeCo2Repository from '@/adapter/co2-repository'
+import makeRepository from '@/adapter/co2-repository'
 
 export type Unit =
   | 'gram'
@@ -29,7 +29,4 @@ export type Co2Repository = {
   getCo2AverageBySlug: (slug: string) => Promise<Co2Average | undefined>
 }
 
-const repository = makeCo2Repository()
-
-export const getAllCo2Averages = repository.getAllCo2Averages
-export const getCo2AverageBySlug = repository.getCo2AverageBySlug
+export const repository = makeRepository

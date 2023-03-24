@@ -1,5 +1,5 @@
 import OgImageFrame from '@/components/og-image-frame'
-import { getCo2AverageBySlug } from '@/domain/co2'
+import { repository } from '@/domain/co2'
 import { ImageResponse } from '@vercel/og'
 import type { NextRequest } from 'next/server'
 import { Fragment } from 'react'
@@ -13,6 +13,8 @@ const formatter = new Intl.NumberFormat('en', {
   unit: 'kilogram',
   notation: 'compact',
 })
+
+const { getCo2AverageBySlug } = repository()
 
 export default async function OG(req: NextRequest) {
   try {

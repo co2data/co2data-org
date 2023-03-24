@@ -1,4 +1,4 @@
-import makeSourceRepository from '@/adapter/source-repository'
+import repo from '@/adapter/source-repository'
 
 export type Source = {
   id: string
@@ -16,7 +16,4 @@ export type SourceRepository = {
   getAllSourcesByCo2ProducerId: (id: string) => Promise<Source[]>
 }
 
-const repository = makeSourceRepository()
-
-export const getAllSourcesByCo2ProducerId =
-  repository.getAllSourcesByCo2ProducerId
+export const getAllSourcesByCo2ProducerId = repo.getAllSourcesByCo2ProducerId

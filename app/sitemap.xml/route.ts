@@ -1,5 +1,7 @@
-import { getAllCo2Averages } from '@/domain/co2'
+import { repository } from '@/domain/co2'
 import { baseUrl } from '../config'
+
+const { getAllCo2Averages } = repository()
 
 export async function GET() {
   const co2Averages = await getAllCo2Averages()
