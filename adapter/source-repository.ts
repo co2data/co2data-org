@@ -25,11 +25,6 @@ export function makeSourceRepository(deps = { db }): SourceRepository {
         .where('amount.co2_producer_id', '=', id)
         .execute()
 
-      console.log(
-        'sources for link searching',
-        amountSources.map((i) => i.source_id)
-      )
-
       const links = await deps.db
         .selectFrom('links')
         .selectAll()
@@ -39,17 +34,20 @@ export function makeSourceRepository(deps = { db }): SourceRepository {
           amountSources.map((i) => i.source_id)
         )
         .execute()
-      const mappedData = amountSources.map(async (source) => ({
-        ...source,
-        description: await markdownToHtml(source.description),
-        links:
-          links.length > 0
-            ? links.map((link) => ({
-                ...link,
-                mediaType: link.media_type,
-              }))
-            : null,
-      }))
+      const mappedData = amountSources.map(async (source) => {
+        const linksOfSource = links
+          .filter((link) => link.sources_id === source.source_id)
+          .map((link) => ({
+            ...link,
+            mediaType: link.media_type,
+          }))
+
+        return {
+          ...source,
+          description: await markdownToHtml(source.description),
+          links: linksOfSource.length > 0 ? linksOfSource : null,
+        }
+      })
       return Promise.all(mappedData)
     }),
   }
