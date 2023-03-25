@@ -11,7 +11,8 @@
     "ci": "vitest run && next build",
     "generate-db-types": "kysely-codegen --out-file ./infra/db/types.d.ts",
     "connect-to-prod-db": "pscale connect co2data-org main --role reader",
-    "connect-to-db": "pscale connect co2data-org"
+    "connect-to-db": "pscale connect co2data-org",
+    "db-push": "prisma db push --skip-generate && kysely-codegen --out-file ./infra/db/types.d.ts"
   },
   "dependencies": {
     "@planetscale/database": "^1.5.0",

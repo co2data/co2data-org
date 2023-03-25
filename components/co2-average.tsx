@@ -17,7 +17,7 @@ const Co2Average = ({ co2Average }: Props) => {
       <p className="px-4 text-right text-3xl font-bold">
         {
           +parseFloat(
-            ((Number(co2Average.avg_per_year) ?? 1) / 1000).toFixed(3)
+            ((Number(co2Average.avg_per_year) ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
           )
         }{' '}
         <span className="text-sm font-normal">kg</span>
