@@ -53,7 +53,7 @@ model links {
   sources_id String @db.Char(36)
   name       String
   media_type String
-  url        String
+  url        String @db.VarChar(2000)
 
   @@index([sources_id])
 }
