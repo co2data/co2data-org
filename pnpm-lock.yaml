@@ -25,6 +25,7 @@ specifiers:
   postcss: ^8.4.21
   prettier: ^2.8.3
   prettier-plugin-tailwindcss: ^0.2.2
+  prisma: ^4.11.0
   react: 18.2.0
   react-dom: 18.2.0
   remark: ^14.0.2
@@ -66,6 +67,7 @@ devDependencies:
   postcss: 8.4.21
   prettier: 2.8.3
   prettier-plugin-tailwindcss: 0.2.2_prettier@2.8.3
+  prisma: 4.11.0
   tailwindcss: 3.2.4_postcss@8.4.21
   testtriple: 2.2.3
   vitest: 0.29.2_happy-dom@8.9.0
@@ -746,6 +748,11 @@ packages:
       playwright-core: 1.31.2
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  /@prisma/engines/4.11.0:
+    resolution: {integrity: sha512-0AEBi2HXGV02cf6ASsBPhfsVIbVSDC9nbQed4iiY5eHttW9ZtMxHThuKZE1pnESbr8HRdgmFSa/Kn4OSNYuibg==}
+    requiresBuild: true
     dev: true
 
   /@resvg/resvg-wasm/2.4.1:
@@ -3482,6 +3489,15 @@ packages:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
+    dev: true
+
+  /prisma/4.11.0:
+    resolution: {integrity: sha512-4zZmBXssPUEiX+GeL0MUq/Yyie4ltiKmGu7jCJFnYMamNrrulTBc+D+QwAQSJ01tyzeGHlD13kOnqPwRipnlNw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 4.11.0
     dev: true
 
   /prop-types/15.8.1:
