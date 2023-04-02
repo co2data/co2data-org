@@ -1,28 +1,30 @@
+import { mockPlanetScale } from '@/infra/mock/server'
 import { describe, expect, test } from 'vitest'
-
-import co2Repository, { createCo2AveragesTestData } from './co2-repository'
+import repo from './co2-repository'
 
 describe('co2-repository', () => {
   test('getAllCo2Averages', async () => {
-    const repo = setup()
-    const actual = await repo.getCo2AverageBySlug('test')
-    expect(actual).toStrictEqual({
-      avg_per_unit: 22,
-      avg_per_year: 2222,
-      single_consumption_average: 2,
-      single_consumption_from: 1,
-      single_consumption_to: 10,
-      slug: 'test',
-      times_per_year_average: 50,
-      times_per_year_from: 1,
-      times_per_year_to: 200,
-      title: 'Test',
-      unit: 'kilometer',
-      id: 'test',
-    })
+    const mockData = [
+      {
+        id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
+        title: 'Grains',
+        slug: 'test',
+        unit: 'kilogram',
+        avgPerYear: 675000,
+        avgPerUnit: 27000,
+        singleConsumptionFrom: 0,
+        singleConsumptionTo: 0.5,
+        singleConsumptionAverage: 0.05,
+        timesPerYearFrom: 0,
+        timesPerYearTo: 1000,
+        timesPerYearAverage: 500,
+      },
+    ]
+
+    mockPlanetScale(mockData)
+
+    const actual = await repo().getCo2AverageBySlug('test')
+
+    expect(actual).toStrictEqual(mockData[0])
   })
 })
-
-const setup = () => {
-  return co2Repository(createCo2AveragesTestData())
-}
