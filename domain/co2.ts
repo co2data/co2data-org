@@ -14,14 +14,14 @@ export type Co2Average = {
   title: string
   slug: string
   unit: Unit
-  avg_per_year: number
-  avg_per_unit: number
-  single_consumption_from: number
-  single_consumption_to: number
-  single_consumption_average: number
-  times_per_year_from: number
-  times_per_year_to: number
-  times_per_year_average: number
+  avgPerYear: number
+  avgPerUnit: number
+  singleConsumptionFrom: number
+  singleConsumptionTo: number
+  singleConsumptionAverage: number
+  timesPerYearFrom: number
+  timesPerYearTo: number
+  timesPerYearAverage: number
 }
 
 export type Co2Repository = {

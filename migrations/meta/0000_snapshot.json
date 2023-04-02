@@ -1,0 +1,519 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "mysql",
+  "tables": {
+    "categories": {
+      "name": "categories",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "default": "''",
+          "autoincrement": false,
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {}
+    },
+    "co2_average": {
+      "name": "co2_average",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "autoincrement": false,
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit": {
+          "autoincrement": false,
+          "name": "unit",
+          "type": "enum('kilometer','hour','gram','meter','kilogram','liter','minute')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avg_per_year": {
+          "autoincrement": false,
+          "name": "avg_per_year",
+          "type": "decimal(16,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avg_per_unit": {
+          "autoincrement": false,
+          "name": "avg_per_unit",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "single_consumption_from": {
+          "autoincrement": false,
+          "name": "single_consumption_from",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "single_consumption_to": {
+          "autoincrement": false,
+          "name": "single_consumption_to",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "single_consumption_average": {
+          "autoincrement": false,
+          "name": "single_consumption_average",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "times_per_year_from": {
+          "autoincrement": false,
+          "name": "times_per_year_from",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "times_per_year_to": {
+          "autoincrement": false,
+          "name": "times_per_year_to",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "times_per_year_average": {
+          "autoincrement": false,
+          "name": "times_per_year_average",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {}
+    },
+    "co2_producers": {
+      "name": "co2_producers",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category_id": {
+          "autoincrement": false,
+          "name": "category_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "autoincrement": false,
+          "name": "image",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit": {
+          "autoincrement": false,
+          "name": "unit",
+          "type": "enum('kilometer','hour','gram','meter','kilogram','liter','minute')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "single_consumption_from": {
+          "autoincrement": false,
+          "name": "single_consumption_from",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "single_consumption_to": {
+          "autoincrement": false,
+          "name": "single_consumption_to",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "single_consumption_average": {
+          "autoincrement": false,
+          "name": "single_consumption_average",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "times_per_year_from": {
+          "autoincrement": false,
+          "name": "times_per_year_from",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "times_per_year_to": {
+          "autoincrement": false,
+          "name": "times_per_year_to",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "times_per_year_average": {
+          "autoincrement": false,
+          "name": "times_per_year_average",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "autoincrement": false,
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "category_id": {
+          "name": "category_id",
+          "columns": [
+            "category_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {}
+    },
+    "links": {
+      "name": "links",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "sources_id": {
+          "autoincrement": false,
+          "name": "sources_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_type": {
+          "autoincrement": false,
+          "name": "media_type",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "autoincrement": false,
+          "name": "url",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "links_sources_id_idx": {
+          "name": "links_sources_id_idx",
+          "columns": [
+            "sources_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {}
+    },
+    "sourced_co2_amounts": {
+      "name": "sourced_co2_amounts",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "co2_producer_id": {
+          "autoincrement": false,
+          "name": "co2_producer_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "autoincrement": false,
+          "name": "source_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "g_co2e": {
+          "autoincrement": false,
+          "name": "g_co2e",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "per": {
+          "autoincrement": false,
+          "name": "per",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quote": {
+          "autoincrement": false,
+          "name": "quote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_co2e_amount": {
+          "autoincrement": false,
+          "name": "source_co2e_amount",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_co2e_unit": {
+          "autoincrement": false,
+          "name": "source_co2e_unit",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "sourced_co2_amounts_source_id_co2_producer_id_idx": {
+          "name": "sourced_co2_amounts_source_id_co2_producer_id_idx",
+          "columns": [
+            "source_id",
+            "co2_producer_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {}
+    },
+    "sources": {
+      "name": "sources",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "co2_producer_id": {
+          "autoincrement": false,
+          "name": "co2_producer_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "autoincrement": false,
+          "name": "region",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "year": {
+          "autoincrement": false,
+          "name": "year",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "g_co2e": {
+          "autoincrement": false,
+          "name": "g_co2e",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "per": {
+          "autoincrement": false,
+          "name": "per",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "default": "''",
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "index_co2_producers": {
+          "name": "index_co2_producers",
+          "columns": [
+            "co2_producer_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "default": "(uuid())",
+          "autoincrement": false,
+          "name": "id",
+          "type": "char(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "autoincrement": false,
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "autoincrement": false,
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "locked_at": {
+          "autoincrement": false,
+          "name": "locked_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "failed_login_attempts": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "failed_login_attempts",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

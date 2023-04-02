@@ -1,8 +1,9 @@
-import { Kysely, MysqlDialect } from 'kysely'
-import { DB } from './types'
-import { PlanetScaleDialect } from 'kysely-planetscale'
+import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
+import { drizzle as mysqlDrizzle } from 'drizzle-orm/mysql2'
 
-const dialect = () => {
+import { connect } from '@planetscale/database'
+
+const connection = () => {
   switch (process.env.NODE_ENV) {
     case 'development': {
       console.log(
@@ -11,21 +12,30 @@ const dialect = () => {
         }`
       )
 
-      const { createPool } = require('mysql2')
-      return new MysqlDialect({
-        pool: createPool({
-          host: '127.0.0.1',
-          user: 'root',
-          password: 'password',
-          database: 'co2data-org',
-        }),
+      const { createPool } = require('mysql2/promise')
+      const connection = createPool({
+        host: '127.0.0.1',
+        user: 'root',
+        password: 'password',
+        database: 'co2data-org',
       })
+
+      return mysqlDrizzle(connection)
+    }
+    case 'test': {
+      console.log('Loading test db connection...')
+
+      const connection = connect({ url: 'mysql://test:test@psdb.cloud/db' })
+      return planetscaleDrizzle(connection)
     }
 
     default: {
-      return new PlanetScaleDialect({ url: process.env.DATABASE_URL })
+      console.log('Loading Planetscale db connection...')
+
+      const connection = connect({ url: process.env.DATABASE_URL })
+      return planetscaleDrizzle(connection)
     }
   }
 }
 
-export const db = new Kysely<DB>({ dialect: dialect() })
+export const db = connection()

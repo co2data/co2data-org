@@ -1,6 +1,8 @@
-import { cache } from 'react'
 import { SourceRepository } from '@/domain/source'
 import { db } from '@/infra/db'
+import { links, sourcedCo2Amounts, sources } from '@/migrations/schema'
+import { eq, or } from 'drizzle-orm/expressions'
+import { cache } from 'react'
 import { remark } from 'remark'
 import html from 'remark-html'
 
@@ -8,39 +10,33 @@ export function makeSourceRepository(deps = { db }): SourceRepository {
   return {
     getAllSourcesByCo2ProducerId: cache(async (id: string) => {
       const amountSources = await deps.db
-        .selectFrom('sourced_co2_amounts as amount')
-        .innerJoin('sources', 'sources.id', 'amount.source_id')
-        .select([
-          'amount.id',
-          'amount.g_co2e',
-          'amount.per',
-          'amount.quote',
-          'amount.description',
-          'amount.user_id',
-          'sources.name',
-          'sources.year',
-          'sources.region',
-          'sources.id as source_id',
-        ])
-        .where('amount.co2_producer_id', '=', id)
-        .execute()
+        .select({
+          id: sourcedCo2Amounts.id,
+          gCo2e: sourcedCo2Amounts.gCo2E,
+          per: sourcedCo2Amounts.per,
+          quote: sourcedCo2Amounts.quote,
+          description: sourcedCo2Amounts.description,
+          userId: sourcedCo2Amounts.userId,
+          name: sources.name,
+          year: sources.year,
+          region: sources.region,
+          sourcesId: sources.id,
+        })
+        .from(sourcedCo2Amounts)
+        .innerJoin(sources, eq(sourcedCo2Amounts.sourceId, sources.id))
+        .where(eq(sourcedCo2Amounts.co2ProducerId, id))
 
-      const links = await deps.db
-        .selectFrom('links')
-        .selectAll()
+      const linksResult = await deps.db
+        .select()
+        .from(links)
         .where(
-          'links.sources_id',
-          'in',
-          amountSources.map((i) => i.source_id)
+          or(...amountSources.map((i) => eq(links.sourcesId, i.sourcesId)))
         )
-        .execute()
+
       const mappedData = amountSources.map(async (source) => {
-        const linksOfSource = links
-          .filter((link) => link.sources_id === source.source_id)
-          .map((link) => ({
-            ...link,
-            mediaType: link.media_type,
-          }))
+        const linksOfSource = linksResult.filter(
+          (link) => link.sourcesId === source.sourcesId
+        )
 
         return {
           ...source,

@@ -25,7 +25,7 @@ export default async function OG(req: NextRequest) {
     if (!co2Avg) throw Error(`Didn\'t find co2 data with slug "${slug}".`)
 
     const formattedParts = formatter.formatToParts(
-      (co2Avg.avg_per_unit ?? 1) / 1000 // could use https://convert.js.org/ for the conversion
+      (co2Avg.avgPerUnit ?? 1) / 1000 // could use https://convert.js.org/ for the conversion
     )
 
     const formattedInteger = formattedParts.find(

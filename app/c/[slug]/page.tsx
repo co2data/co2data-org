@@ -52,7 +52,7 @@ export default async function Home({ params }: Params) {
               ></path>
             </svg>
             <span className="font-bold">
-              {+parseFloat(((co2Average.avg_per_unit ?? 1) / 1000).toFixed(3))}{' '}
+              {+parseFloat(((co2Average.avgPerUnit ?? 1) / 1000).toFixed(3))}{' '}
               {/* // could use https://convert.js.org/ for the conversion */}
             </span>
             &nbsp;
@@ -87,7 +87,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
     co2Average.title
   }" are ${+parseFloat(
-    ((co2Average.avg_per_unit ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
+    ((co2Average.avgPerUnit ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
   )} kg CO₂e`
 
   return {

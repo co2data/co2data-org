@@ -17,7 +17,7 @@ const Co2Average = ({ co2Average }: Props) => {
       <p className="px-4 text-right text-3xl font-bold">
         {
           +parseFloat(
-            ((Number(co2Average.avg_per_year) ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
+            ((Number(co2Average.avgPerYear) ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
           )
         }{' '}
         <span className="text-sm font-normal">kg</span>
@@ -25,7 +25,7 @@ const Co2Average = ({ co2Average }: Props) => {
       <div className="flex justify-between gap-2">
         <p className="py-2 pl-4 text-xs">1 {co2Average.unit}</p>
         <p className="py-2 pr-4 text-xs">
-          {(co2Average.avg_per_unit ?? 1) / 1000} kg CO<sub>2</sub>e
+          {(co2Average.avgPerUnit ?? 1) / 1000} kg CO<sub>2</sub>e
         </p>
       </div>
     </li>
