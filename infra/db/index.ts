@@ -5,23 +5,23 @@ import { connect } from '@planetscale/database'
 
 const connection = () => {
   switch (process.env.NODE_ENV) {
-    case 'development': {
-      console.log(
-        `Loading MySQL driver for local development environment @${
-          process.env.DATABASE_URL?.split('@')[1]
-        }`
-      )
+    // case 'development': {
+    //   console.log(
+    //     `Loading MySQL driver for local development environment @${
+    //       process.env.DATABASE_URL?.split('@')[1]
+    //     }`
+    //   )
 
-      const { createPool } = require('mysql2/promise')
-      const connection = createPool({
-        host: '127.0.0.1',
-        user: 'root',
-        password: 'password',
-        database: 'co2data-org',
-      })
+    //   const { createPool } = require('mysql2/promise')
+    //   const connection = createPool({
+    //     host: '127.0.0.1',
+    //     user: 'root',
+    //     password: 'password',
+    //     database: 'co2data-org',
+    //   })
 
-      return mysqlDrizzle(connection)
-    }
+    //   return mysqlDrizzle(connection)
+    // }
     case 'test': {
       console.log('Loading test db connection...')
 
