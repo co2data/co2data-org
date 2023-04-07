@@ -14,7 +14,7 @@ function makeCo2Repository(): Co2Repository {
       return data.map((co2Average) => ({
         ...co2Average,
         avgPerYear: Number(co2Average.avgPerYear ?? 1),
-        avgPerUnit: co2Average.avgPerYear ?? 1,
+        avgPerUnit: co2Average.avgPerUnit ?? 1,
       }))
     }),
     getCo2AverageBySlug: cache(async (slug: string) => {
