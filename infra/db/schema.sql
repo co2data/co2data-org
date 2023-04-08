@@ -76,9 +76,9 @@ SELECT
 	`co2`.`slug`,
 	`co2`.`unit`,
 	cast(
-		`co2`.`single_consumption_average` * `co2`.`times_per_year_average` * AVG(`sources`.`g_co2e`) AS DECIMAL (16, 2)) AS avg_per_year,
+		`co2`.`single_consumption_average` * `co2`.`times_per_year_average` * AVG(`sourced_co2_amounts`.`g_co2e`) AS DECIMAL (16, 2)) AS avg_per_year,
 	avg(
-		`sources`.`g_co2e`) AS `avg_per_unit`,
+		`sourced_co2_amounts`.`g_co2e`) AS `avg_per_unit`,
   `co2`.`single_consumption_from`,
   `co2`.`single_consumption_to`,
   `co2`.`single_consumption_average`,
@@ -87,9 +87,9 @@ SELECT
   `co2`.`times_per_year_average`
 FROM (
 	`co2_producers` `co2`
-	JOIN `sources` ON ((`co2`.`id` = `sources`.`co2_producer_id`)))
+	JOIN `sourced_co2_amounts` ON ((`co2`.`id` = `sourced_co2_amounts`.`co2_producer_id`)))
 GROUP BY
-	`sources`.`co2_producer_id`;
+	`sourced_co2_amounts`.`co2_producer_id`;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

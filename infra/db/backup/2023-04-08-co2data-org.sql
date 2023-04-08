@@ -3,8 +3,8 @@
 --
 -- https://tableplus.com/
 --
--- Database: mydb
--- Generation Time: 2023-01-28 11:48:56.7410
+-- Database: co2data-org
+-- Generation Time: 2023-04-08 10:49:12.7640
 -- -------------------------------------------------------------
 
 
@@ -49,34 +49,6 @@ INSERT INTO `co2_producers` (`id`, `title`, `description`, `category_id`, `image
 ('f71d3153-3746-44f1-bc0b-0a7d92565efe', 'Grains', NULL, '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'kilogram', 0, 0.5, 0.05, 0, 1000, 500, 'grains'),
 ('f8f07a6e-f98e-43ee-b56e-49b551441179', 'Palm Oil', NULL, '64ac4651-062b-47db-ae5f-9929dc73950d', '', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'liter', 0, 0.4, 0.01, 0, 1600, 800, 'palm-oil');
 
-INSERT INTO `sources` (`id`, `co2_producer_id`, `region`, `year`, `user_id`, `name`) VALUES
-('083cab84-b0fb-47a0-8e42-001860395395', 'dc70a896-b475-4c0a-b8d2-d0db382cd3c4', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('1488d81e-80a9-496e-884b-76da03592ee9', '4067b5fe-582d-4cc1-948b-3c704aebd5fa', 'USA', 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'How much carbon dioxide is produced per kilowatthour of U.S. electricity generation?'),
-('1f7e6a1f-7c88-4b17-b542-d92d2e542e48', '95a12fea-124f-4c05-a0a2-ba5faa4adb9a', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('24731ab3-aa70-41d8-9a89-bd9215a5a081', '3fcf0a84-a438-440c-bb90-1221907caa8a', 'Global', 2005, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Greenhouse gas emissions from ruminant supply chains'),
-('2890e38a-7d6f-47ba-8a44-3f0576c2cce8', 'c72452c9-d4cb-4a9b-8a99-113ee7c24dc5', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('2cbfccbc-aec1-4cf4-89d2-7a169fc507a8', 'f71d3153-3746-44f1-bc0b-0a7d92565efe', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('354342a1-adea-449f-8b1e-7e37413317ea', 'ba7ba10c-fd19-48e7-a606-8941f34775df', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('38f80b84-84f0-481f-81c9-ae416af6ef7a', '7e7363d7-458a-45c9-8158-845628aab7eb', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek3'),
-('48e02428-dbd8-4f88-8df1-63515c28828d', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2013, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Major cuts of greenhouse gas emissions from livestock within reach'),
-('4bcd924c-4d94-4498-aab0-2f17230ea32e', '258aaa11-a891-4f9a-b29b-67086edd53e6', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('554bc400-2769-4dca-b113-35c09afebd3b', '67ac058e-4156-404e-8933-fa43e950550c', 'UK', 2009, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Quantifying the energy  and carbon effects of  water saving'),
-('6da879ec-4daa-44e7-8db6-28e570636c8f', 'eb71fed0-ca8b-4dfd-a201-0ae62150bc61', NULL, NULL, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('6fb022bf-2b1c-4bac-90d4-340e64c0ea21', 'ae13e603-b2f5-4a4a-a8ba-2799f32a2dc4', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', ''),
-('71fc3493-3269-49a9-b773-84976d4d1c5b', '8ade21c7-64e5-4c36-9308-7414c826f73f', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('7ba3b2bd-a209-486b-ab4e-869612153f0c', 'd8bcad6a-77a3-4ce6-8d4f-aee796e35117', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and consumers'),
-('9a12a2bf-4a47-4a36-96d8-14ba8330db6c', 'd9e9f7c1-ba53-4477-8a8f-74ea39c4d631', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('a2268f70-d29c-482b-b320-3abf2ab52665', '4067b5fe-582d-4cc1-948b-3c704aebd5fa', 'Switzerland', 2018, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'How climate-friendly is Swiss electricity?'),
-('a925b2ae-a7e3-4c94-974c-37eed66e9f20', 'f8f07a6e-f98e-43ee-b56e-49b551441179', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('c6efc062-36c3-43ce-8408-30ede05bd8ca', '05e9b91f-fe9e-4679-86c7-fe60fa13fae4', 'Global', 2014, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Learn the facts: Fuel consumption and CO₂'),
-('cab21f63-8873-44d4-9621-ab5436c7da8c', '3570f84b-fcc7-45c5-b415-ec19a56c77ea', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('d03c94bc-b6b1-43df-9c53-80ef1ff7a001', '3fcf0a84-a438-440c-bb90-1221907caa8a', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('d1a953aa-1299-43bc-9ffa-4f96e2c82719', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and consumers, J. Poore, T. Nemecek'),
-('eb9c2db0-1eb2-4fbf-a20b-fe7ffa2e5872', '34669972-a53e-4bee-a2cc-2c8414014a39', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and consumers'),
-('ed43ec62-72e9-42d4-8522-4682e4651513', '2a3fd46e-f20d-4961-a89e-11b9236448e4', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
-('f2080f15-f195-4661-b0fb-7a5c4bbb7f2d', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2013, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Tackling Climate Change Through Livestock'),
-('fbf38fe8-5591-4ff5-b166-258a2c928a5e', '684b6b08-8b7d-4012-b24b-fafc7464a510', 'UK', 2020, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Greenhouse gas reporting: conversion factors 2020');
-
 INSERT INTO `sourced_co2_amounts` (`id`, `co2_producer_id`, `source_id`, `g_co2e`, `per`, `quote`, `description`, `user_id`, `source_co2e_amount`, `source_co2e_unit`) VALUES
 ('2b8b9d91-d5e2-11ed-9416-de741d4b6ce8', 'dc70a896-b475-4c0a-b8d2-d0db382cd3c4', '083cab84-b0fb-47a0-8e42-001860395395', 42000, 1, NULL, '100g protein from eggs mean 4.2 kg CO2 eq.\n\n[ora.ox.ac.uk](https://ora.ox.ac.uk/objects/uuid:b0b53649-5e93-4415-bf07-6b0b1227172f)\n[PDF](https://ora.ox.ac.uk/objects/uuid:b0b53649-5e93-4415-bf07-6b0b1227172f/download_file?file_format=pdf&safe_filename=Reducing_foods_environment_impacts_Science%2B360%2B6392%2B987%2B-%2BAccepted%2BManuscript.pdf&type_of_work=Journal+article#page=6)', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', NULL, NULL),
 ('2b8d837c-d5e2-11ed-9416-de741d4b6ce8', '4067b5fe-582d-4cc1-948b-3c704aebd5fa', '1488d81e-80a9-496e-884b-76da03592ee9', 3, 1, NULL, '[eia.gov](https://www.eia.gov/tools/faqs/faq.php?id=74&t=11#:~:text=This%20equaled%20about%200.92%20pounds%20of%20CO2%20emissions%20per%20kWh)', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', NULL, NULL),
@@ -104,6 +76,34 @@ INSERT INTO `sourced_co2_amounts` (`id`, `co2_producer_id`, `source_id`, `g_co2e
 ('2bb5e145-d5e2-11ed-9416-de741d4b6ce8', '2a3fd46e-f20d-4961-a89e-11b9236448e4', 'ed43ec62-72e9-42d4-8522-4682e4651513', 57000, 1, NULL, '100g protein from poultry meat mean 5.7 kg CO2 eq.\n\n[ora.ox.ac.uk](https://ora.ox.ac.uk/objects/uuid:b0b53649-5e93-4415-bf07-6b0b1227172f)\n[PDF](https://ora.ox.ac.uk/objects/uuid:b0b53649-5e93-4415-bf07-6b0b1227172f/download_file?file_format=pdf&safe_filename=Reducing_foods_environment_impacts_Science%2B360%2B6392%2B987%2B-%2BAccepted%2BManuscript.pdf&type_of_work=Journal+article#page=6)', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', NULL, NULL),
 ('2bb7ab8e-d5e2-11ed-9416-de741d4b6ce8', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'f2080f15-f195-4661-b0fb-7a5c4bbb7f2d', 67600, 1, NULL, '67,6kg CO2-eq/kg product of beef (carcass weight and does not include post-harvest emissions.) \n\n[fao.org (PDF)](https://www.fao.org/3/i3437e/i3437e.pdf) Page 24', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', NULL, NULL),
 ('2bb9716f-d5e2-11ed-9416-de741d4b6ce8', '684b6b08-8b7d-4012-b24b-fafc7464a510', 'fbf38fe8-5591-4ff5-b166-258a2c928a5e', 112.86, 1, NULL, '[Excel](<https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2020#:~:text=Conversion%20factors%202020:%20condensed%20set%20(for%20most%20users)>) Sheet Business travel- sea', '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', NULL, NULL);
+
+INSERT INTO `sources` (`id`, `co2_producer_id`, `region`, `year`, `user_id`, `name`) VALUES
+('083cab84-b0fb-47a0-8e42-001860395395', 'dc70a896-b475-4c0a-b8d2-d0db382cd3c4', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('1488d81e-80a9-496e-884b-76da03592ee9', '4067b5fe-582d-4cc1-948b-3c704aebd5fa', 'USA', 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'How much carbon dioxide is produced per kilowatthour of U.S. electricity generation?'),
+('1f7e6a1f-7c88-4b17-b542-d92d2e542e48', '95a12fea-124f-4c05-a0a2-ba5faa4adb9a', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('24731ab3-aa70-41d8-9a89-bd9215a5a081', '3fcf0a84-a438-440c-bb90-1221907caa8a', 'Global', 2005, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Greenhouse gas emissions from ruminant supply chains'),
+('2890e38a-7d6f-47ba-8a44-3f0576c2cce8', 'c72452c9-d4cb-4a9b-8a99-113ee7c24dc5', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('2cbfccbc-aec1-4cf4-89d2-7a169fc507a8', 'f71d3153-3746-44f1-bc0b-0a7d92565efe', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('354342a1-adea-449f-8b1e-7e37413317ea', 'ba7ba10c-fd19-48e7-a606-8941f34775df', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('38f80b84-84f0-481f-81c9-ae416af6ef7a', '7e7363d7-458a-45c9-8158-845628aab7eb', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek3'),
+('48e02428-dbd8-4f88-8df1-63515c28828d', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2013, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Major cuts of greenhouse gas emissions from livestock within reach'),
+('4bcd924c-4d94-4498-aab0-2f17230ea32e', '258aaa11-a891-4f9a-b29b-67086edd53e6', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('554bc400-2769-4dca-b113-35c09afebd3b', '67ac058e-4156-404e-8933-fa43e950550c', 'UK', 2009, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Quantifying the energy  and carbon effects of  water saving'),
+('6da879ec-4daa-44e7-8db6-28e570636c8f', 'eb71fed0-ca8b-4dfd-a201-0ae62150bc61', NULL, NULL, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('6fb022bf-2b1c-4bac-90d4-340e64c0ea21', 'ae13e603-b2f5-4a4a-a8ba-2799f32a2dc4', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', ''),
+('71fc3493-3269-49a9-b773-84976d4d1c5b', '8ade21c7-64e5-4c36-9308-7414c826f73f', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('7ba3b2bd-a209-486b-ab4e-869612153f0c', 'd8bcad6a-77a3-4ce6-8d4f-aee796e35117', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and consumers'),
+('9a12a2bf-4a47-4a36-96d8-14ba8330db6c', 'd9e9f7c1-ba53-4477-8a8f-74ea39c4d631', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('a2268f70-d29c-482b-b320-3abf2ab52665', '4067b5fe-582d-4cc1-948b-3c704aebd5fa', 'Switzerland', 2018, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'How climate-friendly is Swiss electricity?'),
+('a925b2ae-a7e3-4c94-974c-37eed66e9f20', 'f8f07a6e-f98e-43ee-b56e-49b551441179', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('c6efc062-36c3-43ce-8408-30ede05bd8ca', '05e9b91f-fe9e-4679-86c7-fe60fa13fae4', 'Global', 2014, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Learn the facts: Fuel consumption and CO₂'),
+('cab21f63-8873-44d4-9621-ab5436c7da8c', '3570f84b-fcc7-45c5-b415-ec19a56c77ea', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('d03c94bc-b6b1-43df-9c53-80ef1ff7a001', '3fcf0a84-a438-440c-bb90-1221907caa8a', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('d1a953aa-1299-43bc-9ffa-4f96e2c82719', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and consumers, J. Poore, T. Nemecek'),
+('eb9c2db0-1eb2-4fbf-a20b-fe7ffa2e5872', '34669972-a53e-4bee-a2cc-2c8414014a39', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and consumers'),
+('ed43ec62-72e9-42d4-8522-4682e4651513', '2a3fd46e-f20d-4961-a89e-11b9236448e4', NULL, 2019, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Reducing food’s environmental impacts through producers and  consumers, J. Poore, T. Nemecek'),
+('f2080f15-f195-4661-b0fb-7a5c4bbb7f2d', 'c8d6f416-ad52-484f-9f7e-b510dac2c158', 'Global', 2013, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Tackling Climate Change Through Livestock'),
+('fbf38fe8-5591-4ff5-b166-258a2c928a5e', '684b6b08-8b7d-4012-b24b-fafc7464a510', 'UK', 2020, '22ecf9d3-27a8-4cbf-8b66-54d96fa6bd2c', 'Greenhouse gas reporting: conversion factors 2020');
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

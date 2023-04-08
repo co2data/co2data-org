@@ -9,10 +9,10 @@ export default function PersonalCo2({
   co2Average: Co2Average
 }) {
   const [consumption, setConsumption] = useState(
-    co2Average.single_consumption_average
+    co2Average.singleConsumptionAverage
   )
-  const [times, setTimes] = useState(co2Average.times_per_year_average)
-  const co2PerConsumption = co2Average.avg_per_unit * consumption
+  const [times, setTimes] = useState(co2Average.timesPerYearAverage)
+  const co2PerConsumption = co2Average.avgPerUnit * consumption
   const co2PerYear = times * co2PerConsumption
   const factorOfPersonYearFootprint = co2PerYear / 6000000
   const angle = (factorOfPersonYearFootprint % 1) * 360
@@ -47,7 +47,8 @@ export default function PersonalCo2({
                 CO<sub>2</sub>e per consumption
               </p>
               <p className="text-2xl">
-                <b>{+parseFloat((co2PerConsumption / 1000).toFixed(1))}</b>
+                <b>{+parseFloat((co2PerConsumption / 1000).toFixed(1))}</b>{' '}
+                {/* // could use https://convert.js.org/ for the conversion */}
                 &nbsp;kg
               </p>
             </div>
@@ -57,7 +58,8 @@ export default function PersonalCo2({
                 <sub>2</sub>e per year
               </p>
               <p className="text-2xl">
-                <b>{+parseFloat((co2PerYear / 1000).toFixed(1))}</b>&nbsp;kg
+                <b>{+parseFloat((co2PerYear / 1000).toFixed(1))}</b>&nbsp;kg{' '}
+                {/* // could use https://convert.js.org/ for the conversion */}
               </p>
             </div>
           </div>
@@ -75,11 +77,11 @@ export default function PersonalCo2({
               id="amountInput"
               type="range"
               className="range touch-pan-x text-sky-600"
-              min={co2Average.single_consumption_from}
-              max={co2Average.single_consumption_to}
+              min={co2Average.singleConsumptionFrom}
+              max={co2Average.singleConsumptionTo}
               step={
-                (co2Average.single_consumption_to -
-                  co2Average.single_consumption_from) /
+                (co2Average.singleConsumptionTo -
+                  co2Average.singleConsumptionFrom) /
                 50
               }
               value={consumption}
@@ -97,12 +99,10 @@ export default function PersonalCo2({
               id="timesPerYearInput"
               type="range"
               className="range touch-pan-x text-sky-600"
-              min={co2Average.times_per_year_from}
-              max={co2Average.times_per_year_to}
+              min={co2Average.timesPerYearFrom}
+              max={co2Average.timesPerYearTo}
               step={
-                (co2Average.times_per_year_to -
-                  co2Average.times_per_year_from) /
-                50
+                (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) / 50
               }
               value={times}
               // onInput={(e) => setTimes(e)}

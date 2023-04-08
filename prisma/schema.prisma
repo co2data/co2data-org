@@ -1,0 +1,107 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model categories {
+  id    String @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  title String @db.Text
+  slug  String @default("") @db.VarChar(255)
+}
+
+model co2_producers {
+  id                         String             @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  title                      String             @db.VarChar(255)
+  description                String?            @db.Text
+  category_id                String             @db.Char(36)
+  image                      String?            @db.VarChar(255)
+  user_id                    String             @db.Char(36)
+  unit                       co2_producers_unit
+  single_consumption_from    Float
+  single_consumption_to      Float
+  single_consumption_average Float
+  times_per_year_from        Float
+  times_per_year_to          Float
+  times_per_year_average     Float
+  slug                       String             @db.VarChar(255)
+
+  @@index([category_id], map: "category_id")
+}
+
+model sources {
+  id              String  @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  co2_producer_id String  @db.Char(36)
+  region          String? @db.VarChar(255)
+  year            Int?
+  g_co2e          Float
+  per             Float
+  description     String  @db.Text
+  user_id         String  @db.Char(36)
+  name            String  @default("") @db.VarChar(255)
+
+  @@index([co2_producer_id], map: "index_co2_producers")
+}
+
+model links {
+  id         String @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  sources_id String @db.Char(36)
+  name       String
+  media_type String
+  url        String @db.VarChar(2000)
+
+  @@index([sources_id])
+}
+
+model sourced_co2_amounts {
+  id                 String  @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  co2_producer_id    String  @db.Char(36)
+  source_id          String  @db.Char(36)
+  g_co2e             Float
+  per                Float
+  quote              String? @db.Text
+  description        String  @db.Text
+  user_id            String  @db.Char(36)
+  source_co2e_amount Float?
+  source_co2e_unit   String? @db.VarChar(255)
+
+  @@index([source_id, co2_producer_id])
+}
+
+model users {
+  id                    String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  email                 String    @db.VarChar(255)
+  password_hash         String    @db.VarChar(255)
+  locked_at             DateTime? @db.Timestamp(0)
+  failed_login_attempts Int       @default(0)
+}
+
+view co2_average {
+  id                         String             @unique @default(dbgenerated("(uuid())")) @db.Char(36)
+  title                      String             @db.VarChar(255)
+  slug                       String             @db.VarChar(255)
+  unit                       co2_producers_unit
+  avg_per_year               Decimal?           @db.Decimal(16, 2)
+  avg_per_unit               Float?
+  single_consumption_from    Float
+  single_consumption_to      Float
+  single_consumption_average Float
+  times_per_year_from        Float
+  times_per_year_to          Float
+  times_per_year_average     Float
+}
+
+enum co2_producers_unit {
+  kilometer
+  hour
+  gram
+  meter
+  kilogram
+  liter
+  minute
+}

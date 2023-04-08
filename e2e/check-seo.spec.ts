@@ -1,4 +1,3 @@
-import { baseUrl } from '@/app/config'
 import { test, expect } from '@playwright/test'
 
 test('has title', async ({ page }) => {
@@ -11,7 +10,7 @@ test('has title', async ({ page }) => {
 test('checks sitemap.xml', async ({ page }) => {
   await page.goto('/sitemap.xml')
   const content = await page.content()
-  const urlToCheck = `${baseUrl}/c/pork`
+  const urlToCheck = `https://co2data.org/c/pork`
 
   expect(content).toContain(urlToCheck)
 })
@@ -22,19 +21,22 @@ test('checks robots.txt', async ({ page }) => {
 
   expect(actual).toContain('User-agent: *')
   expect(actual).toContain('Allow: ')
-  expect(actual).toContain(`Sitemap: ${baseUrl}/sitemap.xml`)
+  expect(actual).toContain(`Sitemap: https://co2data.org/sitemap.xml`)
 })
 
 test('head has canonical on root', async ({ page }) => {
   await page.goto('/')
   const metaDescription = page.locator('link[rel="canonical"]')
-  await expect(metaDescription).toHaveAttribute('href', `${baseUrl}/`)
+  await expect(metaDescription).toHaveAttribute('href', `https://co2data.org/`)
 })
 
 test('head has canonical on pork', async ({ page }) => {
   await page.goto('/c/pork')
   const metaDescription = page.locator('link[rel="canonical"]')
-  await expect(metaDescription).toHaveAttribute('href', `${baseUrl}/c/pork`)
+  await expect(metaDescription).toHaveAttribute(
+    'href',
+    `https://co2data.org/c/pork`
+  )
 })
 
 test('head has description', async ({ page }) => {

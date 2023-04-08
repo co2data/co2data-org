@@ -22,16 +22,40 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
         CO<sub>2</sub>e for {source.per} {unit}
       </p>
       <p className="px-4 pb-2 text-right ">
-        <span className="text-3xl font-bold">{source.g_co2e / 1000}</span>{' '}
+        <span className="text-3xl font-bold">{source.gCo2e / 1000}</span>{' '}
+        {/* // could use https://convert.js.org/ for the conversion */}
         <span className="">
           kg CO<sub>2</sub>e
         </span>
       </p>
-      <p className="px-4 pt-2 text-xs font-bold">Source</p>
+      <p className="px-4 pt-2 text-xs font-bold">Description</p>
       <div
         className="prose prose-sm px-4 pb-2 prose-p:my-1 prose-ul:my-1 prose-li:my-0"
         dangerouslySetInnerHTML={{ __html: source.description }}
       ></div>
+      {source.links && (
+        <>
+          <p className="px-4 pt-2 text-xs font-bold">Links</p>
+          <ul className="px-4 pb-2 ">
+            {source.links.map((link) => {
+              const url = new URL(link.url)
+              return (
+                <li key={link.id}>
+                  <a href={url.href} target="_blank" rel="noreferrer">
+                    {link.name}
+                  </a>{' '}
+                  {link.mediaType !== 'text/html' && (
+                    <span className="text-sm text-gray-400">
+                      {link.mediaType.split('/').at(-1)?.toUpperCase()}{' '}
+                    </span>
+                  )}
+                  <span className="text-sm text-gray-500">{url.hostname}</span>{' '}
+                </li>
+              )
+            })}
+          </ul>
+        </>
+      )}
     </li>
   )
 }

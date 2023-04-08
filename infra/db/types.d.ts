@@ -44,6 +44,27 @@ export interface Co2Producers {
   slug: string;
 }
 
+export interface Links {
+  id: Generated<string>;
+  sources_id: string;
+  name: string;
+  media_type: string;
+  url: string;
+}
+
+export interface SourcedCo2Amounts {
+  id: Generated<string>;
+  co2_producer_id: string;
+  source_id: string;
+  g_co2e: number;
+  per: number;
+  quote: string | null;
+  description: string;
+  user_id: string;
+  source_co2e_amount: number | null;
+  source_co2e_unit: string | null;
+}
+
 export interface Sources {
   id: Generated<string>;
   co2_producer_id: string;
@@ -68,6 +89,8 @@ export interface DB {
   categories: Categories;
   co2_average: Co2Average;
   co2_producers: Co2Producers;
+  links: Links;
+  sourced_co2_amounts: SourcedCo2Amounts;
   sources: Sources;
   users: Users;
 }
