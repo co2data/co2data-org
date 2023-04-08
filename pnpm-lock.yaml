@@ -13,7 +13,7 @@ specifiers:
   '@vercel/og': ^0.4.0
   '@vitejs/plugin-react': ^3.1.0
   autoprefixer: ^10.4.13
-  drizzle-kit: ^0.17.1
+  drizzle-kit: 0.17.1-609a4f0
   drizzle-orm: ^0.23.4
   eslint: 8.32.0
   eslint-config-next: 13.1.5
@@ -26,7 +26,6 @@ specifiers:
   postcss: ^8.4.21
   prettier: ^2.8.3
   prettier-plugin-tailwindcss: ^0.2.2
-  prisma: ^4.11.0
   react: 18.2.0
   react-dom: 18.2.0
   remark: ^14.0.2
@@ -60,7 +59,7 @@ devDependencies:
   '@testing-library/react': 14.0.0_biqbaboplfbrettd7655fr4n2y
   '@vitejs/plugin-react': 3.1.0
   autoprefixer: 10.4.13_postcss@8.4.21
-  drizzle-kit: 0.17.1
+  drizzle-kit: 0.17.1-609a4f0
   eslint-config-prettier: 8.6.0_eslint@8.32.0
   happy-dom: 9.1.0
   jsdom: 21.1.1
@@ -69,7 +68,6 @@ devDependencies:
   postcss: 8.4.21
   prettier: 2.8.3
   prettier-plugin-tailwindcss: 0.2.2_prettier@2.8.3
-  prisma: 4.11.0
   tailwindcss: 3.2.4_postcss@8.4.21
   testtriple: 2.2.3
   vitest: 0.29.2_cmjul5afz57jbsqpbbeoo4cczq
@@ -796,11 +794,6 @@ packages:
       playwright-core: 1.31.2
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
-
-  /@prisma/engines/4.11.0:
-    resolution: {integrity: sha512-0AEBi2HXGV02cf6ASsBPhfsVIbVSDC9nbQed4iiY5eHttW9ZtMxHThuKZE1pnESbr8HRdgmFSa/Kn4OSNYuibg==}
-    requiresBuild: true
     dev: true
 
   /@resvg/resvg-wasm/2.4.1:
@@ -1829,8 +1822,8 @@ packages:
       wordwrap: 1.0.0
     dev: true
 
-  /drizzle-kit/0.17.1:
-    resolution: {integrity: sha512-1+/RSzVMRpAjqQzr+Gi8st3Y3GrRzun/EG9MwASZ/iYOm3erLJgAaM4xTz9RiM/wLYonPI+I5MZRXStSpCfEmg==}
+  /drizzle-kit/0.17.1-609a4f0:
+    resolution: {integrity: sha512-bXflv8YQPe8gE+OSqllxVJEiwzupHjzu6tcBqfO4avrlspiP3shFJfDuHeiv+ztpKcG+8KXAuuFRIplJtD89LA==}
     hasBin: true
     dependencies:
       camelcase: 7.0.1
@@ -1841,6 +1834,7 @@ packages:
       glob: 8.1.0
       hanji: 0.0.5
       json-diff: 0.9.0
+      minimatch: 7.4.5
       zod: 3.21.4
     transitivePeerDependencies:
       - supports-color
@@ -3132,7 +3126,7 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       ansi-escapes: 4.3.2
-      chalk: 4.1.1
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-width: 3.0.0
       external-editor: 3.1.0
@@ -3539,7 +3533,7 @@ packages:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
     dependencies:
-      chalk: 4.1.1
+      chalk: 4.1.2
       is-unicode-supported: 0.1.0
     dev: true
 
@@ -3897,6 +3891,13 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
+  /minimatch/7.4.5:
+    resolution: {integrity: sha512-OzOamaOmNBJZUv2qqY1OSWa+++4YPpOkLgkc0w30Oov5ufKlWWXnFUl0l4dgmSv5Shq/zRVkEOXAe2NaqO4l5Q==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
+
   /minimist/1.2.7:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
 
@@ -4185,7 +4186,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       bl: 4.1.0
-      chalk: 4.1.1
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.7.0
       is-interactive: 1.0.0
@@ -4461,15 +4462,6 @@ packages:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
-    dev: true
-
-  /prisma/4.11.0:
-    resolution: {integrity: sha512-4zZmBXssPUEiX+GeL0MUq/Yyie4ltiKmGu7jCJFnYMamNrrulTBc+D+QwAQSJ01tyzeGHlD13kOnqPwRipnlNw==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      '@prisma/engines': 4.11.0
     dev: true
 
   /prop-types/15.8.1:
