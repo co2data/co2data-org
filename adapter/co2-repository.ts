@@ -1,6 +1,6 @@
 import { Co2Repository } from '@/domain/co2'
 import { db } from '@/infra/db'
-import { co2Average } from '@/migrations/schema'
+import { co2Average } from '@/infra/db/schema'
 import { eq } from 'drizzle-orm/expressions'
 import { cache as reactCache } from 'react'
 

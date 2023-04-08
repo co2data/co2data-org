@@ -30,7 +30,11 @@ const connection = () => {
     }
 
     default: {
-      console.log('Loading Planetscale db connection...')
+      console.log(
+        `Making Planetscale db connection to ${
+          process.env.DATABASE_URL?.split('@')[1]
+        }...`
+      )
 
       const connection = connect({ url: process.env.DATABASE_URL })
       return planetscaleDrizzle(connection)
