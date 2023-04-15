@@ -1,9 +1,5 @@
-'use client'
-import { useRouter } from 'next/navigation'
-
-const Q = () => {
-  const router = useRouter()
-  router.push('/c')
+const Placeholder = () => {
+  return null
 }
 
-export default Q
+export default Placeholder

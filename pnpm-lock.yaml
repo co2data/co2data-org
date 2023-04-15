@@ -32,6 +32,7 @@ specifiers:
   remark-html: ^15.0.2
   tailwindcss: ^3.2.4
   testtriple: ^2.2.3
+  ts-debounce: ^4.0.0
   typescript: 4.9.4
   vitest: ^0.29.2
 
@@ -50,6 +51,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   remark: 14.0.2
   remark-html: 15.0.2
+  ts-debounce: 4.0.0
   typescript: 4.9.4
 
 devDependencies:
@@ -5078,6 +5080,10 @@ packages:
 
   /trough/2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
+    dev: false
+
+  /ts-debounce/4.0.0:
+    resolution: {integrity: sha512-+1iDGY6NmOGidq7i7xZGA4cm8DAa6fqdYcvO5Z6yBevH++Bdo9Qt/mN0TzHUgcCcKv1gmh9+W5dHqz8pMWbCbg==}
     dev: false
 
   /tsconfig-paths/3.14.1:

@@ -1,5 +1,6 @@
-import React from 'react'
-import SearchBox from '../c/search-box'
+import React, { Suspense } from 'react'
+import SearchBox from './search-box'
+import SearchBoxFallback from './search-box-fallback'
 
 export default function Test({
   searchPart,
@@ -10,10 +11,17 @@ export default function Test({
 }) {
   return (
     <>
-      <SearchBox />
+      <div className="space-y-12 text-center sm:space-y-20 ">
+        <h1 className="text-6xl font-bold text-sky-600">
+          CO<sub>2</sub> Data
+        </h1>
+        <Suspense fallback={<SearchBoxFallback />}>
+          <SearchBox />
+        </Suspense>
+      </div>
       {searchPart}
 
-      {children}
+      <div className="pt-20">{children}</div>
     </>
   )
 }

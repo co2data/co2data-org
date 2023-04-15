@@ -16,7 +16,6 @@ export default async function Page({
 
   return (
     <>
-      <p>{JSON.stringify(searchParams)}</p>
       <ul>
         {co2Averages
           .filter((co2) =>

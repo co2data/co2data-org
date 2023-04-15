@@ -1,3 +1,4 @@
+import { Route } from 'next'
 import Link from 'next/link'
 
 export default function NotFound() {
@@ -7,7 +8,7 @@ export default function NotFound() {
         <nav>
           <ol className="flex gap-3">
             <li>
-              <Link href="/">Contributors</Link>
+              <Link href={'/' as Route}>Contributors</Link>
             </li>
           </ol>
         </nav>
@@ -15,7 +16,7 @@ export default function NotFound() {
       </header>
       <p>Could not find the requested contributor.</p>
       <p>
-        <Link className="text-sky-600" href="/">
+        <Link className="text-sky-600" href={'/' as Route}>
           Back to all contributors
         </Link>
       </p>

@@ -1,11 +1,12 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { Route } from 'next'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback } from 'react'
+import { debounce } from 'ts-debounce'
 
 export default function SearchBox() {
   const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()!
 
   const createQueryString = useCallback(
@@ -18,22 +19,22 @@ export default function SearchBox() {
     [searchParams]
   )
 
+  const getSearchResults = debounce((value) => {
+    router.replace(('/c?' + createQueryString('search', value)) as Route)
+  }, 500)
+
   return (
     <>
-      <p>Search</p>
-
-      <label htmlFor="search"></label>
+      <label htmlFor="search" className="sr-only"></label>
       <input
-        title="search"
-        placeholder="search"
+        className="rounded border-2 border-sky-600 bg-blue-50  focus:ring-4 focus:ring-sky-100"
+        title="Search"
+        placeholder="Search"
         type="search"
         name="search"
         id="search"
         onChange={(e) => {
-          router.push(
-            // @ts-ignore
-            pathname + '?' + createQueryString('search', e.target.value)
-          )
+          getSearchResults(e.target.value)
         }}
         defaultValue={
           new URLSearchParams(searchParams).get('search') ?? undefined

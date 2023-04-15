@@ -6,6 +6,7 @@ import type { Metadata } from 'next/types'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { baseUrl } from '@/app/config'
+import { Route } from 'next'
 
 type Params = {
   params: {
@@ -29,7 +30,7 @@ export default async function Home({ params }: Params) {
         <nav>
           <ol className="flex gap-3">
             <li>
-              <Link href="/">Contributors</Link>
+              <Link href={'/' as Route}>Contributors</Link>
             </li>
             <li className="ml-2 list-['>'] pl-2">{co2Average.title}</li>
           </ol>
