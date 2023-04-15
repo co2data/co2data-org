@@ -24,10 +24,10 @@ export default function SearchBox() {
   }, 500)
 
   return (
-    <>
+    <div className="after:z-10 after:focus-within:absolute after:focus-within:inset-0 after:focus-within:backdrop-blur-3xl ">
       <label htmlFor="search" className="sr-only"></label>
       <input
-        className="rounded border-2 border-sky-600 bg-blue-50  focus:ring-4 focus:ring-sky-100"
+        className="relative z-20 rounded border-2  border-sky-600 bg-blue-50 focus:ring-4 focus:ring-sky-100"
         title="Search"
         placeholder="Search"
         type="search"
@@ -40,6 +40,6 @@ export default function SearchBox() {
           new URLSearchParams(searchParams).get('search') ?? undefined
         }
       />
-    </>
+    </div>
   )
 }
