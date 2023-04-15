@@ -31,6 +31,7 @@ export default function SearchBox() {
         id="search"
         onChange={(e) => {
           router.push(
+            // @ts-ignore
             pathname + '?' + createQueryString('search', e.target.value)
           )
         }}

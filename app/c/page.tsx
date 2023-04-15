@@ -1,6 +1,8 @@
 import Co2Average from '@/components/co2-average'
 import { repository } from '@/domain/co2'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page({
   searchParams,
 }: {
