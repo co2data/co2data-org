@@ -1,3 +1,5 @@
-import ContributorPage from '@/components/contributor-page'
+import { redirect } from 'next/navigation'
 
-export default ContributorPage
+export default function RootPage() {
+  redirect('/c')
+}
