@@ -28,6 +28,7 @@ export default function RootLayout({
 }
 
 export const metadata = {
+  metadataBase: new URL(baseUrl),
   title: {
     default: 'co2data.org',
     template: '%s | co2data.org',
@@ -52,19 +53,19 @@ export const metadata = {
   openGraph: {
     title: 'co2data.org',
     description: 'What are the CO₂ emissions of things.',
-    url: baseUrl,
+    url: '/',
     siteName: 'CO₂ Data',
     locale: 'en-US',
     type: 'website',
     images: [
       {
-        url: `${baseUrl}/api/og`,
+        url: `/api/og`,
         width: 1200,
         height: 630,
       },
     ],
   },
   alternates: {
-    canonical: baseUrl,
+    canonical: '/',
   },
 }

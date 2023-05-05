@@ -91,21 +91,22 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   )} kg CO₂e`
 
   return {
+    metadataBase: new URL(baseUrl),
     title: co2Average.title,
     description,
     openGraph: {
       description,
-      url: `${baseUrl}/c/${params.slug}`,
+      url: `/c/${params.slug}`,
       images: [
         {
-          url: `${baseUrl}/api/og/${co2Average.slug}`,
+          url: `/api/og/${co2Average.slug}`,
           width: 1200,
           height: 630,
         },
       ],
     },
     alternates: {
-      canonical: `${baseUrl}/c/${params.slug}`,
+      canonical: `/c/${params.slug}`,
     },
   }
 }

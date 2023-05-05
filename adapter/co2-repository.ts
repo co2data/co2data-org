@@ -1,7 +1,7 @@
 import { Co2Repository } from '@/domain/co2'
 import { db } from '@/infra/db'
 import { co2Average } from '@/infra/db/schema'
-import { eq } from 'drizzle-orm/expressions'
+import { eq } from 'drizzle-orm'
 import { cache as reactCache } from 'react'
 
 const isTest = process.env.NODE_ENV === 'test'

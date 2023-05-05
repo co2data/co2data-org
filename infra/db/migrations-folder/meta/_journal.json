@@ -1,0 +1,12 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1683270127712,
+      "tag": "0000_supreme_bruce_banner"
+    }
+  ]
+}

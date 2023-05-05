@@ -1,7 +1,7 @@
 import { SourceRepository } from '@/domain/source'
 import { db } from '@/infra/db'
 import { links, sourcedCo2Amounts, sources } from '@/infra/db/schema'
-import { eq, or } from 'drizzle-orm/expressions'
+import { eq, or } from 'drizzle-orm'
 import { cache } from 'react'
 import { remark } from 'remark'
 import html from 'remark-html'

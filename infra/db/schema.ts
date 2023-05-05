@@ -11,7 +11,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core'
-import { sql } from 'drizzle-orm/sql'
+import { sql } from 'drizzle-orm'
 export const categories = mysqlTable('categories', {
   id: char('id', { length: 36 })
     .default(sql`(uuid())`)
