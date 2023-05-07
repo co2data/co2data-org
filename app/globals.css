@@ -4,6 +4,7 @@
 
 @import './range.css';
 @import './tooltip.css';
+@import './spinner.css';
 
 @layer base {
   a {
