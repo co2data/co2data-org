@@ -4,7 +4,7 @@ import filterContributors from '@/app/c/searchAction'
 import { Route } from 'next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useCallback, useTransition } from 'react'
-import Spinner from './spinner'
+import Spinner from './ui/spinner'
 import { Input } from './ui/input'
 
 export default function SearchBox() {
