@@ -1,7 +1,10 @@
 'use client'
 
-import { Co2Average, Unit } from '@/domain/co2'
+import { Co2Average } from '@/domain/co2'
 import { useState } from 'react'
+import { Button } from './ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Slider } from './ui/slider'
 
 export default function PersonalCo2({
   co2Average,
@@ -73,10 +76,9 @@ export default function PersonalCo2({
                 </div>
               </div>
             </label>
-            <input
+            <Slider
               id="amountInput"
-              type="range"
-              className="range touch-pan-x text-sky-600"
+              className="mt-3"
               min={co2Average.singleConsumptionFrom}
               max={co2Average.singleConsumptionTo}
               step={
@@ -84,8 +86,8 @@ export default function PersonalCo2({
                   co2Average.singleConsumptionFrom) /
                 50
               }
-              value={consumption}
-              onChange={(e) => setConsumption(Number(e.target.value))}
+              value={[consumption]}
+              onValueChange={(value) => setConsumption(value.at(0) ?? 0)}
             />
             <label htmlFor="timesPerYearInput" className="mt-2 block">
               <div className="flex justify-between">
@@ -95,18 +97,17 @@ export default function PersonalCo2({
                 </div>
               </div>
             </label>
-            <input
+            <Slider
               id="timesPerYearInput"
-              type="range"
-              className="range touch-pan-x text-sky-600"
+              className="my-3"
               min={co2Average.timesPerYearFrom}
               max={co2Average.timesPerYearTo}
               step={
                 (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) / 50
               }
-              value={times}
+              value={[times]}
               // onInput={(e) => setTimes(e)}
-              onChange={(e) => setTimes(Number(e.target.value))}
+              onValueChange={(value) => setTimes(value.at(0) ?? 0)}
             />
           </div>
         </div>
@@ -150,32 +151,31 @@ export default function PersonalCo2({
               </svg>
               .
             </span>
-            <span
-              role="button"
-              aria-label="More information"
-              className="rounded text-sky-600 hover:bg-sky-100"
-            >
-              &#9432;
-            </span>
-            <div className="tooltip text-sky-600">
-              <p>
-                The average{' '}
-                <svg
-                  viewBox="0 -2 20 55"
-                  className="inline-block h-6 w-2 -translate-y-1"
-                >
-                  <circle cx="9" cy="9" r="4" />
-                  <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
-                </svg>{' '}
-                has a <b>total</b>* CO<sub>2</sub>e footprint of 6000t per year.
-              </p>
-              <p>
-                <small>
-                  * Not only this contributor, but all CO<sub>2</sub>e combined
-                  of one person in one year.
-                </small>
-              </p>
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost">&#9432;</Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 text-center">
+                <p>
+                  The average{' '}
+                  <svg
+                    viewBox="0 -2 20 55"
+                    className="inline-block h-6 w-2 -translate-y-1"
+                  >
+                    <circle cx="9" cy="9" r="4" />
+                    <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
+                  </svg>{' '}
+                  has a <b>total</b>* CO<sub>2</sub>e footprint of 6000t per
+                  year.
+                </p>
+                <p>
+                  <small>
+                    * Not only this contributor, but all CO<sub>2</sub>e
+                    combined of one person in one year.
+                  </small>
+                </p>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>

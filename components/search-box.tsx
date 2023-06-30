@@ -5,6 +5,7 @@ import { Route } from 'next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useCallback, useTransition } from 'react'
 import Spinner from './spinner'
+import { Input } from './ui/input'
 
 export default function SearchBox() {
   const [isPending, startTransition] = useTransition()
@@ -34,8 +35,7 @@ export default function SearchBox() {
         Search
       </label>
       <div className="relative mx-auto max-w-fit">
-        <input
-          className="rounded border-2 border-sky-600 text-black focus:border-sky-600 focus:ring-4 focus:ring-sky-100"
+        <Input
           type="search"
           name="search"
           id="search"
@@ -44,7 +44,7 @@ export default function SearchBox() {
           defaultValue={searchParams?.get('search') ?? ''}
         />
         {isPending && (
-          <div className="absolute top-1/2 bottom-1/2 -right-10 -my-4">
+          <div className="absolute -right-10 bottom-1/2 top-1/2 -my-4">
             <Spinner />
           </div>
         )}
