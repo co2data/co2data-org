@@ -2,13 +2,12 @@ import { SourceRepository } from '@/domain/source'
 import { db } from '@/infra/db'
 import { links, sourcedCo2Amounts, sources } from '@/infra/db/schema'
 import { eq, or } from 'drizzle-orm'
-import { cache } from 'react'
 import { remark } from 'remark'
 import html from 'remark-html'
 
 export function makeSourceRepository(deps = { db }): SourceRepository {
   return {
-    getAllSourcesByCo2ProducerId: cache(async (id: string) => {
+    getAllSourcesByCo2ProducerId: async (id: string) => {
       const amountSources = await deps.db
         .select({
           id: sourcedCo2Amounts.id,
@@ -45,7 +44,7 @@ export function makeSourceRepository(deps = { db }): SourceRepository {
         }
       })
       return Promise.all(mappedData)
-    }),
+    },
   }
 }
 

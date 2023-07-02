@@ -1,6 +1,7 @@
 import ContributorList from '@/components/contributor-list'
 import SearchBox from '@/components/search-box'
 import { Co2Average, repository } from '@/domain/co2'
+import { Suspense } from 'react'
 
 export default async function ContributorPage({
   searchParams,
@@ -21,7 +22,9 @@ export default async function ContributorPage({
         <SearchBox />
       </div>
       <main>
-        <ContributorList co2Averages={co2Averages} />
+        <Suspense>
+          <ContributorList co2Averages={co2Averages} />
+        </Suspense>
       </main>
     </div>
   )
