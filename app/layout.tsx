@@ -3,6 +3,7 @@ import Header from '@/components/header'
 import { AnalyticsWrapper } from './analytics'
 import { baseUrl } from './config'
 import './globals.css'
+import { ThemeProvider } from '@/components/theme-provider'
 // import type { Metadata } from 'next/types'
 
 export default function RootLayout({
@@ -11,11 +12,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
-        <Header />
-        <div className="container mx-auto flex-1 px-4 py-16">{children}</div>
-        <Footer />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+          <div className="container mx-auto flex-1 px-4 py-16">{children}</div>
+          <Footer />
+        </ThemeProvider>
         <AnalyticsWrapper />
       </body>
     </html>

@@ -37,7 +37,7 @@ export default function PersonalCo2({
   console.log('render', factorOfPersonYearFootprint, parts)
 
   return (
-    <div className="rounded-lg border border-sky-600 bg-sky-50 p-8">
+    <div className="rounded-lg border border-border bg-card p-8">
       <div className="flex flex-col justify-between gap-x-24 gap-y-8 lg:flex-row">
         <div className="flex-1">
           <h2 className="text-lg font-bold">
@@ -185,21 +185,21 @@ export default function PersonalCo2({
 
 function PieChart({ state }: { state: 'partial' | 'full' }) {
   return (
-    <div className="-mx-36 text-sky-600">
+    <div className="-mx-36 text-primary">
       <svg className="w-full" viewBox="0 0 300 200">
         <circle
           cx="150"
           cy="100"
           r="75"
-          fill="lightgrey"
-          className="drop-shadow-xl"
+          strokeWidth={3}
+          className="fill-secondary stroke-secondary drop-shadow-xl"
         />
         <circle
           cx="150"
           cy="100"
-          r="75"
-          fill="currentColor"
+          r="74"
           mask={state === 'partial' ? 'url(#segmentMask)' : ''}
+          className="fill-primary"
         />
         <g
           transform="translate(135,50) scale(1.8)"

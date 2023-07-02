@@ -18,7 +18,7 @@ const About = () => {
         project on{' '}
         <a
           href="https://github.com/co2data/co2data-org"
-          className="text-sky-700"
+          className="text-muted-foreground"
           target="_blank"
           rel="noreferrer"
         >
@@ -32,7 +32,7 @@ const About = () => {
         My name is Philip Schönholzer. Get in touch on{' '}
         <a
           href="https://mastodon.world/@phisch"
-          className="text-sky-700"
+          className="text-muted-foreground"
           target="_blank"
           rel="noreferrer"
         >
@@ -41,7 +41,7 @@ const About = () => {
         or{' '}
         <a
           href="https://www.reddit.com/user/phischer_h"
-          className="text-sky-700"
+          className="text-muted-foreground"
           target="_blank"
           rel="noreferrer"
         >

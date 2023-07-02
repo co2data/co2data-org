@@ -14,17 +14,16 @@ export default async function ContributorPage({
 
   return (
     <div className={'space-y-20 sm:space-y-32 '}>
-    <div className="space-y-12 text-center sm:space-y-20 ">
-      <h1 className="text-6xl font-bold text-sky-600">
-        CO<sub>2</sub> Data
-      </h1>
-      <SearchBox />
+      <div className="space-y-12 text-center sm:space-y-20 ">
+        <h1 className="text-6xl font-bold text-foreground">
+          CO<sub>2</sub> Data
+        </h1>
+        <SearchBox />
+      </div>
+      <main>
+        <ContributorList co2Averages={co2Averages} />
+      </main>
     </div>
-    <main>
-      <ContributorList co2Averages={co2Averages} />
-    </main>
-  </div>
-
   )
 }
 

@@ -34,7 +34,7 @@ export default async function Home({ params }: Params) {
             <li className="ml-2 list-['>'] pl-2">{co2Average.title}</li>
           </ol>
         </nav>
-        <div className="space-y-4 rounded-lg border border-sky-600 bg-sky-50 p-8">
+        <div className="space-y-4 rounded-lg border border-border bg-card p-8">
           <h1 className="text-4xl font-bold">
             <div>{co2Average.title}</div>
             <div className="text-sm font-normal">
@@ -46,7 +46,7 @@ export default async function Home({ params }: Params) {
             <svg className="inline-block h-6 w-12" viewBox="-40 0 140 120">
               <path
                 fill="transparent"
-                stroke="black"
+                stroke="currentColor"
                 strokeWidth="10"
                 d="M -10,50 L 90,50 M 50,10 L 90,50 L 50,90"
               ></path>
