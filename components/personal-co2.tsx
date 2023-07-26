@@ -93,7 +93,7 @@ export default function PersonalCo2({
               <div className="flex justify-between">
                 <div>Times per year</div>
                 <div>
-                  ×&nbsp;<b>{Math.round(times)}</b>
+                  &times;&nbsp;<b>{Math.round(times)}</b>
                 </div>
               </div>
             </label>
