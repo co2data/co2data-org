@@ -1,11 +1,12 @@
+import { baseUrl } from '@/app/config'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { repository } from '@/domain/co2'
 import { getAllSourcesByCo2ProducerId } from '@/domain/source'
-import type { Metadata } from 'next/types'
+import convert from 'convert'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { baseUrl } from '@/app/config'
+import type { Metadata } from 'next/types'
 
 type Params = {
   params: {
@@ -52,8 +53,7 @@ export default async function Home({ params }: Params) {
               ></path>
             </svg>
             <span className="font-bold">
-              {+parseFloat(((co2Average.avgPerUnit ?? 1) / 1000).toFixed(3))}{' '}
-              {/* // could use https://convert.js.org/ for the conversion */}
+              {convert(co2Average.avgPerUnit, 'grams').to('kg').toFixed(3)}{' '}
             </span>
             &nbsp;
             <span className="text-base">
@@ -86,9 +86,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
     co2Average.title
-  }" are ${+parseFloat(
-    ((co2Average.avgPerUnit ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
-  )} kg CO₂e`
+  }" are ${convert(co2Average.avgPerUnit, 'grams').to('kg').toFixed(3)} kg CO₂e`
 
   return {
     metadataBase: new URL(baseUrl),

@@ -1,6 +1,7 @@
 'use client'
 
 import { Co2Average } from '@/domain/co2'
+import convert from 'convert'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
@@ -50,8 +51,7 @@ export default function PersonalCo2({
                 CO<sub>2</sub>e per consumption
               </p>
               <p className="text-2xl">
-                <b>{+parseFloat((co2PerConsumption / 1000).toFixed(1))}</b>{' '}
-                {/* // could use https://convert.js.org/ for the conversion */}
+                <b>{convert(co2PerConsumption, 'grams').to('kg').toFixed(1)}</b>{' '}
                 &nbsp;kg
               </p>
             </div>
@@ -61,8 +61,8 @@ export default function PersonalCo2({
                 <sub>2</sub>e per year
               </p>
               <p className="text-2xl">
-                <b>{+parseFloat((co2PerYear / 1000).toFixed(1))}</b>&nbsp;kg{' '}
-                {/* // could use https://convert.js.org/ for the conversion */}
+                <b>{convert(co2PerYear, 'grams').to('kg').toFixed(1)}</b>
+                &nbsp;kg{' '}
               </p>
             </div>
           </div>

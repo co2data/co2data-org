@@ -41,6 +41,9 @@ dependencies:
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
+  convert:
+    specifier: ^4.13.1
+    version: 4.13.1
   drizzle-orm:
     specifier: ^0.27.2
     version: 0.27.2(@planetscale/database@1.10.0)(mysql2@3.5.2)
@@ -2445,6 +2448,10 @@ packages:
 
   /convert-source-map@1.9.0:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
+
+  /convert@4.13.1:
+    resolution: {integrity: sha512-gr79Kvys+6BtZi0Um3GsUKml1D+q7jvbHyPlHkcpV7982lHa8Ml4bWEvjeBjo/KSjYxxixHreZBHgkPXbMxdDg==}
+    dev: false
 
   /cookie@0.4.2:
     resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}

@@ -1,4 +1,5 @@
 import { Co2Average } from '@/domain/co2'
+import convert from 'convert'
 import Link from 'next/link'
 
 type Props = { co2Average: Co2Average }
@@ -15,17 +16,13 @@ const Co2Average = ({ co2Average }: Props) => {
         Possible CO<sub>2</sub>e per person-year
       </p>
       <p className="px-4 text-right text-3xl font-bold">
-        {
-          +parseFloat(
-            ((Number(co2Average.avgPerYear) ?? 1) / 1000).toFixed(3) // could use https://convert.js.org/ for the conversion
-          )
-        }{' '}
+        {convert(co2Average.avgPerYear, 'grams').to('kg').toFixed(3)}{' '}
         <span className="text-sm font-normal">kg</span>
       </p>
       <div className="flex justify-between gap-2">
         <p className="py-2 pl-4 text-xs">1 {co2Average.unit}</p>
         <p className="py-2 pr-4 text-xs">
-          {(co2Average.avgPerUnit ?? 1) / 1000} kg CO<sub>2</sub>e
+          {convert(co2Average.avgPerUnit, 'grams').to('kg')} kg CO<sub>2</sub>e
         </p>
       </div>
     </li>

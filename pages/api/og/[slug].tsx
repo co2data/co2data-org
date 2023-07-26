@@ -1,6 +1,7 @@
 import OgImageFrame from '@/components/og-image-frame'
 import { repository } from '@/domain/co2'
 import { ImageResponse } from '@vercel/og'
+import convert from 'convert'
 import type { NextRequest } from 'next/server'
 import { Fragment } from 'react'
 
@@ -25,7 +26,7 @@ export default async function OG(req: NextRequest) {
     if (!co2Avg) throw Error(`Didn\'t find co2 data with slug "${slug}".`)
 
     const formattedParts = formatter.formatToParts(
-      (co2Avg.avgPerUnit ?? 1) / 1000 // could use https://convert.js.org/ for the conversion
+      convert(co2Avg.avgPerUnit, 'grams').to('kg')
     )
 
     const formattedInteger = formattedParts.find(

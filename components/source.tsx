@@ -1,4 +1,5 @@
 import { Source } from '@/domain/source'
+import convert from 'convert'
 
 const Source = ({ source, unit }: { source: Source; unit: string }) => {
   return (
@@ -22,8 +23,9 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
         CO<sub>2</sub>e for {source.per} {unit}
       </p>
       <p className="px-4 pb-2 text-right">
-        <span className="text-3xl font-bold">{source.gCo2e / 1000}</span>{' '}
-        {/* // could use https://convert.js.org/ for the conversion */}
+        <span className="text-3xl font-bold">
+          {convert(source.gCo2e, 'grams').to('kg')}
+        </span>{' '}
         <span className="">
           kg CO<sub>2</sub>e
         </span>
