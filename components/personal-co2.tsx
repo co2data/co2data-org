@@ -6,6 +6,11 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Slider } from './ui/slider'
+import {
+  calcCo2PerConsumption,
+  calcCo2PerYear,
+  calcFactorOfPersonYearFootprint,
+} from '@/domain/personal-co2'
 
 export default function PersonalCo2({
   co2Average,
@@ -16,9 +21,13 @@ export default function PersonalCo2({
     co2Average.singleConsumptionAverage
   )
   const [times, setTimes] = useState(co2Average.timesPerYearAverage)
-  const co2PerConsumption = co2Average.avgPerUnit * consumption
-  const co2PerYear = times * co2PerConsumption
-  const factorOfPersonYearFootprint = co2PerYear / 6000000
+  const co2PerConsumption = calcCo2PerConsumption(
+    co2Average.avgPerUnit,
+    consumption
+  )
+  const co2PerYear = calcCo2PerYear(times, co2PerConsumption)
+  const factorOfPersonYearFootprint =
+    calcFactorOfPersonYearFootprint(co2PerYear)
   const angle = (factorOfPersonYearFootprint % 1) * 360
   const isLeft = angle > 180
   const angleMask = isLeft ? angle - 180 : angle
@@ -34,8 +43,6 @@ export default function PersonalCo2({
   ) {
     parts.push('partial')
   }
-
-  console.log('render', factorOfPersonYearFootprint, parts)
 
   return (
     <div className="rounded-lg border border-border bg-card p-8">

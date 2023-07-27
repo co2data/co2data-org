@@ -17,12 +17,9 @@ type Params = {
 export default async function Home({ params }: Params) {
   const { getCo2AverageBySlug } = repository()
 
-  const co2Average = await getCo2AverageBySlug(params.slug)
+  const co2Average = (await getCo2AverageBySlug(params.slug)) ?? notFound()
 
-  if (!co2Average) {
-    return notFound()
-  }
-  const sources = await getAllSourcesByCo2ProducerId(co2Average?.id)
+  const sources = await getAllSourcesByCo2ProducerId(co2Average.id)
 
   return (
     <main className="overflow-hidden">
@@ -81,8 +78,7 @@ export default async function Home({ params }: Params) {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { getCo2AverageBySlug } = repository()
 
-  const co2Average = await getCo2AverageBySlug(params.slug)
-  if (!co2Average) return {}
+  const co2Average = (await getCo2AverageBySlug(params.slug)) ?? notFound()
 
   const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
     co2Average.title

@@ -4,3 +4,7 @@ import type { ClassValue } from 'class-variance-authority/dist/types'
 export function cn(...inputs: ClassValue[]) {
   return cx(inputs)
 }
+
+export function raise(error: string): never {
+  throw new Error(error)
+}

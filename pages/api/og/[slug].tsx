@@ -1,5 +1,6 @@
 import OgImageFrame from '@/components/og-image-frame'
 import { repository } from '@/domain/co2'
+import { raise } from '@/lib/utils'
 import { ImageResponse } from '@vercel/og'
 import convert from 'convert'
 import type { NextRequest } from 'next/server'
@@ -19,11 +20,12 @@ const { getCo2AverageBySlug } = repository()
 
 export default async function OG(req: NextRequest) {
   try {
-    const slug = req.nextUrl.searchParams.get('slug')
-    if (!slug) throw Error('No slug defined.')
+    const slug =
+      req.nextUrl.searchParams.get('slug') ?? raise('No slug defined.')
 
-    const co2Avg = await getCo2AverageBySlug(slug)
-    if (!co2Avg) throw Error(`Didn\'t find co2 data with slug "${slug}".`)
+    const co2Avg =
+      (await getCo2AverageBySlug(slug)) ??
+      raise(`Didn\'t find co2 data with slug "${slug}".`)
 
     const formattedParts = formatter.formatToParts(
       convert(co2Avg.avgPerUnit, 'grams').to('kg')
