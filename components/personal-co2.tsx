@@ -1,16 +1,17 @@
 'use client'
 
 import { Co2Average } from '@/domain/co2'
-import convert from 'convert'
-import { useState } from 'react'
-import { Button } from './ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { Slider } from './ui/slider'
 import {
   calcCo2PerConsumption,
   calcCo2PerYear,
   calcFactorOfPersonYearFootprint,
 } from '@/domain/personal-co2'
+import { format } from '@/lib/utils'
+import convert from 'convert'
+import { useState } from 'react'
+import { Button } from './ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Slider } from './ui/slider'
 
 export default function PersonalCo2({
   co2Average,
@@ -58,7 +59,7 @@ export default function PersonalCo2({
                 CO<sub>2</sub>e per consumption
               </p>
               <p className="text-2xl">
-                <b>{convert(co2PerConsumption, 'grams').to('kg').toFixed(1)}</b>{' '}
+                <b>{format(convert(co2PerConsumption, 'grams').to('kg'))}</b>
                 &nbsp;kg
               </p>
             </div>
@@ -68,8 +69,8 @@ export default function PersonalCo2({
                 <sub>2</sub>e per year
               </p>
               <p className="text-2xl">
-                <b>{convert(co2PerYear, 'grams').to('kg').toFixed(1)}</b>
-                &nbsp;kg{' '}
+                <b>{format(convert(co2PerYear, 'grams').to('kg'))}</b>
+                &nbsp;kg
               </p>
             </div>
           </div>
