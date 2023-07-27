@@ -8,3 +8,13 @@ export function cn(...inputs: ClassValue[]) {
 export function raise(error: string): never {
   throw new Error(error)
 }
+
+export function format(
+  value: number,
+  options: { trialingZeros?: boolean; decimalPlaces?: number } = {}
+) {
+  const { trialingZeros = true, decimalPlaces = 3 } = options
+  return trialingZeros
+    ? value.toFixed(decimalPlaces)
+    : parseFloat(value.toFixed(decimalPlaces))
+}

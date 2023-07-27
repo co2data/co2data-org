@@ -1,7 +1,8 @@
 import { Source } from '@/domain/source'
-import mime from 'mime'
+import { format } from '@/lib/utils'
 import convert from 'convert'
 import { ExternalLink } from 'lucide-react'
+import mime from 'mime'
 
 const Source = ({ source, unit }: { source: Source; unit: string }) => {
   return (
@@ -10,13 +11,13 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
         {source.name}
         {source.region && (
           <>
-            &ensp;•&ensp;
+            &ensp;&bull;&ensp;
             <span className="text-right text-sky-200">{source.region}</span>
           </>
         )}
         {source.year && (
           <>
-            &ensp;•&ensp;
+            &ensp;&bull;&ensp;
             <span className="text-right font-bold">{source.year}</span>
           </>
         )}
@@ -26,7 +27,9 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
       </p>
       <p className="px-4 pb-2 text-right">
         <span className="text-3xl font-bold">
-          {convert(source.gCo2e, 'grams').to('kg')}
+          {format(convert(source.gCo2e, 'grams').to('kg'), {
+            trialingZeros: false,
+          })}
         </span>{' '}
         <span className="">
           kg CO<sub>2</sub>e

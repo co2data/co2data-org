@@ -1,4 +1,5 @@
 import { Co2Average } from '@/domain/co2'
+import { format } from '@/lib/utils'
 import convert from 'convert'
 import Link from 'next/link'
 
@@ -16,13 +17,17 @@ const Co2Average = ({ co2Average }: Props) => {
         Possible CO<sub>2</sub>e per person-year
       </p>
       <p className="px-4 text-right text-3xl font-bold">
-        {convert(co2Average.avgPerYear, 'grams').to('kg').toFixed(3)}{' '}
+        {format(convert(co2Average.avgPerYear, 'grams').to('kg'))}{' '}
         <span className="text-sm font-normal">kg</span>
       </p>
       <div className="flex justify-between gap-2">
         <p className="py-2 pl-4 text-xs">1 {co2Average.unit}</p>
         <p className="py-2 pr-4 text-xs">
-          {convert(co2Average.avgPerUnit, 'grams').to('kg')} kg CO<sub>2</sub>e
+          {format(convert(co2Average.avgPerUnit, 'grams').to('kg'), {
+            trialingZeros: false,
+          })}{' '}
+          kg CO
+          <sub>2</sub>e
         </p>
       </div>
     </li>
