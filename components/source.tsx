@@ -1,5 +1,7 @@
 import { Source } from '@/domain/source'
+import mime from 'mime'
 import convert from 'convert'
+import { ExternalLink } from 'lucide-react'
 
 const Source = ({ source, unit }: { source: Source; unit: string }) => {
   return (
@@ -37,21 +39,35 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
       ></div>
       {source.links && (
         <>
-          <p className="px-4 pt-2 text-xs font-bold">Links</p>
-          <ul className="px-4 pb-2 ">
+          <p className="px-4 pt-2 text-xs font-bold">
+            Links{' '}
+            <ExternalLink
+              strokeWidth={3}
+              className="inline h-3 w-3 align-text-bottom opacity-60"
+            />
+          </p>
+          <ul className="space-y-2 px-4 pb-4 pt-2">
             {source.links.map((link) => {
               const url = new URL(link.url)
+              const extension = mime.getExtension(link.mediaType)
               return (
                 <li key={link.id}>
-                  <a href={url.href} target="_blank" rel="noreferrer">
+                  <a
+                    className="underline"
+                    href={url.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {link.name}
                   </a>{' '}
-                  {link.mediaType !== 'text/html' && (
-                    <span className="text-sm text-gray-400">
-                      {link.mediaType.split('/').at(-1)?.toUpperCase()}{' '}
-                    </span>
+                  {extension && (
+                    <>
+                      <span className="inline-block rounded border px-1 font-mono text-xs font-bold opacity-60">
+                        {extension}
+                      </span>{' '}
+                    </>
                   )}
-                  <span className="text-sm text-gray-500">{url.hostname}</span>{' '}
+                  <span className="text-sm opacity-50">{url.hostname}</span>{' '}
                 </li>
               )
             })}

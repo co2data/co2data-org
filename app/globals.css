@@ -90,9 +90,6 @@
   a {
     @apply hover:underline;
   }
-  svg {
-    fill: currentColor;
-  }
 }
 
 @layer components {
