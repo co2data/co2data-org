@@ -1,13 +1,15 @@
 import { Co2Repository } from '@/domain/co2'
 import { db } from '@/infra/db'
 import { co2Average } from '@/infra/db/schema'
-import { eq } from 'drizzle-orm'
-
+import { desc, eq } from 'drizzle-orm'
 
 function makeCo2Repository(): Co2Repository {
   return {
     getAllCo2Averages: async () => {
-      const data = await db.select().from(co2Average)
+      const data = await db
+        .select()
+        .from(co2Average)
+        .orderBy(desc(co2Average.avgPerYear))
       return data.map((co2Average) => ({
         ...co2Average,
         avgPerYear: Number(co2Average.avgPerYear ?? 1),
