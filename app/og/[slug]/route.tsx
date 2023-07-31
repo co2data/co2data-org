@@ -1,9 +1,8 @@
 import OgImageFrame from '@/components/og-image-frame'
 import { repository } from '@/domain/co2'
 import { raise } from '@/lib/utils'
-import { ImageResponse } from '@vercel/og'
 import convert from 'convert'
-import type { NextRequest } from 'next/server'
+import { ImageResponse } from 'next/server'
 import { Fragment } from 'react'
 
 export const config = {
@@ -18,10 +17,12 @@ const formatter = new Intl.NumberFormat('en', {
 
 const { getCo2AverageBySlug } = repository()
 
-export default async function OG(req: NextRequest) {
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: string | undefined } }
+) {
   try {
-    const slug =
-      req.nextUrl.searchParams.get('slug') ?? raise('No slug defined.')
+    const slug = params.slug ?? raise('No slug defined.')
 
     const co2Avg =
       (await getCo2AverageBySlug(slug)) ??

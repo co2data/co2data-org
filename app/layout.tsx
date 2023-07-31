@@ -57,7 +57,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: `/api/og`,
+        url: `/og`,
         width: 1200,
         height: 630,
       },

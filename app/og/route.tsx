@@ -1,19 +1,20 @@
 import OgImageFrame from '@/components/og-image-frame'
-import { ImageResponse } from '@vercel/og'
-import type { NextRequest } from 'next/server'
+import { ImageResponse } from 'next/server'
 
 export const config = {
   runtime: 'edge',
 }
 
-export default function OG(req: NextRequest) {
+export function GET(request: Request) {
   try {
     return new ImageResponse(
       (
         <OgImageFrame>
           <div tw="flex flex-col">
             <div tw="flex text-[50]">CO₂ Data</div>
-            <div tw="flex text-4xl">What are the CO₂ emissions of things.</div>
+            <div tw="flex text-4xl">
+              What are the CO<sub>2</sub> emissions of things.
+            </div>
           </div>
         </OgImageFrame>
       ),
