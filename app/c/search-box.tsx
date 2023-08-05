@@ -1,11 +1,11 @@
 'use client'
 
 import filterContributors from '@/app/c/searchAction'
+import { Input } from '@/components/ui/input'
+import Spinner from '@/components/ui/spinner'
 import { Route } from 'next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useCallback, useTransition } from 'react'
-import Spinner from './ui/spinner'
-import { Input } from './ui/input'
 
 export default function SearchBox() {
   const [isPending, startTransition] = useTransition()

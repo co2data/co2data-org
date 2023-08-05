@@ -1,4 +1,10 @@
-export default function Spinner({ className }: { className?: string }) {
+export default function Spinner({
+  className,
+  strokeWidth = 4,
+}: {
+  className?: string
+  strokeWidth?: number
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -6,7 +12,13 @@ export default function Spinner({ className }: { className?: string }) {
       height="2em"
       width="2em"
     >
-      <circle className="path" r="10" cx="12" cy="12" strokeWidth={4} />
+      <circle
+        className="path"
+        r="10"
+        cx="12"
+        cy="12"
+        strokeWidth={strokeWidth}
+      />
     </svg>
   )
 }
