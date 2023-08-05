@@ -7,7 +7,6 @@ export default async function ContributorList({
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  await new Promise((r) => setTimeout(r, 5000))
   const { getAllCo2Averages } = repository()
 
   const filterByTerm = filter(searchParams['search'])
