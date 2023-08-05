@@ -1,6 +1,6 @@
-import ContributorList from '@/components/contributor-list'
-import SearchBox from '@/components/search-box'
-import { Co2Average, repository } from '@/domain/co2'
+import ContributorList from '@/app/c/contributor-list'
+import SearchBox from '@/app/c/search-box'
+import Spinner from '@/components/ui/spinner'
 import { Suspense } from 'react'
 
 export default async function ContributorPage({
@@ -8,11 +8,6 @@ export default async function ContributorPage({
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  const { getAllCo2Averages } = repository()
-
-  const filterByTerm = filter(searchParams['search'])
-  const co2Averages = filterByTerm(await getAllCo2Averages())
-
   return (
     <div className={'space-y-20 sm:space-y-32 '}>
       <div className="space-y-12 text-center sm:space-y-20 ">
@@ -22,18 +17,16 @@ export default async function ContributorPage({
         <SearchBox />
       </div>
       <main>
-        <Suspense>
-          <ContributorList co2Averages={co2Averages} />
+        <Suspense
+          fallback={
+            <div className="text-center">
+              <Spinner className="inline h-20 w-20" strokeWidth={2.5} />
+            </div>
+          }
+        >
+          <ContributorList searchParams={searchParams} />
         </Suspense>
       </main>
     </div>
   )
 }
-
-const filter =
-  (term: string | null | undefined) => (co2Averges: Co2Average[]) =>
-    term
-      ? co2Averges.filter((item) =>
-          item.title.toLowerCase().includes(term.toLowerCase())
-        )
-      : co2Averges

@@ -1,11 +1,16 @@
 import Link from 'next/link'
-import Co2Average from './co2-average'
+import Co2Average from '../../components/co2-average'
+import { repository } from '@/domain/co2'
 
-export default function ContributorList({
-  co2Averages,
+export default async function ContributorList({
+  searchParams,
 }: {
-  co2Averages: Co2Average[]
+  searchParams: { [key: string]: string | undefined }
 }) {
+  const { getAllCo2Averages } = repository()
+
+  const filterByTerm = filter(searchParams['search'])
+  const co2Averages = filterByTerm(await getAllCo2Averages())
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8">
@@ -29,3 +34,11 @@ export default function ContributorList({
     </>
   )
 }
+
+const filter =
+  (term: string | null | undefined) => (co2Averges: Co2Average[]) =>
+    term
+      ? co2Averges.filter((item) =>
+          item.title.toLowerCase().includes(term.toLowerCase())
+        )
+      : co2Averges

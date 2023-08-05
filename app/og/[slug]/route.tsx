@@ -5,9 +5,7 @@ import convert from 'convert'
 import { ImageResponse } from 'next/server'
 import { Fragment } from 'react'
 
-export const config = {
-  runtime: 'edge',
-}
+export const runtime = 'edge'
 
 const formatter = new Intl.NumberFormat('en', {
   style: 'unit',
