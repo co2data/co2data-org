@@ -13,7 +13,8 @@
     "connect-to-db": "pscale connect co2data-org",
     "db-migrate": "drizzle-kit generate:mysql",
     "db-update": "drizzle-kit up:mysql",
-    "db-push": "drizzle-kit push:mysql"
+    "db-push": "drizzle-kit push:mysql",
+    "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "@planetscale/database": "^1.10.0",
@@ -61,5 +62,6 @@
     "tailwindcss": "^3.3.3",
     "testtriple": "^2.2.3",
     "vitest": "^0.33.0"
-  }
+  },
+  "packageManager": "pnpm@8.6.12"
 }
