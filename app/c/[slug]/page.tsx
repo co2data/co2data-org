@@ -1,9 +1,10 @@
 import { baseUrl } from '@/app/config'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
-import { repository } from '@/domain/co2'
+import { Co2Repository, repository } from '@/domain/co2'
 import { getAllSourcesByCo2ProducerId } from '@/domain/source'
 import convert from 'convert'
+import { Effect, Option } from 'effect'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
@@ -15,9 +16,12 @@ type Params = {
 }
 
 export default async function Home({ params }: Params) {
-  const { getCo2AverageBySlug } = repository()
-
-  const co2Average = (await getCo2AverageBySlug(params.slug)) ?? notFound()
+  const co2Average = await Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
+    Effect.map(Option.getOrElse(notFound)),
+    Effect.provideLayer(repository),
+    Effect.runPromise
+  )
 
   const sources = await getAllSourcesByCo2ProducerId(co2Average.id)
 
@@ -76,9 +80,12 @@ export default async function Home({ params }: Params) {
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const { getCo2AverageBySlug } = repository()
-
-  const co2Average = (await getCo2AverageBySlug(params.slug)) ?? notFound()
+  const co2Average = await Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
+    Effect.map(Option.getOrElse(notFound)),
+    Effect.provideLayer(repository),
+    Effect.runPromise
+  )
 
   const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
     co2Average.title

@@ -1,27 +1,20 @@
 import Link from 'next/link'
 import Co2Average from '../../components/co2-average'
-import { repository } from '@/domain/co2'
-import { Effect } from 'effect'
-import { DB, db } from '@/infra/db'
+import { Co2Repository, repository } from '@/domain/co2'
+import { Effect, Option } from 'effect'
 
 export default async function ContributorList({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  const { getAllCo2Averages } = repository()
-
-  const filterByTerm = filter(searchParams['search'])
-
-  const runnable = Effect.provideService(
-    getAllCo2Averages(),
-    DB,
-    DB.of(Effect.sync(() => db))
+  const co2Averages = await Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+    Effect.map(filter(searchParams['search'])),
+    Effect.provideLayer(repository),
+    Effect.runPromise
   )
 
-  const allCo2Averages = await Effect.runPromise(runnable)
-
-  const co2Averages = filterByTerm(allCo2Averages)
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8">
