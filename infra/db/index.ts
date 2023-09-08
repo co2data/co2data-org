@@ -1,40 +1,28 @@
-import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
+import {
+  PlanetScaleDatabase,
+  drizzle as planetscaleDrizzle,
+} from 'drizzle-orm/planetscale-serverless'
 import { drizzle as mysqlDrizzle } from 'drizzle-orm/mysql2'
-
+import { Effect, Context } from 'effect'
 import { connect } from '@planetscale/database'
 
-const connection = () => {
-  switch (process.env.NODE_ENV) {
-    // case 'development': {
-    //   console.log(`Loading MySQL driver for local development environment`)
+export type DB = Effect.Effect<
+  never,
+  never,
+  PlanetScaleDatabase<Record<string, never>>
+>
 
-    //   const { createPool } = require('mysql2/promise')
-    //   const connection = createPool({
-    //     host: '127.0.0.1',
-    //     user: 'root',
-    //     database: 'co2data-org',
-    //   })
+export const DB = Context.Tag<DB>()
 
-    //   return mysqlDrizzle(connection)
-    // }
-    case 'test': {
-      console.log('Loading test db connection...')
+const connection = connect({ url: process.env.DATABASE_URL })
 
-      const connection = connect({ url: 'mysql://test:test@psdb.cloud/db' })
-      return planetscaleDrizzle(connection)
-    }
+const { createPool } = require('mysql2/promise')
+const pool = createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  database: 'co2data-org',
+})
 
-    default: {
-      console.log(
-        `Making Planetscale db connection to ${process.env.DATABASE_URL?.split(
-          '@'
-        )[1]}...`
-      )
+const mysql = mysqlDrizzle(pool)
 
-      const connection = connect({ url: process.env.DATABASE_URL })
-      return planetscaleDrizzle(connection)
-    }
-  }
-}
-
-export const db = connection()
+export const db = planetscaleDrizzle(connection)

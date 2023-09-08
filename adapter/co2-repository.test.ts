@@ -1,6 +1,8 @@
 import { mockPlanetScale } from '@/infra/mock/server'
 import { describe, expect, test } from 'vitest'
 import repo from './co2-repository'
+import { Effect } from 'effect'
+import { DB, db } from '@/infra/db'
 
 describe('co2-repository', () => {
   test('getCo2AverageBySlug', async () => {
@@ -48,7 +50,12 @@ describe('co2-repository', () => {
 
     mockPlanetScale(mockData)
 
-    const actual = await repo().getAllCo2Averages()
+    const runnable = Effect.provideService(
+      repo().getAllCo2Averages(),
+      DB,
+      DB.of(Effect.sync(() => db))
+    )
+    const actual = await Effect.runPromise(runnable)
 
     expect(actual).toStrictEqual(mockData)
   })
