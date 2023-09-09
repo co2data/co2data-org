@@ -1,7 +1,7 @@
+import { Co2Repository, repository } from '@/domain/co2'
+import { Effect } from 'effect'
 import Link from 'next/link'
 import Co2Average from '../../components/co2-average'
-import { Co2Repository, repository } from '@/domain/co2'
-import { Effect, Option } from 'effect'
 
 export default async function ContributorList({
   searchParams,
