@@ -1,10 +1,16 @@
-import { repository } from '@/domain/co2'
+import { Co2Repository, repository } from '@/domain/co2'
 import { baseUrl } from '../config'
+import { Effect } from 'effect'
 
-const { getAllCo2Averages } = repository()
+function getAllCo2Averages() {
+  return Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+    Effect.provideLayer(repository)
+  )
+}
 
 export async function GET() {
-  const co2Averages = await getAllCo2Averages()
+  const co2Averages = await Effect.runPromise(getAllCo2Averages())
   return new Response(`
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
