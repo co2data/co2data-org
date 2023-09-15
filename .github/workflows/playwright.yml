@@ -14,11 +14,14 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Install dependencies
+        run: pnpm install --dev
+
       - name: Install Playwright Browsers
-        run: pnpm dlx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm dlx playwright test
+        run: pnpm exec playwright test
         env:
           BASE_URL: ${{ github.event.deployment_status.target_url }}
 
