@@ -57,17 +57,17 @@ export const SourceRepositoryLive = Layer.effect(
             )
           )
 
-          const sourcesWithLinks = amountSources.map((source) => {
-            const links = pipe(
+          const sourcesWithLinks = amountSources.map((source) =>
+            pipe(
               linksResult,
               ReadonlyArray.filter(
                 (link) => link.sourcesId === source.sourcesId
               ),
               Option.some,
-              Option.filter((a) => a.length > 0)
+              Option.filter((a) => a.length > 0),
+              (links) => ({ ...source, links })
             )
-            return { ...source, links }
-          })
+          )
 
           const sourceLinksWithDescriptions = yield* _(
             Effect.all(
