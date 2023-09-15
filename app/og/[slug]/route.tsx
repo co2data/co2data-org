@@ -1,7 +1,9 @@
 import OgImageFrame from '@/components/og-image-frame'
-import { repository } from '@/domain/co2'
+import { Co2Repository, repository } from '@/domain/co2'
 import { raise } from '@/lib/utils'
 import convert from 'convert'
+import { Effect, Option } from 'effect'
+import { notFound } from 'next/navigation'
 import { ImageResponse } from 'next/server'
 import { Fragment } from 'react'
 
@@ -13,7 +15,13 @@ const formatter = new Intl.NumberFormat('en', {
   notation: 'compact',
 })
 
-const { getCo2AverageBySlug } = repository()
+function getCo2AverageBySlug(slug: string) {
+  return Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getCo2AverageBySlug(slug)),
+    Effect.map(Option.getOrElse(notFound)),
+    Effect.provideLayer(repository)
+  )
+}
 
 export async function GET(
   request: Request,
@@ -22,9 +30,7 @@ export async function GET(
   try {
     const slug = params.slug ?? raise('No slug defined.')
 
-    const co2Avg =
-      (await getCo2AverageBySlug(slug)) ??
-      raise(`Didn\'t find co2 data with slug "${slug}".`)
+    const co2Avg = await Effect.runPromise(getCo2AverageBySlug(slug))
 
     const formattedParts = formatter.formatToParts(
       convert(co2Avg.avgPerUnit, 'grams').to('kg')

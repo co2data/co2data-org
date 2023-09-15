@@ -27,7 +27,7 @@ const requestFrame = (data: any) => ({
 
 export const mockPlanetScale = (response: any) => {
   server.use(
-    rest.post(/psdb.cloud/i, async (req, res, ctx) => {
+    rest.post(/psdb/i, async (req, res, ctx) => {
       console.log('Mocking PlanetScale with test data...')
       return res(ctx.json(requestFrame(encode(response))))
     })
@@ -36,7 +36,7 @@ export const mockPlanetScale = (response: any) => {
 
 export const recordNetworkToSnapshot = () => {
   server.use(
-    rest.all(/psdb.cloud/i, async (req, res, ctx) => {
+    rest.all(/psdb/i, async (req, res, ctx) => {
       console.log('Mocking PlanetScale and returning original data...')
 
       const originalResponse = await ctx.fetch(req)

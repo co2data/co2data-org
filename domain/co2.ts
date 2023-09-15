@@ -1,5 +1,7 @@
-import makeRepository from '@/adapter/co2-repository'
-
+import { Co2RepositoryLive } from '@/adapter/co2-repository'
+import { DbLive } from '@/infra/db'
+import { Layer } from 'effect'
+export { Co2Repository } from '@/adapter/co2-repository'
 export type Unit =
   | 'gram'
   | 'hour'
@@ -24,9 +26,4 @@ export type Co2Average = {
   timesPerYearAverage: number
 }
 
-export type Co2Repository = {
-  getAllCo2Averages: () => Promise<Co2Average[]>
-  getCo2AverageBySlug: (slug: string) => Promise<Co2Average | undefined>
-}
-
-export const repository = makeRepository
+export const repository = Co2RepositoryLive.pipe(Layer.use(DbLive))

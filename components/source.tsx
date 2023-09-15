@@ -1,10 +1,12 @@
 import { Source } from '@/domain/source'
 import { format } from '@/lib/utils'
 import convert from 'convert'
+import { Option } from 'effect'
 import { ExternalLink } from 'lucide-react'
 import mime from 'mime'
 
 const Source = ({ source, unit }: { source: Source; unit: string }) => {
+  const linksOrNull = Option.getOrNull(source.links)
   return (
     <li className="max-w-sm list-none overflow-hidden rounded border-4 border-border bg-card">
       <h3 className="bg-border px-4 py-2 text-white">
@@ -40,7 +42,7 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
         className="prose prose-sm px-4 pb-2 dark:prose-invert prose-p:my-1 prose-ul:my-1 prose-li:my-0"
         dangerouslySetInnerHTML={{ __html: source.description }}
       ></div>
-      {source.links && (
+      {linksOrNull && (
         <>
           <p className="px-4 pt-2 text-xs font-bold">
             Links{' '}
@@ -50,7 +52,7 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
             />
           </p>
           <ul className="space-y-2 px-4 pb-4 pt-2">
-            {source.links.map((link) => {
+            {linksOrNull.map((link) => {
               const url = new URL(link.url)
               const extension = mime.getExtension(link.mediaType)
               return (

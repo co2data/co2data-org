@@ -11,7 +11,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core'
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 export const categories = mysqlTable('categories', {
   id: char('id', { length: 36 })
     .default(sql`(uuid())`)
@@ -146,6 +146,10 @@ export const sources = mysqlTable(
     }
   }
 )
+
+export const sourceRelations = relations(sources, ({ many }) => ({
+  Links: many(links),
+}))
 
 export const users = mysqlTable('users', {
   id: char('id', { length: 36 })

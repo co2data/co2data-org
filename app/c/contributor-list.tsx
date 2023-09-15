@@ -1,16 +1,20 @@
+import { Co2Repository, repository } from '@/domain/co2'
+import { Effect } from 'effect'
 import Link from 'next/link'
 import Co2Average from '../../components/co2-average'
-import { repository } from '@/domain/co2'
 
 export default async function ContributorList({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  const { getAllCo2Averages } = repository()
+  const co2Averages = await Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+    Effect.map(filter(searchParams['search'])),
+    Effect.provideLayer(repository),
+    Effect.runPromise
+  )
 
-  const filterByTerm = filter(searchParams['search'])
-  const co2Averages = filterByTerm(await getAllCo2Averages())
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8">

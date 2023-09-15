@@ -29,21 +29,8 @@ export default function PersonalCo2({
   const co2PerYear = calcCo2PerYear(times, co2PerConsumption)
   const factorOfPersonYearFootprint =
     calcFactorOfPersonYearFootprint(co2PerYear)
-  const angle = (factorOfPersonYearFootprint % 1) * 360
-  const isLeft = angle > 180
-  const angleMask = isLeft ? angle - 180 : angle
 
-  const parts: Array<'full' | 'partial'> = Array.from(
-    Array(Math.floor(factorOfPersonYearFootprint)),
-    (_) => 'full' as const
-  )
-  if (
-    Math.floor(factorOfPersonYearFootprint) - factorOfPersonYearFootprint !==
-      0 ||
-    factorOfPersonYearFootprint === 0
-  ) {
-    parts.push('partial')
-  }
+  const { isLeft, angleMask } = calculateAngles(factorOfPersonYearFootprint)
 
   return (
     <div className="rounded-lg border border-border bg-card p-8">
@@ -140,7 +127,7 @@ export default function PersonalCo2({
                 </mask>
               </defs>
             </svg>
-            {parts.map((state) => (
+            {generatePieParts(factorOfPersonYearFootprint).map((state) => (
               <PieChart key={Math.random()} state={state} />
             ))}
           </div>
@@ -191,6 +178,13 @@ export default function PersonalCo2({
   )
 }
 
+function calculateAngles(factorOfPersonYearFootprint: number) {
+  const angle = (factorOfPersonYearFootprint % 1) * 360
+  const isLeft = angle > 180
+  const angleMask = isLeft ? angle - 180 : angle
+  return { isLeft, angleMask }
+}
+
 function PieChart({ state }: { state: 'partial' | 'full' }) {
   return (
     <div className="-mx-36 text-primary">
@@ -219,4 +213,20 @@ function PieChart({ state }: { state: 'partial' | 'full' }) {
       </svg>
     </div>
   )
+}
+
+function generatePieParts(factorOfPersonYearFootprint: number) {
+  const parts: Array<'full' | 'partial'> = Array.from(
+    Array(Math.floor(factorOfPersonYearFootprint)),
+    (_) => 'full' as const
+  )
+  if (
+    Math.floor(factorOfPersonYearFootprint) - factorOfPersonYearFootprint !==
+      0 ||
+    factorOfPersonYearFootprint === 0
+  ) {
+    parts.push('partial')
+  }
+
+  return parts
 }
