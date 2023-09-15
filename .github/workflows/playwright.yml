@@ -14,6 +14,9 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Install dependencies
+        run: pnpm install playwright
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
