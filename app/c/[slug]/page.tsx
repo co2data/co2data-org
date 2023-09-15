@@ -1,8 +1,11 @@
 import { baseUrl } from '@/app/config'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
-import { Co2Repository, repositoryLive as co2Repo } from '@/domain/co2'
-import { SourceRepository, repository as sourceRepo } from '@/domain/source'
+import { Co2Repository, co2RepoLive } from '@/domain/co2'
+import {
+  SourceRepository,
+  sourceRepoLive as sourceRepoLive,
+} from '@/domain/source'
 import convert from 'convert'
 import { Effect, Option } from 'effect'
 import Link from 'next/link'
@@ -19,13 +22,13 @@ export default async function Home({ params }: Params) {
   const co2Average = await Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
     Effect.map(Option.getOrElse(notFound)),
-    Effect.provideLayer(co2Repo),
+    Effect.provideLayer(co2RepoLive),
     Effect.runPromise
   )
 
   const sources = await SourceRepository.pipe(
     Effect.flatMap((repo) => repo.getAllSourcesByCo2ProducerId(co2Average.id)),
-    Effect.provideLayer(sourceRepo),
+    Effect.provideLayer(sourceRepoLive),
     Effect.runPromise
   )
 
@@ -87,7 +90,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const co2Average = await Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
     Effect.map(Option.getOrElse(notFound)),
-    Effect.provideLayer(co2Repo),
+    Effect.provideLayer(co2RepoLive),
     Effect.runPromise
   )
 

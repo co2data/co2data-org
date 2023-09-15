@@ -1,4 +1,4 @@
-import { Co2Repository, repositoryLive } from '@/domain/co2'
+import { Co2Repository, co2RepoLive } from '@/domain/co2'
 import { mockPlanetScale } from '@/infra/mock/server'
 import { Effect, Option } from 'effect'
 import { describe, expect, test } from 'vitest'
@@ -24,7 +24,7 @@ describe('co2-repository', () => {
 
     const actual = await Co2Repository.pipe(
       Effect.flatMap((repo) => repo.getCo2AverageBySlug('test')),
-      Effect.provideLayer(repositoryLive),
+      Effect.provideLayer(co2RepoLive),
       Effect.runPromise
     )
 
@@ -53,7 +53,7 @@ describe('co2-repository', () => {
 
     const actual = await Co2Repository.pipe(
       Effect.flatMap((repo) => repo.getAllCo2Averages()),
-      Effect.provideLayer(repositoryLive),
+      Effect.provideLayer(co2RepoLive),
       Effect.runPromise
     )
 

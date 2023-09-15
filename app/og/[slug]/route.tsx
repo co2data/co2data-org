@@ -1,5 +1,5 @@
 import OgImageFrame from '@/components/og-image-frame'
-import { Co2Repository, repositoryLive } from '@/domain/co2'
+import { Co2Repository, co2RepoLive } from '@/domain/co2'
 import { raise } from '@/lib/utils'
 import convert from 'convert'
 import { Effect, Option } from 'effect'
@@ -19,7 +19,7 @@ function getCo2AverageBySlug(slug: string) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(slug)),
     Effect.map(Option.getOrElse(notFound)),
-    Effect.provideLayer(repositoryLive)
+    Effect.provideLayer(co2RepoLive)
   )
 }
 

@@ -61,7 +61,7 @@ async function setup(props: {
   mockData: Co2Average[]
   searchParams: { [key: string]: string | undefined }
 }) {
-  const co2RepositoryTest = Layer.succeed(
+  const co2RepoTest = Layer.succeed(
     Co2Repository,
     Co2Repository.of({
       getAllCo2Averages: () => Effect.succeed(props.mockData),
@@ -70,7 +70,7 @@ async function setup(props: {
   )
   const result = await ContributorList({
     searchParams: props.searchParams,
-    deps: { repository: co2RepositoryTest },
+    deps: { repository: co2RepoTest },
   })
   return render(result)
 }

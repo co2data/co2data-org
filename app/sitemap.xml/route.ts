@@ -1,11 +1,11 @@
-import { Co2Repository, repositoryLive } from '@/domain/co2'
+import { Co2Repository, co2RepoLive } from '@/domain/co2'
 import { baseUrl } from '../config'
 import { Effect } from 'effect'
 
 function getAllCo2Averages() {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
-    Effect.provideLayer(repositoryLive)
+    Effect.provideLayer(co2RepoLive)
   )
 }
 

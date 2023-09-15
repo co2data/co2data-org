@@ -26,4 +26,4 @@ export type Co2Average = {
   timesPerYearAverage: number
 }
 
-export const repositoryLive = Co2RepositoryLive.pipe(Layer.use(DbLive))
+export const co2RepoLive = Co2RepositoryLive.pipe(Layer.use(DbLive))

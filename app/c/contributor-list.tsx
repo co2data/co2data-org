@@ -1,14 +1,14 @@
-import { Co2Repository, repositoryLive } from '@/domain/co2'
+import { Co2Repository, co2RepoLive } from '@/domain/co2'
 import { Effect } from 'effect'
 import Link from 'next/link'
 import Co2Average from '../../components/co2-average'
 
 export default async function ContributorList({
   searchParams,
-  deps = { repository: repositoryLive },
+  deps = { repository: co2RepoLive },
 }: {
   searchParams: { [key: string]: string | undefined }
-  deps?: { repository: typeof repositoryLive }
+  deps?: { repository: typeof co2RepoLive }
 }) {
   const co2Averages = await getCo2Averages(searchParams, deps)
 
@@ -38,7 +38,7 @@ export default async function ContributorList({
 
 function getCo2Averages(
   searchParams: { [key: string]: string | undefined },
-  deps: { repository: typeof repositoryLive }
+  deps: { repository: typeof co2RepoLive }
 ) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getAllCo2Averages()),

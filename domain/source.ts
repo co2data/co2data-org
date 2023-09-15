@@ -1,6 +1,6 @@
 import { SourceRepositoryLive } from '@/adapter/source-repository'
 import { DbLive } from '@/infra/db'
-import { Effect, Layer, Option } from 'effect'
+import { Layer, Option } from 'effect'
 export { SourceRepository } from '@/adapter/source-repository'
 export type Source = {
   id: string
@@ -21,4 +21,4 @@ export type Link = {
   url: string
 }
 
-export const repository = SourceRepositoryLive.pipe(Layer.use(DbLive))
+export const sourceRepoLive = SourceRepositoryLive.pipe(Layer.use(DbLive))
