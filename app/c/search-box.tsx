@@ -25,7 +25,9 @@ export default function SearchBox() {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     startTransition(() =>
-      replace(('/c?' + createQueryString('search', value)) as Route)
+      replace(('/c?' + createQueryString('search', value)) as Route, {
+        scroll: false,
+      })
     )
   }
 
