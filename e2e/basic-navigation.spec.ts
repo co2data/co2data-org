@@ -7,7 +7,7 @@ test('has search', async ({ page }) => {
 })
 
 test('finds a contributor', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'networkidle' })
+  await page.goto('/')
 
   await page.getByLabel('Search').fill('Pork')
 
