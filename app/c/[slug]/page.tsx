@@ -1,7 +1,7 @@
 import { baseUrl } from '@/app/config'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
-import { Co2Repository, repository as co2Repo } from '@/domain/co2'
+import { Co2Repository, repositoryLive as co2Repo } from '@/domain/co2'
 import { SourceRepository, repository as sourceRepo } from '@/domain/source'
 import convert from 'convert'
 import { Effect, Option } from 'effect'

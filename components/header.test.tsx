@@ -4,7 +4,7 @@ import Header from './header'
 
 test('home', () => {
   render(<Header />)
-  const navigation = within(screen.getByRole('navigation'))
-  expect(navigation.getByRole('link', { name: /contributors/i })).toBeDefined()
-  expect(navigation.getByRole('link', { name: /about/i })).toBeDefined()
+  const nav = within(screen.getByRole('navigation'))
+  expect(nav.getByRole('link', { name: /contributors/i })).toBeInTheDocument()
+  expect(nav.getByRole('link', { name: /about/i })).toBeInTheDocument()
 })

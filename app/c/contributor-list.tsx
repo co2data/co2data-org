@@ -1,19 +1,16 @@
-import { Co2Repository, repository } from '@/domain/co2'
+import { Co2Repository, repositoryLive } from '@/domain/co2'
 import { Effect } from 'effect'
 import Link from 'next/link'
 import Co2Average from '../../components/co2-average'
 
 export default async function ContributorList({
   searchParams,
+  deps = { repository: repositoryLive },
 }: {
   searchParams: { [key: string]: string | undefined }
+  deps?: { repository: typeof repositoryLive }
 }) {
-  const co2Averages = await Co2Repository.pipe(
-    Effect.flatMap((repo) => repo.getAllCo2Averages()),
-    Effect.map(filter(searchParams['search'])),
-    Effect.provideLayer(repository),
-    Effect.runPromise
-  )
+  const co2Averages = await getCo2Averages(searchParams, deps)
 
   return (
     <>
@@ -39,10 +36,23 @@ export default async function ContributorList({
   )
 }
 
-const filter =
-  (term: string | null | undefined) => (co2Averges: Co2Average[]) =>
+function getCo2Averages(
+  searchParams: { [key: string]: string | undefined },
+  deps: { repository: typeof repositoryLive }
+) {
+  return Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+    Effect.map(filter(searchParams['search'])),
+    Effect.provideLayer(deps.repository),
+    Effect.runPromise
+  )
+}
+
+function filter(term: string | null | undefined) {
+  return (co2Averges: Co2Average[]) =>
     term
       ? co2Averges.filter((item) =>
           item.title.toLowerCase().includes(term.toLowerCase())
         )
       : co2Averges
+}

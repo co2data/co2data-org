@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+import { cleanup } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { server } from './infra/mock/server'
 
@@ -7,4 +9,7 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterAll(() => server.close())
 
 // Reset handlers after each test `important for test isolation`
-afterEach(() => server.resetHandlers())
+afterEach(() => {
+  server.resetHandlers()
+  cleanup()
+})
