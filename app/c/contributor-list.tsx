@@ -1,22 +1,27 @@
-import { Co2Repository, co2RepoLive } from '@/domain/co2'
-import { Effect } from 'effect'
+import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
+import { Effect, flow } from 'effect'
 import Link from 'next/link'
-import Co2Average from '../../components/co2-average'
+import Co2AverageCmp from '../../components/co2-average'
 
-export default async function ContributorList({
-  searchParams,
-  deps = { repository: co2RepoLive },
-}: {
-  searchParams: { [key: string]: string | undefined }
-  deps?: { repository: typeof co2RepoLive }
+export function ContributorListEffect(props: {
+  searchParams: {
+    [key: string]: string | undefined
+  }
 }) {
-  const co2Averages = await getCo2Averages(searchParams, deps)
+  return Co2Repository.pipe(
+    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+    Effect.map(filter(props.searchParams['search'])),
+    Effect.map(render),
+    Effect.catchAll(() => Effect.succeed(<main>Error</main>))
+  )
+}
 
+function render(co2Averages: Co2Average[]) {
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8">
         {co2Averages.map((co2Average) => (
-          <Co2Average key={co2Average.slug} co2Average={co2Average} />
+          <Co2AverageCmp key={co2Average.slug} co2Average={co2Average} />
         ))}
       </ul>
       {co2Averages.length === 0 && (
@@ -36,18 +41,6 @@ export default async function ContributorList({
   )
 }
 
-function getCo2Averages(
-  searchParams: { [key: string]: string | undefined },
-  deps: { repository: typeof co2RepoLive }
-) {
-  return Co2Repository.pipe(
-    Effect.flatMap((repo) => repo.getAllCo2Averages()),
-    Effect.map(filter(searchParams['search'])),
-    Effect.provideLayer(deps.repository),
-    Effect.runPromise
-  )
-}
-
 function filter(term: string | null | undefined) {
   return (co2Averges: Co2Average[]) =>
     term
@@ -56,3 +49,10 @@ function filter(term: string | null | undefined) {
         )
       : co2Averges
 }
+
+const ContributorList = flow(
+  ContributorListEffect,
+  Effect.provideLayer(co2RepoLive),
+  Effect.runPromise
+)
+export default ContributorList

@@ -1,6 +1,6 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
-import { DB } from '@/infra/db'
+import { DB, DbError } from '@/infra/db'
 import { links, sourcedCo2Amounts, sources } from '@/infra/db/schema'
 import { eq, or } from 'drizzle-orm'
 import { Context, Effect, Layer, Option, ReadonlyArray, pipe } from 'effect'
@@ -10,7 +10,7 @@ import html from 'remark-html'
 export interface SourceRepository {
   getAllSourcesByCo2ProducerId: (
     id: string
-  ) => Effect.Effect<never, unknown, Source[]>
+  ) => Effect.Effect<never, MarkdownError | DbError, Source[]>
 }
 
 export const SourceRepository = Context.Tag<SourceRepository>()
@@ -21,72 +21,33 @@ export const SourceRepositoryLive = Layer.effect(
     SourceRepository.of({
       getAllSourcesByCo2ProducerId: (id) =>
         Effect.gen(function* (_) {
-          const db = yield* _(database)
-          const amountSources = yield* _(
-            Effect.tryPromise(() =>
-              db
-                .select({
-                  id: sourcedCo2Amounts.id,
-                  gCo2e: sourcedCo2Amounts.gCo2E,
-                  per: sourcedCo2Amounts.per,
-                  quote: sourcedCo2Amounts.quote,
-                  description: sourcedCo2Amounts.description,
-                  userId: sourcedCo2Amounts.userId,
-                  name: sources.name,
-                  year: sources.year,
-                  region: sources.region,
-                  sourcesId: sources.id,
-                })
-                .from(sourcedCo2Amounts)
-                .innerJoin(sources, eq(sourcedCo2Amounts.sourceId, sources.id))
-                .where(eq(sourcedCo2Amounts.co2ProducerId, id))
-            )
-          )
-          const linksResult = yield* _(
-            Effect.tryPromise(() =>
-              db
-                .select()
-                .from(links)
-                .where(
-                  or(
-                    ...amountSources.map((i) =>
-                      eq(links.sourcesId, i.sourcesId)
-                    )
-                  )
-                )
-            )
-          )
+          const data = yield* _(database.sources.getAllByProducerId(id))
 
-          const sourcesWithLinks = amountSources.map((source) =>
+          const transformedData = yield* _(
             pipe(
-              linksResult,
-              ReadonlyArray.filter(
-                (link) => link.sourcesId === source.sourcesId
-              ),
-              Option.some,
-              Option.filter((a) => a.length > 0),
-              (links) => ({ ...source, links })
-            )
-          )
-
-          const sourceLinksWithDescriptions = yield* _(
-            Effect.all(
-              sourcesWithLinks.map((sWL) =>
-                pipe(
-                  Effect.tryPromise(() => markdownToHtml(sWL.description)),
-                  Effect.map((description) => ({ ...sWL, description }))
+              data,
+              ReadonlyArray.map((source) =>
+                markdownToHtml(source.description).pipe(
+                  Effect.map((markdown) => ({
+                    ...source,
+                    description: markdown,
+                  }))
                 )
-              )
+              ),
+              Effect.all
             )
           )
-
-          return sourceLinksWithDescriptions
+          return transformedData
         }),
     })
   )
 )
-
-async function markdownToHtml(markdown: string) {
-  const result = await remark().use(html).process(markdown)
-  return result.toString()
+export class MarkdownError extends Error {
+  readonly _tag = 'MarkdownError'
+}
+function markdownToHtml(markdown: string) {
+  return Effect.tryPromise({
+    try: () => remark().use(html).process(markdown),
+    catch: (cause) => new MarkdownError('Markdown Error', { cause }),
+  }).pipe(Effect.map((source) => source.toString()))
 }
