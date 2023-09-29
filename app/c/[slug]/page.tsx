@@ -15,7 +15,7 @@ type Params = {
   }
 }
 
-export function ContributorPageEffect({ params }: Params) {
+function ContributorPageEffect({ params }: Params) {
   return Effect.gen(function* (_) {
     const co2Repo = yield* _(Co2Repository)
     const sourceRepo = yield* _(SourceRepository)
@@ -87,7 +87,7 @@ export function ContributorPageEffect({ params }: Params) {
   ) satisfies Effect.Effect<any, never, JSX.Element>
 }
 
-export function generateMetadataEffect({ params }: Params) {
+function generateMetadataEffect({ params }: Params) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
     Effect.map(Option.getOrElse(notFound)),
