@@ -9,6 +9,7 @@
     "test": "vitest",
     "lint": "next lint",
     "ci": "vitest run && next build",
+    "analyze-bundle-size": "ANALYZE=true next build",
     "connect-to-prod-db": "pscale connect co2data-org main --role reader",
     "connect-to-db": "pscale connect co2data-org",
     "db-migrate": "drizzle-kit generate:mysql",
@@ -17,6 +18,7 @@
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^13.5.3",
     "@planetscale/database": "^1.11.0",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-popover": "^1.0.6",
