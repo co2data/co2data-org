@@ -98,7 +98,7 @@ function generateMetadataEffect({ params }: Params) {
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
     Effect.map(Option.getOrElse(notFound)),
     Effect.map(mapMetadata(params)),
-    Effect.orDie
+    Effect.orElseSucceed(() => ({}))
   ) satisfies Effect.Effect<any, never, Metadata>
 }
 

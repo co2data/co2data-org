@@ -16,7 +16,7 @@ export function ContributorListEffect(props: {
       DbError: () =>
         Effect.succeed(<main>The database is not reachable...</main>),
     })
-  )
+  ) satisfies Effect.Effect<any, never, JSX.Element>
 }
 
 function render(co2Averages: Co2Average[]) {
