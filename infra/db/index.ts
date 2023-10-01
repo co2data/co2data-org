@@ -109,13 +109,16 @@ export const DbLive = Layer.succeed(
                   ...acc.filter((e) => e.id === source.id),
                   {
                     ...existing,
-                    links: Option.map(existing.links, (value) =>
-                      source.links ? [...value, source.links] : value
+                    links: Option.map(
+                      existing.links,
+                      ReadonlyArray.appendAll(
+                        ReadonlyArray.fromNullable(source.links)
+                      )
                     ).pipe(
                       Option.orElse(() =>
-                        source.links
-                          ? Option.some([source.links])
-                          : Option.none()
+                        Option.fromNullable(source.links).pipe(
+                          Option.map(ReadonlyArray.of)
+                        )
                       )
                     ),
                   },
@@ -123,9 +126,9 @@ export const DbLive = Layer.succeed(
               }
               acc.push({
                 ...source,
-                links: source.links
-                  ? Option.some([source.links])
-                  : Option.none(),
+                links: Option.fromNullable(source.links).pipe(
+                  Option.map(ReadonlyArray.of)
+                ),
               })
               return acc
             }, [])
