@@ -17,16 +17,9 @@ type Params = {
 
 function ContributorPageEffect({ params }: Params) {
   return Effect.gen(function* (_) {
-    const co2Repo = yield* _(Co2Repository)
-    const sourceRepo = yield* _(SourceRepository)
-    const co2Average = yield* _(
-      co2Repo
-        .getCo2AverageBySlug(params.slug)
-        .pipe(Effect.map(Option.getOrElse(notFound)))
-    )
-    const sources = yield* _(
-      sourceRepo.getAllSourcesByCo2ProducerId(co2Average.id)
-    )
+    const co2Average = yield* _(getCo2Average(params.slug))
+    const sources = yield* _(getSources(co2Average.id))
+
     return (
       <main className="overflow-hidden">
         <header className="space-y-4">
@@ -85,6 +78,20 @@ function ContributorPageEffect({ params }: Params) {
       MarkdownError: () => Effect.succeed(<main>Error</main>),
     })
   ) satisfies Effect.Effect<any, never, JSX.Element>
+}
+
+function getCo2Average(slug: string) {
+  return Effect.flatMap(Co2Repository, (co2Repo) =>
+    co2Repo
+      .getCo2AverageBySlug(slug)
+      .pipe(Effect.map(Option.getOrElse(notFound)))
+  )
+}
+
+function getSources(id: string) {
+  return Effect.flatMap(SourceRepository, (sourceRepo) =>
+    sourceRepo.getAllSourcesByCo2ProducerId(id)
+  )
 }
 
 function generateMetadataEffect({ params }: Params) {
