@@ -12,7 +12,10 @@ export function ContributorListEffect(props: {
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
     Effect.map(filter(props.searchParams['search'])),
     Effect.map(render),
-    Effect.catchAll(() => Effect.succeed(<main>Error</main>))
+    Effect.catchTags({
+      DbError: () =>
+        Effect.succeed(<main>The database is not reachable...</main>),
+    })
   )
 }
 

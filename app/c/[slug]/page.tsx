@@ -74,8 +74,7 @@ function ContributorPageEffect({ params }: Params) {
     )
   }).pipe(
     Effect.catchTags({
-      DbError: () => Effect.succeed(<main>Error</main>),
-      MarkdownError: () => Effect.succeed(<main>Error</main>),
+      DbError: (cause) => Effect.succeed(<main>Database error</main>),
     })
   ) satisfies Effect.Effect<any, never, JSX.Element>
 }

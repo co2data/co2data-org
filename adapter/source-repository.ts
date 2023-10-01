@@ -1,16 +1,15 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
 import { DB, DbError } from '@/infra/db'
-import { links, sourcedCo2Amounts, sources } from '@/infra/db/schema'
-import { eq, or } from 'drizzle-orm'
-import { Context, Effect, Layer, Option, ReadonlyArray, pipe } from 'effect'
+import { BaseError } from '@/lib/types'
+import { Context, Data, Effect, Layer, ReadonlyArray, pipe } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
 export interface SourceRepository {
   getAllSourcesByCo2ProducerId: (
     id: string
-  ) => Effect.Effect<never, MarkdownError | DbError, Source[]>
+  ) => Effect.Effect<never, DbError, Source[]>
 }
 
 export const SourceRepository = Context.Tag<SourceRepository>()
@@ -42,12 +41,12 @@ export const SourceRepositoryLive = Layer.effect(
     })
   )
 )
-export class MarkdownError extends Error {
-  readonly _tag = 'MarkdownError'
-}
+export class MarkdownError extends Data.TaggedClass(
+  'MarkdownError'
+)<BaseError> {}
+
 function markdownToHtml(markdown: string) {
-  return Effect.tryPromise({
-    try: () => remark().use(html).process(markdown),
-    catch: (cause) => new MarkdownError('Markdown Error', { cause }),
-  }).pipe(Effect.map((source) => source.toString()))
+  return Effect.promise(() => remark().use(html).process(markdown)).pipe(
+    Effect.map((source) => source.toString())
+  )
 }

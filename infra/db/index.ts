@@ -1,9 +1,10 @@
 import { Co2Average } from '@/domain/co2'
 import { Source } from '@/domain/source'
+import { BaseError } from '@/lib/types'
 import { connect } from '@planetscale/database'
 import { desc, eq } from 'drizzle-orm'
 import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
-import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
+import { Context, Data, Effect, Layer, Option, ReadonlyArray } from 'effect'
 import * as schema from './schema'
 
 export type DB = {
@@ -26,9 +27,7 @@ const connection = connect({ url: process.env.DATABASE_URL })
 
 export const db = planetscaleDrizzle(connection, { schema })
 type DbDrizzle = typeof db
-export class DbError extends Error {
-  readonly _tag = 'DbError'
-}
+export class DbError extends Data.TaggedClass('DbError')<BaseError> {}
 export type DbFrom = ReturnType<ReturnType<DbDrizzle['select']>['from']>
 
 export const DbLive = Layer.succeed(
@@ -42,7 +41,7 @@ export const DbLive = Layer.succeed(
               .select()
               .from(schema.co2Average)
               .orderBy(desc(schema.co2Average.avgPerYear)),
-          catch: (cause) => new DbError('DB Error', { cause }),
+          catch: handleDbError,
         }).pipe(
           Effect.map(
             ReadonlyArray.map((co2Average) => ({
@@ -59,7 +58,7 @@ export const DbLive = Layer.succeed(
               .select()
               .from(schema.co2Average)
               .where(eq(schema.co2Average.slug, slug)),
-          catch: (cause) => new DbError('DB Error', { cause }),
+          catch: handleDbError,
         }).pipe(
           Effect.map(ReadonlyArray.head),
           Effect.map(
@@ -99,7 +98,7 @@ export const DbLive = Layer.succeed(
                 eq(schema.sourcedCo2Amounts.sourceId, schema.links.sourcesId)
               )
               .where(eq(schema.sourcedCo2Amounts.co2ProducerId, id)),
-          catch: (cause) => new DbError('DB Error', { cause }),
+          catch: handleDbError,
         }).pipe(
           Effect.map((d) =>
             d.reduce<Source[]>((acc, source) => {
@@ -137,3 +136,7 @@ export const DbLive = Layer.succeed(
     },
   })
 )
+function handleDbError(cause: unknown) {
+  console.error(`DbError: ${cause}`)
+  return new DbError({ cause })
+}
