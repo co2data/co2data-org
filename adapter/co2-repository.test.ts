@@ -140,7 +140,7 @@ function runWithLiveDb(
 ) {
   return Co2Repository.pipe(
     Effect.flatMap(f),
-    Effect.provideLayer(co2RepoLive),
+    Effect.provide(co2RepoLive),
     Effect.runPromise
   )
 }
@@ -165,7 +165,7 @@ function runWithTestDb(
 
   const getAllCo2Averages = Co2Repository.pipe(
     Effect.flatMap(f),
-    Effect.provideLayer(Co2RepoTest),
+    Effect.provide(Co2RepoTest),
     Effect.runPromise
   )
   return getAllCo2Averages

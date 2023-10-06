@@ -69,7 +69,7 @@ async function setup(props: {
     })
   )
   const result = await ContributorListEffect(props).pipe(
-    Effect.provideLayer(co2RepoTest),
+    Effect.provide(co2RepoTest),
     Effect.runPromise
   )
 

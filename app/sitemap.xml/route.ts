@@ -5,7 +5,7 @@ import { Effect } from 'effect'
 function getAllCo2Averages() {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
-    Effect.provideLayer(co2RepoLive)
+    Effect.provide(co2RepoLive)
   )
 }
 

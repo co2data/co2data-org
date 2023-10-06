@@ -55,7 +55,7 @@ function filter(term: string | null | undefined) {
 
 const ContributorList = flow(
   ContributorListEffect,
-  Effect.provideLayer(co2RepoLive),
+  Effect.provide(co2RepoLive),
   Effect.runPromise
 )
 export default ContributorList

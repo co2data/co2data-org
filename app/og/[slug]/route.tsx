@@ -19,7 +19,7 @@ function getCo2AverageBySlug(slug: string) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(slug)),
     Effect.map(Option.getOrElse(notFound)),
-    Effect.provideLayer(co2RepoLive)
+    Effect.provide(co2RepoLive)
   )
 }
 

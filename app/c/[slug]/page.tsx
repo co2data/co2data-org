@@ -134,13 +134,13 @@ function mapMetadata(params: { slug: string }) {
 
 const ContributorPage = flow(
   ContributorPageEffect,
-  Effect.provideLayer(Layer.merge(co2RepoLive, sourceRepoLive)),
+  Effect.provide(Layer.merge(co2RepoLive, sourceRepoLive)),
   Effect.runPromise
 )
 export default ContributorPage
 
 export const generateMetadata = flow(
   generateMetadataEffect,
-  Effect.provideLayer(co2RepoLive),
+  Effect.provide(co2RepoLive),
   Effect.runPromise
 )
