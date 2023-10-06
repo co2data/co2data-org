@@ -1,3 +1,4 @@
+import { InferSelectModel, relations, sql } from 'drizzle-orm'
 import {
   char,
   decimal,
@@ -11,7 +12,7 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core'
-import { relations, sql } from 'drizzle-orm'
+
 export const categories = mysqlTable('categories', {
   id: char('id', { length: 36 })
     .default(sql`(uuid())`)
@@ -45,6 +46,14 @@ export const co2Average = mysqlView('co2_average', {
   timesPerYearTo: double('times_per_year_to').notNull(),
   timesPerYearAverage: double('times_per_year_average').notNull(),
 }).existing()
+
+type Co2AverageFields = typeof co2Average._.selectedFields
+
+export type Co2Average = {
+  [Key in keyof Co2AverageFields]: Co2AverageFields[Key]['_']['notNull'] extends true
+    ? Co2AverageFields[Key]['_']['data']
+    : Co2AverageFields[Key]['_']['data'] | null
+}
 
 export const co2Producers = mysqlTable(
   'co2_producers',
@@ -126,7 +135,7 @@ export const sourcedCo2Amounts = mysqlTable(
     }
   }
 )
-
+export type SelectSourcedCo2Amounts = InferSelectModel<typeof sourcedCo2Amounts>
 export const sources = mysqlTable(
   'sources',
   {
