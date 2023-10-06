@@ -18,7 +18,7 @@ export default function OgImageFrame({
       <div tw="flex flex-col grow">
         <div tw="flex grow justify-between">
           <div tw="flex flex-col text-center justify-center items-center rounded-lg min-w-20 min-h-20 self-start p-3 text-xl leading-4 font-bold bg-white text-sky-600">
-            CO₂
+            CO2
             <br />
             Data
           </div>

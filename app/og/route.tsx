@@ -9,10 +9,8 @@ export function GET(request: Request) {
       (
         <OgImageFrame>
           <div tw="flex flex-col">
-            <div tw="flex text-[50]">CO₂ Data</div>
-            <div tw="flex text-4xl">
-              What are the CO<sub>2</sub> emissions of things.
-            </div>
+            <div tw="flex text-[50]">CO2 Data</div>
+            <div tw="flex text-4xl">What are the CO2 emissions of things.</div>
           </div>
         </OgImageFrame>
       ),
