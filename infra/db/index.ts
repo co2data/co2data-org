@@ -109,7 +109,11 @@ function findMany({ orderBy }: { orderBy?: SQL<unknown> } = {}) {
   return Effect.tryPromise({
     try: () => query,
     catch: handleDbError,
-  })
+  }).pipe(
+    Effect.tap((data) =>
+      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
+    )
+  )
 }
 function findOne({ where }: { where: SQL<unknown> }) {
   const selectFrom = db.select().from(schema.co2Average)
@@ -117,7 +121,12 @@ function findOne({ where }: { where: SQL<unknown> }) {
   return Effect.tryPromise({
     try: () => query,
     catch: handleDbError,
-  }).pipe(Effect.map(ReadonlyArray.head))
+  }).pipe(
+    Effect.tap((data) =>
+      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
+    ),
+    Effect.map(ReadonlyArray.head)
+  )
 }
 
 function handleDbError(cause: unknown) {

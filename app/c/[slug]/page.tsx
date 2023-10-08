@@ -3,19 +3,23 @@ import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
 import { SourceRepository, sourceRepoLive } from '@/domain/source'
+import { setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
 import { Effect, Layer, Option, flow } from 'effect'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
 
-type Params = {
+type Props = {
   params: {
     slug: string
   }
+  searchParams: {
+    logLevel?: string
+  }
 }
 
-function ContributorPageEffect({ params }: Params) {
+function ContributorPageEffect({ params, searchParams }: Props) {
   return Effect.gen(function* (_) {
     const co2Average = yield* _(getCo2Average(params.slug))
     const sources = yield* _(getSources(co2Average.id))
@@ -75,7 +79,8 @@ function ContributorPageEffect({ params }: Params) {
   }).pipe(
     Effect.catchTags({
       DbError: (cause) => Effect.succeed(<main>Database error</main>),
-    })
+    }),
+    setLogLevelFromSearchParams({ searchParams })
   ) satisfies Effect.Effect<any, never, JSX.Element>
 }
 
@@ -93,12 +98,13 @@ function getSources(id: string) {
   )
 }
 
-function generateMetadataEffect({ params }: Params) {
+function generateMetadataEffect({ params, searchParams }: Props) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
     Effect.map(Option.getOrElse(notFound)),
     Effect.map(mapMetadata(params)),
-    Effect.orElseSucceed(() => ({}))
+    Effect.orElseSucceed(() => ({})),
+    setLogLevelFromSearchParams({ searchParams })
   ) satisfies Effect.Effect<any, never, Metadata>
 }
 

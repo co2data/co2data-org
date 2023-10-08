@@ -1,4 +1,5 @@
 import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
+import { setLogLevelFromSearchParams } from '@/lib/utils'
 import { Effect, flow } from 'effect'
 import Link from 'next/link'
 import Co2AverageCmp from '../../components/co2-average'
@@ -12,10 +13,8 @@ export function ContributorListEffect(props: {
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
     Effect.map(filter(props.searchParams['search'])),
     Effect.map(render),
-    Effect.catchTags({
-      DbError: () =>
-        Effect.succeed(<main>The database is not reachable...</main>),
-    })
+    Effect.catchTag('DbError', handleDbError),
+    setLogLevelFromSearchParams(props)
   ) satisfies Effect.Effect<any, never, JSX.Element>
 }
 
@@ -51,6 +50,10 @@ function filter(term: string | null | undefined) {
           item.title.toLowerCase().includes(term.toLowerCase())
         )
       : co2Averges
+}
+
+function handleDbError() {
+  return Effect.succeed(<main>The database is not reachable...</main>)
 }
 
 const ContributorList = flow(

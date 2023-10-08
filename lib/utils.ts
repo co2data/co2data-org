@@ -1,5 +1,6 @@
 import { cx } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/dist/types'
+import { LogLevel, Logger, identity } from 'effect'
 
 export function cn(...inputs: ClassValue[]) {
   return cx(inputs)
@@ -17,4 +18,19 @@ export function format(
   return trialingZeros
     ? value.toFixed(decimalPlaces)
     : parseFloat(value.toFixed(decimalPlaces))
+}
+
+export function setLogLevelFromSearchParams(props: {
+  searchParams: { logLevel?: string | undefined }
+}) {
+  const logLevel = props.searchParams['logLevel'] as LogLevel.Literal
+
+  if (
+    logLevel === undefined ||
+    !LogLevel.allLevels.some((ll) => ll._tag === logLevel)
+  ) {
+    return identity
+  }
+
+  return Logger.withMinimumLogLevel(LogLevel.fromLiteral(logLevel))
 }
