@@ -24,7 +24,7 @@ const connection = connect({ url: process.env.DATABASE_URL })
 
 export const db = planetscaleDrizzle(connection, { schema })
 type DbDrizzle = typeof db
-export class DbError extends Data.TaggedClass('DbError')<BaseError> {}
+export class DbError extends Data.TaggedError('DbError')<BaseError> {}
 export type DbFrom = ReturnType<ReturnType<DbDrizzle['select']>['from']>
 
 export const DbLive = Layer.succeed(

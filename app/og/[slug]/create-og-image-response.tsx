@@ -110,14 +110,12 @@ function notFound(slug: string | undefined) {
     })
 }
 
-class NoParamError extends Data.TaggedClass('NoParamError')<{}> {
+class NoParamError extends Data.TaggedError('NoParam')<{}> {
   readonly cause = 'No parameter defined.'
 }
-class NotFoundError extends Data.TaggedClass('NotFoundError')<BaseError> {}
+class NotFoundError extends Data.TaggedError('NotFound')<BaseError> {}
 
-class ImageRenderError extends Data.TaggedClass(
-  'ImageRenderError'
-)<BaseError> {}
+class ImageRenderError extends Data.TaggedError('ImageRender')<BaseError> {}
 
 function handleErrors(
   error: NoParamError | DbError | NotFoundError | ImageRenderError
