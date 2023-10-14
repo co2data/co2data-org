@@ -1,8 +1,7 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
 import { DB, DbError } from '@/infra/db'
-import { BaseError } from '@/lib/types'
-import { Context, Data, Effect, Layer, ReadonlyArray, pipe } from 'effect'
+import { Context, Effect, Layer, ReadonlyArray, pipe } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
@@ -25,14 +24,7 @@ export const SourceRepositoryLive = Layer.effect(
           const transformedData = yield* _(
             pipe(
               data,
-              ReadonlyArray.map((source) =>
-                markdownToHtml(source.description).pipe(
-                  Effect.map((markdown) => ({
-                    ...source,
-                    description: markdown,
-                  }))
-                )
-              ),
+              ReadonlyArray.map(transformDescriptionToHTML),
               Effect.all
             )
           )
@@ -41,12 +33,15 @@ export const SourceRepositoryLive = Layer.effect(
     })
   )
 )
-export class MarkdownError extends Data.TaggedClass(
-  'MarkdownError'
-)<BaseError> {}
 
-function markdownToHtml(markdown: string) {
-  return Effect.promise(() => remark().use(html).process(markdown)).pipe(
-    Effect.map((source) => source.toString())
+function transformDescriptionToHTML(source: Source) {
+  return Effect.promise(() =>
+    remark().use(html).process(source.description)
+  ).pipe(
+    Effect.map((processed) => processed.toString()),
+    Effect.map((markdown) => ({
+      ...source,
+      description: markdown,
+    }))
   )
 }
