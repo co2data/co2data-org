@@ -3,7 +3,15 @@ import { BaseError } from '@/lib/types'
 import { connect } from '@planetscale/database'
 import { SQL, eq } from 'drizzle-orm'
 import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
-import { Context, Data, Effect, Layer, Option, ReadonlyArray } from 'effect'
+import {
+  Config,
+  Context,
+  Data,
+  Effect,
+  Layer,
+  Option,
+  ReadonlyArray,
+} from 'effect'
 import * as schema from './schema'
 
 export type DB = {
@@ -20,13 +28,6 @@ export type DB = {
 
 export const DB = Context.Tag<DB>()
 
-const connection = connect({ url: process.env.DATABASE_URL })
-
-export const db = planetscaleDrizzle(connection, { schema })
-type DbDrizzle = typeof db
-export class DbError extends Data.TaggedError('DbError')<BaseError> {}
-export type DbFrom = ReturnType<ReturnType<DbDrizzle['select']>['from']>
-
 export const DbLive = Layer.succeed(
   DB,
   DB.of({
@@ -39,6 +40,36 @@ export const DbLive = Layer.succeed(
     },
   })
 )
+
+const url = Effect.config(Config.string('DATABASE_URL')).pipe(Effect.runSync)
+const db = planetscaleDrizzle(connect({ url }), { schema })
+function findOne({ where }: { where: SQL<unknown> }) {
+  const selectFrom = db.select().from(schema.co2Average)
+  const query = selectFrom.where(where)
+  return Effect.tryPromise({
+    try: () => query,
+    catch: handleDbError,
+  }).pipe(
+    Effect.tap((data) =>
+      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
+    ),
+    Effect.map(ReadonlyArray.head)
+  )
+}
+
+function findMany({ orderBy }: { orderBy?: SQL<unknown> } = {}) {
+  const selectFrom = db.select().from(schema.co2Average)
+  const query = orderBy ? selectFrom.orderBy(orderBy) : selectFrom
+  return Effect.tryPromise({
+    try: () => query,
+    catch: handleDbError,
+  }).pipe(
+    Effect.tap((data) =>
+      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
+    )
+  )
+}
+
 function getAllByProducerId(id: string) {
   return Effect.tryPromise({
     try: () =>
@@ -103,31 +134,7 @@ function getAllByProducerId(id: string) {
   )
 }
 
-function findMany({ orderBy }: { orderBy?: SQL<unknown> } = {}) {
-  const selectFrom = db.select().from(schema.co2Average)
-  const query = orderBy ? selectFrom.orderBy(orderBy) : selectFrom
-  return Effect.tryPromise({
-    try: () => query,
-    catch: handleDbError,
-  }).pipe(
-    Effect.tap((data) =>
-      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
-    )
-  )
-}
-function findOne({ where }: { where: SQL<unknown> }) {
-  const selectFrom = db.select().from(schema.co2Average)
-  const query = selectFrom.where(where)
-  return Effect.tryPromise({
-    try: () => query,
-    catch: handleDbError,
-  }).pipe(
-    Effect.tap((data) =>
-      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
-    ),
-    Effect.map(ReadonlyArray.head)
-  )
-}
+export class DbError extends Data.TaggedError('DbError')<BaseError> {}
 
 function handleDbError(cause: unknown) {
   console.error(`DbError: ${cause}`)
