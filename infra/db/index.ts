@@ -23,7 +23,7 @@ export type DB = {
   sources: {
     readonly getAllByProducerId: (
       id: string
-    ) => Effect.Effect<never, ConfigError.ConfigError | DbError, Source[]>
+    ) => Effect.Effect<never, DbError, Source[]>
   }
 }
 
@@ -42,7 +42,7 @@ export const DbLive = Layer.succeed(
   })
 )
 
-const url = Effect.config(Config.string('DATABASE_URL'))
+const url = Effect.config(Config.string('DATABASE_URL')).pipe(Effect.orDie)
 const database = url.pipe(
   Effect.flatMap((url) =>
     Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema }))
@@ -64,24 +64,21 @@ function findOne({ where }: { where: SQL<unknown> }) {
 }
 
 function findMany({ orderBy }: { orderBy?: SQL<unknown> } = {}) {
-  return database
-    .pipe(
-      Effect.flatMap((db) =>
-        Effect.tryPromise({
-          try: () => {
-            const selectFrom = db.select().from(schema.co2Average)
-            const query = orderBy ? selectFrom.orderBy(orderBy) : selectFrom
-            return query
-          },
-          catch: handleDbError,
-        })
-      )
+  return database.pipe(
+    Effect.flatMap((db) =>
+      Effect.tryPromise({
+        try: () => {
+          const selectFrom = db.select().from(schema.co2Average)
+          const query = orderBy ? selectFrom.orderBy(orderBy) : selectFrom
+          return query
+        },
+        catch: handleDbError,
+      })
+    ),
+    Effect.tap((data) =>
+      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
     )
-    .pipe(
-      Effect.tap((data) =>
-        Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
-      )
-    )
+  )
 }
 
 function getAllByProducerId(id: string) {

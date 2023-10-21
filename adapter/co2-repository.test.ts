@@ -147,7 +147,7 @@ function runWithLiveDb(
     ])
   )
 
-  const layer = Effect.setConfigProvider(mockConfigProvider)
+  const layer = Layer.setConfigProvider(mockConfigProvider)
 
   return Co2Repository.pipe(
     Effect.flatMap(f),
