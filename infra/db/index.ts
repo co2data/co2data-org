@@ -5,6 +5,7 @@ import { SQL, eq } from 'drizzle-orm'
 import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
 import {
   Config,
+  ConfigError,
   Context,
   Data,
   Effect,
@@ -22,7 +23,7 @@ export type DB = {
   sources: {
     readonly getAllByProducerId: (
       id: string
-    ) => Effect.Effect<never, DbError, Source[]>
+    ) => Effect.Effect<never, ConfigError.ConfigError | DbError, Source[]>
   }
 }
 
@@ -41,15 +42,20 @@ export const DbLive = Layer.succeed(
   })
 )
 
-const url = Effect.config(Config.string('DATABASE_URL')).pipe(Effect.runSync)
-const db = planetscaleDrizzle(connect({ url }), { schema })
+const url = Effect.config(Config.string('DATABASE_URL'))
+const database = url.pipe(
+  Effect.flatMap((url) =>
+    Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema }))
+  )
+)
 function findOne({ where }: { where: SQL<unknown> }) {
-  const selectFrom = db.select().from(schema.co2Average)
-  const query = selectFrom.where(where)
-  return Effect.tryPromise({
-    try: () => query,
-    catch: handleDbError,
-  }).pipe(
+  return database.pipe(
+    Effect.flatMap((db) =>
+      Effect.tryPromise({
+        try: () => db.select().from(schema.co2Average).where(where),
+        catch: handleDbError,
+      })
+    ),
     Effect.tap((data) =>
       Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
     ),
@@ -58,47 +64,59 @@ function findOne({ where }: { where: SQL<unknown> }) {
 }
 
 function findMany({ orderBy }: { orderBy?: SQL<unknown> } = {}) {
-  const selectFrom = db.select().from(schema.co2Average)
-  const query = orderBy ? selectFrom.orderBy(orderBy) : selectFrom
-  return Effect.tryPromise({
-    try: () => query,
-    catch: handleDbError,
-  }).pipe(
-    Effect.tap((data) =>
-      Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
+  return database
+    .pipe(
+      Effect.flatMap((db) =>
+        Effect.tryPromise({
+          try: () => {
+            const selectFrom = db.select().from(schema.co2Average)
+            const query = orderBy ? selectFrom.orderBy(orderBy) : selectFrom
+            return query
+          },
+          catch: handleDbError,
+        })
+      )
     )
-  )
+    .pipe(
+      Effect.tap((data) =>
+        Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
+      )
+    )
 }
 
 function getAllByProducerId(id: string) {
-  return Effect.tryPromise({
-    try: () =>
-      db
-        .select({
-          id: schema.sourcedCo2Amounts.id,
-          gCo2e: schema.sourcedCo2Amounts.gCo2E,
-          per: schema.sourcedCo2Amounts.per,
-          quote: schema.sourcedCo2Amounts.quote,
-          description: schema.sourcedCo2Amounts.description,
-          userId: schema.sourcedCo2Amounts.userId,
-          name: schema.sources.name,
-          year: schema.sources.year,
-          region: schema.sources.region,
-          sourcesId: schema.sources.id,
-          links: schema.links,
-        })
-        .from(schema.sourcedCo2Amounts)
-        .innerJoin(
-          schema.sources,
-          eq(schema.sourcedCo2Amounts.sourceId, schema.sources.id)
-        )
-        .leftJoin(
-          schema.links,
-          eq(schema.sourcedCo2Amounts.sourceId, schema.links.sourcesId)
-        )
-        .where(eq(schema.sourcedCo2Amounts.co2ProducerId, id)),
-    catch: handleDbError,
-  }).pipe(
+  return database.pipe(
+    Effect.flatMap((db) =>
+      Effect.tryPromise({
+        try: () =>
+          db
+            .select({
+              id: schema.sourcedCo2Amounts.id,
+              gCo2e: schema.sourcedCo2Amounts.gCo2E,
+              per: schema.sourcedCo2Amounts.per,
+              quote: schema.sourcedCo2Amounts.quote,
+              description: schema.sourcedCo2Amounts.description,
+              userId: schema.sourcedCo2Amounts.userId,
+              name: schema.sources.name,
+              year: schema.sources.year,
+              region: schema.sources.region,
+              sourcesId: schema.sources.id,
+              links: schema.links,
+            })
+            .from(schema.sourcedCo2Amounts)
+            .innerJoin(
+              schema.sources,
+              eq(schema.sourcedCo2Amounts.sourceId, schema.sources.id)
+            )
+            .leftJoin(
+              schema.links,
+              eq(schema.sourcedCo2Amounts.sourceId, schema.links.sourcesId)
+            )
+            .where(eq(schema.sourcedCo2Amounts.co2ProducerId, id)),
+        catch: handleDbError,
+      })
+    ),
+
     Effect.map((d) =>
       d.reduce<Source[]>((acc, source) => {
         const existing = acc.find((e) => e.id === source.id)
