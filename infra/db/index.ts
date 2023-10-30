@@ -3,16 +3,8 @@ import { BaseError } from '@/lib/types'
 import { connect } from '@planetscale/database'
 import { SQL, eq } from 'drizzle-orm'
 import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
-import {
-  Config,
-  ConfigError,
-  Context,
-  Data,
-  Effect,
-  Layer,
-  Option,
-  ReadonlyArray,
-} from 'effect'
+import { Config, Context, Data, Effect, Layer, ReadonlyArray } from 'effect'
+import { combineLinks } from './combine-source-links'
 import * as schema from './schema'
 
 export type DB = {
@@ -113,39 +105,8 @@ function getAllByProducerId(id: string) {
         catch: handleDbError,
       })
     ),
-
-    Effect.map((d) =>
-      d.reduce<Source[]>((acc, source) => {
-        const existing = acc.find((e) => e.id === source.id)
-        if (existing) {
-          return [
-            ...acc.filter((e) => e.id === source.id),
-            {
-              ...existing,
-              links: Option.map(
-                existing.links,
-                ReadonlyArray.appendAll(
-                  ReadonlyArray.fromNullable(source.links)
-                )
-              ).pipe(
-                Option.orElse(() =>
-                  Option.fromNullable(source.links).pipe(
-                    Option.map(ReadonlyArray.of)
-                  )
-                )
-              ),
-            },
-          ]
-        }
-        acc.push({
-          ...source,
-          links: Option.fromNullable(source.links).pipe(
-            Option.map(ReadonlyArray.of)
-          ),
-        })
-        return acc
-      }, [])
-    )
+    Effect.map(combineLinks),
+    Effect.tap(Effect.logDebug)
   )
 }
 
