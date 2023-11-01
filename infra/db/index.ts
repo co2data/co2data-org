@@ -34,8 +34,8 @@ export const DbLive = Layer.succeed(
   })
 )
 
-const url = Effect.config(Config.string('DATABASE_URL')).pipe(Effect.orDie)
-const database = url.pipe(
+const database = Effect.config(Config.string('DATABASE_URL')).pipe(
+  Effect.orDie,
   Effect.flatMap((url) =>
     Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema }))
   )
