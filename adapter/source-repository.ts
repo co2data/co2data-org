@@ -22,14 +22,17 @@ export const SourceRepositoryLive = Layer.effect(
           const data = yield* _(database.sources.getAllByProducerId(id))
 
           const transformedData = yield* _(
-            pipe(
-              data,
-              ReadonlyArray.map(transformDescriptionToHTML),
-              Effect.all
+            pipe(data, ReadonlyArray.map(transformDescriptionToHTML), (a) =>
+              Effect.all(a, {
+                concurrency: 'unbounded',
+              })
             )
           )
           return transformedData
-        }),
+        }).pipe(
+          Effect.tap((_) => Effect.logTrace(`id: ${id}`)),
+          Effect.withSpan('getAllSourcesByCo2ProducerId')
+        ),
     })
   )
 )
@@ -42,6 +45,7 @@ function transformDescriptionToHTML(source: Source) {
     Effect.map((markdown) => ({
       ...source,
       description: markdown,
-    }))
+    })),
+    Effect.withSpan('transformDescriptionToHTML')
   )
 }

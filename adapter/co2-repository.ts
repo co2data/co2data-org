@@ -27,7 +27,8 @@ export const Co2RepositoryLive = Layer.effect(
                 avgPerYear: Number(co2Average.avgPerYear ?? 1),
                 avgPerUnit: co2Average.avgPerUnit ?? 1,
               }))
-            )
+            ),
+            Effect.withSpan('getAllCo2Averages')
           )
       },
       getCo2AverageBySlug: (slug) => {
@@ -40,7 +41,8 @@ export const Co2RepositoryLive = Layer.effect(
                 avgPerYear: Number(first.avgPerYear ?? 1),
                 avgPerUnit: first.avgPerUnit ?? 1,
               }))
-            )
+            ),
+            Effect.withSpan('getCo2AverageBySlug')
           )
       },
     })

@@ -21,7 +21,7 @@ export function createOgImageResponse(
 export function renderImageAsResponse(co2Avg: Co2Average) {
   const { formattedInteger, formattedAvgRest } = renderNumberParts(co2Avg)
   const renderedImage = renderImage(co2Avg, formattedInteger, formattedAvgRest)
-  return wrapInResponse(renderedImage)
+  return wrapInResponse(renderedImage).pipe(Effect.withSpan('/render image'))
 }
 function renderNumberParts(co2Avg: Co2Average) {
   const formattedParts = formatter.formatToParts(

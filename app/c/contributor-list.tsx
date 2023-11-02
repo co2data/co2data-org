@@ -1,8 +1,9 @@
 import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
-import { Effect, flow } from 'effect'
+import { Effect, Layer, flow } from 'effect'
 import Link from 'next/link'
-import Co2AverageCmp from '../../components/co2-average'
+import Co2AverageCmp from '@/components/co2-average'
+import { NodeSdkLive } from '@/infra/tracing/NodeSdkLive'
 
 export function ContributorListEffect(props: {
   searchParams: {
@@ -13,6 +14,7 @@ export function ContributorListEffect(props: {
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
     Effect.map(filter(props.searchParams['search'])),
     Effect.map(render),
+    Effect.withSpan('Render /c/'),
     Effect.catchTag('DbError', handleDbError),
     setLogLevelFromSearchParams(props)
   ) satisfies Effect.Effect<any, never, JSX.Element>
@@ -58,7 +60,7 @@ function handleDbError() {
 
 const ContributorList = flow(
   ContributorListEffect,
-  Effect.provide(co2RepoLive),
+  Effect.provide(Layer.merge(co2RepoLive, NodeSdkLive)),
   Effect.runPromise
 )
 export default ContributorList

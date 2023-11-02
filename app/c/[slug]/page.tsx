@@ -3,6 +3,7 @@ import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
 import { SourceRepository, sourceRepoLive } from '@/domain/source'
+import { NodeSdkLive } from '@/infra/tracing/NodeSdkLive'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
 import { Effect, Layer, Option, flow } from 'effect'
@@ -77,6 +78,7 @@ function ContributorPageEffect({ params, searchParams }: Props) {
       </main>
     )
   }).pipe(
+    Effect.withSpan('Render c/[slug]/page'),
     Effect.catchTags({
       DbError: (cause) => Effect.succeed(<main>Database error</main>),
     }),
@@ -104,7 +106,8 @@ function generateMetadataEffect({ params, searchParams }: Props) {
     Effect.map(Option.getOrElse(notFound)),
     Effect.map(mapMetadata(params)),
     Effect.orElseSucceed(() => ({})),
-    setLogLevelFromSearchParams({ searchParams })
+    setLogLevelFromSearchParams({ searchParams }),
+    Effect.withSpan('Generate metadata c/[slug]/page')
   ) satisfies Effect.Effect<any, never, Metadata>
 }
 
@@ -141,6 +144,7 @@ function mapMetadata(params: { slug: string }) {
 const ContributorPage = flow(
   ContributorPageEffect,
   Effect.provide(Layer.merge(co2RepoLive, sourceRepoLive)),
+  Effect.provide(NodeSdkLive),
   Effect.runPromise
 )
 export default ContributorPage
@@ -148,5 +152,6 @@ export default ContributorPage
 export const generateMetadata = flow(
   generateMetadataEffect,
   Effect.provide(co2RepoLive),
+  Effect.provide(NodeSdkLive),
   Effect.runPromise
 )

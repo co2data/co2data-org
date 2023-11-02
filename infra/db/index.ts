@@ -51,7 +51,8 @@ function findOne({ where }: { where: SQL<unknown> }) {
     Effect.tap((data) =>
       Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
     ),
-    Effect.map(ReadonlyArray.head)
+    Effect.map(ReadonlyArray.head),
+    Effect.withSpan('findOne')
   )
 }
 
@@ -69,7 +70,8 @@ function findMany({ orderBy }: { orderBy?: SQL<unknown> } = {}) {
     ),
     Effect.tap((data) =>
       Effect.logDebug(`Read from DB: ${data.map((entry) => `${entry.slug}`)}`)
-    )
+    ),
+    Effect.withSpan('findMany')
   )
 }
 
@@ -106,7 +108,8 @@ function getAllByProducerId(id: string) {
       })
     ),
     Effect.map(combineLinks),
-    Effect.tap(Effect.logDebug)
+    Effect.tap(Effect.logDebug),
+    Effect.withSpan('getAllByProducerId')
   )
 }
 
