@@ -2,7 +2,6 @@
 const nextConfig = {
   experimental: {
     typedRoutes: true,
-    serverActions: true,
   },
   async rewrites() {
     return [

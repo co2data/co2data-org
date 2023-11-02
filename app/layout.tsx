@@ -4,7 +4,7 @@ import { AnalyticsWrapper } from './analytics'
 import { baseUrl } from './config'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
-// import type { Metadata } from 'next/types'
+import type { Metadata, Viewport } from 'next'
 
 export default function RootLayout({
   children,
@@ -25,7 +25,11 @@ export default function RootLayout({
   )
 }
 
-export const metadata = {
+export const viewport: Viewport = {
+  themeColor: '#3982C2',
+}
+
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: 'co2data.org',
@@ -47,7 +51,6 @@ export const metadata = {
     ],
   },
   manifest: '/site.webmanifest',
-  themeColor: '#3982C2',
   openGraph: {
     title: 'co2data.org',
     description: 'What are the CO₂ emissions of things.',
