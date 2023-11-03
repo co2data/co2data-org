@@ -1,14 +1,14 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
 import { DB, DbError } from '@/infra/db'
-import { Context, Effect, Layer, ReadonlyArray, pipe } from 'effect'
+import { Chunk, Context, Effect, Layer, Stream } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
 export interface SourceRepository {
   getAllSourcesByCo2ProducerId: (
     id: string
-  ) => Effect.Effect<never, DbError, Source[]>
+  ) => Effect.Effect<never, DbError, readonly Source[]>
 }
 
 export const SourceRepository = Context.Tag<SourceRepository>()
@@ -18,18 +18,14 @@ export const SourceRepositoryLive = Layer.effect(
   Effect.map(DB, (database) =>
     SourceRepository.of({
       getAllSourcesByCo2ProducerId: (id) =>
-        Effect.gen(function* (_) {
-          const data = yield* _(database.sources.getAllByProducerId(id))
-
-          const transformedData = yield* _(
-            pipe(
-              data,
-              ReadonlyArray.map(transformDescriptionToHTML),
-              Effect.all
-            )
-          )
-          return transformedData
-        }),
+        database.sources
+          .getAllByProducerId(id)
+          .pipe(
+            Stream.fromIterableEffect,
+            Stream.mapEffect(transformDescriptionToHTML),
+            Stream.runCollect,
+            Effect.map(Chunk.toReadonlyArray)
+          ),
     })
   )
 )
