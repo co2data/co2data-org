@@ -1,14 +1,14 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
 import { DB, DbError } from '@/infra/db'
-import { Chunk, Context, Effect, Layer, Stream } from 'effect'
+import { Context, Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
 export interface SourceRepository {
   getAllSourcesByCo2ProducerId: (
     id: string
-  ) => Effect.Effect<never, DbError, readonly Source[]>
+  ) => Effect.Effect<never, DbError, Source[]>
 }
 
 export const SourceRepository = Context.Tag<SourceRepository>()
@@ -20,17 +20,12 @@ export const SourceRepositoryLive = Layer.effect(
       getAllSourcesByCo2ProducerId: (id) =>
         database.sources
           .getAllByProducerId(id)
-          .pipe(
-            Stream.fromIterableEffect,
-            Stream.mapEffect(transformDescriptionToHTML),
-            Stream.runCollect,
-            Effect.map(Chunk.toReadonlyArray)
-          ),
+          .pipe(Effect.flatMap(Effect.forEach(transformMarkdownToHTML))),
     })
   )
 )
 
-function transformDescriptionToHTML(source: Source) {
+function transformMarkdownToHTML(source: Source) {
   return Effect.promise(() =>
     remark().use(html).process(source.description)
   ).pipe(
