@@ -5,7 +5,7 @@ import {
   calcCo2PerConsumption,
   calcCo2PerYear,
   calcFactorOfPersonYearFootprint,
-} from '@/domain/personal-co2'
+} from '@/domain/co2/personal-co2'
 import { format } from '@/lib/utils'
 import convert from 'convert'
 import { useState } from 'react'
