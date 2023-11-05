@@ -7,7 +7,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-border text-white drop-shadow">
       <nav className="container flex gap-4 py-3">
         <div className="flex flex-1 flex-wrap justify-end gap-x-4 gap-y-2">
-          <Link className="flex-1 font-bold" href="/">
+          <Link className="flex-1 font-extrabold" href="/">
             CO<sub>2</sub>&nbsp;Data
           </Link>
           <div className="flex flex-wrap justify-end gap-x-4 gap-y-2">
