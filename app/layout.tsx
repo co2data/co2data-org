@@ -5,6 +5,7 @@ import { baseUrl } from './config'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import type { Metadata, Viewport } from 'next'
+import { GeistSans } from 'geist/font'
 
 export default function RootLayout({
   children,
@@ -12,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={GeistSans.className}>
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />

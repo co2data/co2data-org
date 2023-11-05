@@ -9,11 +9,10 @@ export default async function ContributorPage({
   searchParams: { [key: string]: string | undefined }
 }) {
   return (
-    <>
-      <div className="h-6 md:h-10"></div>
+    <main className="py-6 md:py-10">
       <div className="min-h-screen space-y-16 md:space-y-20">
         <div className="space-y-12 text-center md:space-y-16 ">
-          <h1 className="text-6xl font-bold text-foreground">
+          <h1 className="text-6xl font-extrabold text-foreground">
             CO<sub>2</sub> Data
           </h1>
           <SearchBox />
@@ -30,6 +29,6 @@ export default async function ContributorPage({
           </Suspense>
         </main>
       </div>
-    </>
+    </main>
   )
 }

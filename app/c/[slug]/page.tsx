@@ -36,7 +36,7 @@ function ContributorPageEffect({ params, searchParams }: Props) {
             </ol>
           </nav>
           <div className="space-y-4 rounded-lg border border-border bg-card p-8">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-4xl font-extrabold">
               <div>{co2Average.title}</div>
               <div className="text-sm font-normal">
                 CO<sub>2</sub> emissions
