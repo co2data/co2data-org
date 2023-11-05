@@ -21,7 +21,7 @@ export function ContributorListEffect(props: {
 function render(co2Averages: Co2Average[]) {
   return (
     <>
-      <ul className="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8">
+      <ul className="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-4">
         {co2Averages.map((co2Average) => (
           <Co2AverageCmp key={co2Average.slug} co2Average={co2Average} />
         ))}

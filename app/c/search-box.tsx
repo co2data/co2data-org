@@ -32,11 +32,11 @@ export default function SearchBox() {
   }
 
   return (
-    <form action={filterContributors}>
+    <form action={filterContributors} className="px-12">
       <label className="sr-only" htmlFor="search">
         Search
       </label>
-      <div className="relative mx-auto max-w-fit">
+      <div className="relative mx-auto max-w-xs">
         <Input
           type="search"
           name="search"

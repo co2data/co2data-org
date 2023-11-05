@@ -16,7 +16,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <div className="container mx-auto flex-1 px-4 py-16">{children}</div>
+          <div className="container flex-1 pb-16 pt-4">{children}</div>
           <Footer />
         </ThemeProvider>
         <AnalyticsWrapper />
