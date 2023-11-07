@@ -5,7 +5,7 @@ import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
 import { SourceRepository, sourceRepoLive } from '@/domain/source'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
-import { Effect, Layer, Option, flow } from 'effect'
+import { Effect, Layer, Option, Struct, flow, pipe } from 'effect'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
@@ -36,12 +36,18 @@ function ContributorPageEffect({ params, searchParams }: Props) {
             </ol>
           </nav>
           <div className="space-y-4 rounded-lg border border-border bg-card p-8">
-            <h1 className="text-4xl font-extrabold">
-              <div>{co2Average.title}</div>
-              <div className="text-sm font-normal">
-                CO<sub>2</sub> emissions
-              </div>
-            </h1>
+            <div className="flex flex-wrap items-baseline gap-4">
+              <h1 className="text-4xl font-extrabold">
+                <div>{co2Average.title}</div>
+                <div className="text-sm font-normal">
+                  CO<sub>2</sub> emissions
+                </div>
+              </h1>
+              {co2Average.description.pipe(
+                Option.map((data) => <p key="description">{data}</p>),
+                Option.getOrNull
+              )}
+            </div>
             <p className="text-4xl">
               <span>1 {co2Average.unit}</span>
               <svg className="inline-block h-6 w-12" viewBox="-40 0 140 120">
@@ -65,7 +71,9 @@ function ContributorPageEffect({ params, searchParams }: Props) {
 
         <div className="mt-4 space-y-16">
           <section>
-            <PersonalCo2 co2Average={co2Average} />
+            <PersonalCo2
+              co2Average={pipe(co2Average, Struct.omit('description'))}
+            />
           </section>
           <section className="space-y-4">
             <h2 className="text-xl font-bold ">Sources</h2>

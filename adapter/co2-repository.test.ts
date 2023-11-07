@@ -12,6 +12,7 @@ describe('co2-repository', () => {
     const mockData = {
       id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
       title: 'Grains',
+      description: 'test',
       slug: 'test',
       unit: 'kilogram',
       avgPerYear: 675000,
@@ -30,7 +31,25 @@ describe('co2-repository', () => {
       repo.getCo2AverageBySlug('test')
     )
 
-    expect(actual).toStrictEqual(Option.some(mockData))
+    expect(actual).toStrictEqual(
+      Option.some({
+        avgPerUnit: 27000,
+        avgPerYear: 675000,
+        description: {
+          value: 'test',
+        },
+        id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
+        singleConsumptionAverage: 0.05,
+        singleConsumptionFrom: 0,
+        singleConsumptionTo: 0.5,
+        slug: 'test',
+        timesPerYearAverage: 500,
+        timesPerYearFrom: 0,
+        timesPerYearTo: 1000,
+        title: 'Grains',
+        unit: 'kilogram',
+      })
+    )
   })
 
   test('getAllCo2Averages Live (mock network)', async () => {
@@ -38,6 +57,7 @@ describe('co2-repository', () => {
       {
         id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
         title: 'Grains',
+        description: 'test',
         slug: 'test',
         unit: 'kilogram',
         avgPerYear: 675000,
@@ -54,13 +74,32 @@ describe('co2-repository', () => {
     mockPlanetScale(mockData)
     const actual = await runWithLiveDb((repo) => repo.getAllCo2Averages())
 
-    expect(actual).toStrictEqual(mockData)
+    expect(actual).toStrictEqual([
+      {
+        avgPerUnit: 27000,
+        avgPerYear: 675000,
+        description: {
+          value: 'test',
+        },
+        id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
+        singleConsumptionAverage: 0.05,
+        singleConsumptionFrom: 0,
+        singleConsumptionTo: 0.5,
+        slug: 'test',
+        timesPerYearAverage: 500,
+        timesPerYearFrom: 0,
+        timesPerYearTo: 1000,
+        title: 'Grains',
+        unit: 'kilogram',
+      },
+    ])
   })
 
   test('getAllCo2Averages (mock DB)', async () => {
     const mockData: schema.Co2Average = {
       id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
       title: 'Grains',
+      description: null,
       slug: 'test',
       unit: 'kilogram',
       avgPerYear: '675000',
@@ -76,6 +115,7 @@ describe('co2-repository', () => {
     const expected: Co2Average = {
       id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
       title: 'Grains',
+      description: Option.none(),
       slug: 'test',
       unit: 'kilogram',
       avgPerYear: 675000,
@@ -99,6 +139,7 @@ describe('co2-repository', () => {
     const mockData: schema.Co2Average = {
       id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
       title: 'Grains',
+      description: null,
       slug: 'test',
       unit: 'kilogram',
       avgPerYear: '675000',
@@ -114,6 +155,7 @@ describe('co2-repository', () => {
     const expected: Co2Average = {
       id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
       title: 'Grains',
+      description: Option.none(),
       slug: 'test',
       unit: 'kilogram',
       avgPerYear: 675000,

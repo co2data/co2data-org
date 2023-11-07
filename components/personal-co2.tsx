@@ -16,7 +16,7 @@ import { Slider } from './ui/slider'
 export default function PersonalCo2({
   co2Average,
 }: {
-  co2Average: Co2Average
+  co2Average: Omit<Co2Average, 'description'>
 }) {
   const [consumption, setConsumption] = useState(
     co2Average.singleConsumptionAverage
