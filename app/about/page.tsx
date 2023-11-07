@@ -8,7 +8,7 @@ const About = () => {
           <h1 className="text-4xl font-extrabold">
             About CO<sub>2</sub> Data
           </h1>
-          <blockquote className="my-4 border-l-4 bg-blue-50 px-4 py-3 text-lg italic text-gray-600 [text-wrap:balance]">
+          <blockquote className="my-4 border-l-4 bg-card px-4 py-3 text-lg italic text-border [text-wrap:balance] dark:text-white/70">
             What are the CO2 emissions of things?
           </blockquote>
           <p>
@@ -59,7 +59,7 @@ const About = () => {
           </p>
         </section>
       </article>
-      <aside className="flex grow basis-80 flex-wrap items-start justify-between gap-8 rounded-xl bg-blue-50 p-12 text-sky-500">
+      <aside className="flex grow basis-80 flex-wrap items-start justify-between gap-8 rounded-xl bg-card p-12 text-border">
         <Sun size={48} />
         <Cloud size={48} />
         <Globe2 size={48} />
