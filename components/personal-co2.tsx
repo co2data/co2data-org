@@ -88,7 +88,7 @@ export default function PersonalCo2({
               <div className="flex justify-between">
                 <div>Times per year</div>
                 <div>
-                  &times;&nbsp;<b>{Math.round(times)}</b>
+                  &times;&nbsp;<b>{times}</b>
                 </div>
               </div>
             </label>
@@ -98,7 +98,11 @@ export default function PersonalCo2({
               min={co2Average.timesPerYearFrom}
               max={co2Average.timesPerYearTo}
               step={
-                (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) / 50
+                (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) /
+                Math.min(
+                  co2Average.timesPerYearTo - co2Average.timesPerYearFrom,
+                  50
+                )
               }
               value={[times]}
               // onInput={(e) => setTimes(e)}
