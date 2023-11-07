@@ -1,9 +1,11 @@
+import { Option } from 'effect'
 import { Co2Average } from '.'
 
 export function makeCo2Average() {
   return {
     id: 'id',
     title: 'Pork',
+    description: Option.none(),
     slug: 'test',
     unit: 'kilogram',
     avgPerYear: 500000,
