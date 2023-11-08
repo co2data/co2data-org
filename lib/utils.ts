@@ -1,5 +1,6 @@
 import { cx } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/dist/types'
+import { Option } from 'effect'
 import { LogLevel, Logger, identity } from 'effect'
 
 export function cn(...inputs: ClassValue[]) {
@@ -33,4 +34,7 @@ export function setLogLevelFromSearchParams(props: {
   }
 
   return Logger.withMinimumLogLevel(LogLevel.fromLiteral(logLevel))
+}
+export function mapToJSX<A>(f: (arg: A) => React.ReactNode) {
+  return (item: Option.Option<A>) => item.pipe(Option.map(f), Option.getOrNull)
 }

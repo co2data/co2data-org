@@ -3,7 +3,7 @@ import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
 import { SourceRepository, sourceRepoLive } from '@/domain/source'
-import { setLogLevelFromSearchParams } from '@/lib/utils'
+import { mapToJSX, setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
 import { Effect, Layer, Option, Struct, flow, pipe } from 'effect'
 import Link from 'next/link'
@@ -44,8 +44,9 @@ function ContributorPageEffect({ params, searchParams }: Props) {
                 </div>
               </h1>
               {co2Average.description.pipe(
-                Option.map((data) => <p key="description">{data}</p>),
-                Option.getOrNull
+                mapToJSX((description) => (
+                  <p key="description">{description}</p>
+                ))
               )}
             </div>
             <p className="text-4xl">
