@@ -4,11 +4,14 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 
 export const NodeSdkLive = NodeSdk.layer(() => ({
   resource: {
-    serviceName: 'example',
+    serviceName: 'nextjs',
   },
   spanProcessor: new BatchSpanProcessor(
     new OTLPTraceExporter({
-      url: 'http://127.0.0.1:4318/v1/traces',
+      url: process.env.OTLP_URL,
+      headers: {
+        Authorization: process.env.OTLP_AUTH,
+      },
     })
   ),
 }))
