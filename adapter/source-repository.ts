@@ -19,7 +19,9 @@ export const SourceRepositoryLive = Layer.effect(
     SourceRepository.of({
       getAllSourcesByCo2ProducerId: (id) =>
         database.sources.getAllByProducerId(id).pipe(
-          Effect.flatMap(Effect.forEach(transformMarkdownToHTML)),
+          Effect.flatMap(
+            Effect.forEach(transformMarkdownToHTML, { concurrency: 5 })
+          ),
           Effect.tap((_) => Effect.logTrace(`id: ${id}`)),
           Effect.withSpan('getAllSourcesByCo2ProducerId')
         ),
