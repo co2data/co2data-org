@@ -1,6 +1,6 @@
 import { Co2RepositoryLive } from '@/adapter/co2-repository'
 import { DbLive } from '@/infra/db'
-import { Layer } from 'effect'
+import { Layer, Option } from 'effect'
 export { Co2Repository } from '@/adapter/co2-repository'
 export type Unit =
   | 'gram'
@@ -14,6 +14,7 @@ export type Unit =
 export type Co2Average = {
   id: string
   title: string
+  description: Option.Option<string>
   slug: string
   unit: Unit
   avgPerYear: number

@@ -3,7 +3,7 @@
 exports[`render  1`] = `
 <div>
   <ul
-    class="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8"
+    class="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-4"
   >
     <li
       class="rounded border-4 border-border bg-card"
@@ -80,7 +80,7 @@ exports[`render  1`] = `
 exports[`render no contributor found 1`] = `
 <div>
   <ul
-    class="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-8"
+    class="grid grid-cols-[repeat(auto-fill,_minmax(14rem,_1fr))] gap-4"
   />
   <div
     class="mx-auto max-w-xs text-foreground/50"

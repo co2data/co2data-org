@@ -27,6 +27,7 @@ export const co2Average = mysqlView('co2_average', {
     .default(sql`(uuid())`)
     .notNull(),
   title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
   slug: varchar('slug', { length: 255 }).notNull(),
   unit: mysqlEnum('unit', [
     'kilometer',

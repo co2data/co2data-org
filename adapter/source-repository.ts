@@ -1,7 +1,7 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
 import { DB, DbError } from '@/infra/db'
-import { Context, Effect, Layer, ReadonlyArray, pipe } from 'effect'
+import { Context, Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
@@ -18,18 +18,8 @@ export const SourceRepositoryLive = Layer.effect(
   Effect.map(DB, (database) =>
     SourceRepository.of({
       getAllSourcesByCo2ProducerId: (id) =>
-        Effect.gen(function* (_) {
-          const data = yield* _(database.sources.getAllByProducerId(id))
-
-          const transformedData = yield* _(
-            pipe(data, ReadonlyArray.map(transformDescriptionToHTML), (a) =>
-              Effect.all(a, {
-                concurrency: 'unbounded',
-              })
-            )
-          )
-          return transformedData
-        }).pipe(
+        database.sources.getAllByProducerId(id).pipe(
+          Effect.flatMap(Effect.forEach(transformMarkdownToHTML)),
           Effect.tap((_) => Effect.logTrace(`id: ${id}`)),
           Effect.withSpan('getAllSourcesByCo2ProducerId')
         ),
@@ -37,7 +27,7 @@ export const SourceRepositoryLive = Layer.effect(
   )
 )
 
-function transformDescriptionToHTML(source: Source) {
+function transformMarkdownToHTML(source: Source) {
   return Effect.promise(() =>
     remark().use(html).process(source.description)
   ).pipe(

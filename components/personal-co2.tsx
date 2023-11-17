@@ -5,7 +5,7 @@ import {
   calcCo2PerConsumption,
   calcCo2PerYear,
   calcFactorOfPersonYearFootprint,
-} from '@/domain/personal-co2'
+} from '@/domain/co2/personal-co2'
 import { format } from '@/lib/utils'
 import convert from 'convert'
 import { useState } from 'react'
@@ -16,7 +16,7 @@ import { Slider } from './ui/slider'
 export default function PersonalCo2({
   co2Average,
 }: {
-  co2Average: Co2Average
+  co2Average: Omit<Co2Average, 'description'>
 }) {
   const [consumption, setConsumption] = useState(
     co2Average.singleConsumptionAverage
@@ -88,7 +88,7 @@ export default function PersonalCo2({
               <div className="flex justify-between">
                 <div>Times per year</div>
                 <div>
-                  &times;&nbsp;<b>{Math.round(times)}</b>
+                  &times;&nbsp;<b>{times}</b>
                 </div>
               </div>
             </label>
@@ -98,7 +98,11 @@ export default function PersonalCo2({
               min={co2Average.timesPerYearFrom}
               max={co2Average.timesPerYearTo}
               step={
-                (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) / 50
+                (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) /
+                Math.min(
+                  co2Average.timesPerYearTo - co2Average.timesPerYearFrom,
+                  50
+                )
               }
               value={[times]}
               // onInput={(e) => setTimes(e)}

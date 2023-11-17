@@ -7,4 +7,5 @@ export default async function filterContributors(formData: FormData) {
   if (term) {
     redirect(`/c?search=${term}`)
   }
+  redirect('/')
 }

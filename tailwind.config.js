@@ -14,12 +14,23 @@ module.exports = {
     },
     container: {
       center: true,
-      padding: '2rem',
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+      },
       screens: {
-        '2xl': '1400px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
       },
     },
     extend: {
+      extend: {
+        fontFamily: {
+          sans: ['var(--font-geist-sans)'],
+          mono: ['var(--font-geist-mono)'],
+        },
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

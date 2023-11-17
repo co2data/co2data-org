@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { combineLinks } from './combine-source-links'
-import { NonEmptyIterable, ReadonlyArray } from 'effect'
 
 const testData = [
   {

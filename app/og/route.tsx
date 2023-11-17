@@ -1,5 +1,5 @@
 import OgImageFrame from '@/components/og-image-frame'
-import { ImageResponse } from 'next/server'
+import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 

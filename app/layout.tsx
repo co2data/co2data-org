@@ -4,7 +4,8 @@ import { AnalyticsWrapper } from './analytics'
 import { baseUrl } from './config'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
-// import type { Metadata } from 'next/types'
+import type { Metadata, Viewport } from 'next'
+import { GeistMono, GeistSans } from 'geist/font'
 
 export default function RootLayout({
   children,
@@ -12,11 +13,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+    >
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <div className="container mx-auto flex-1 px-4 py-16">{children}</div>
+          <div className="container flex-1 pb-16 pt-4">{children}</div>
           <Footer />
         </ThemeProvider>
         <AnalyticsWrapper />
@@ -25,7 +30,11 @@ export default function RootLayout({
   )
 }
 
-export const metadata = {
+export const viewport: Viewport = {
+  themeColor: '#3982C2',
+}
+
+export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: 'co2data.org',
@@ -47,7 +56,6 @@ export const metadata = {
     ],
   },
   manifest: '/site.webmanifest',
-  themeColor: '#3982C2',
   openGraph: {
     title: 'co2data.org',
     description: 'What are the CO₂ emissions of things.',
