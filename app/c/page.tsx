@@ -15,7 +15,7 @@ export default async function ContributorPage({
           <h1 className="text-6xl font-extrabold text-foreground">
             CO<sub>2</sub> Data
           </h1>
-          <SearchBox />
+          <SearchBox searchParams={searchParams} />
         </div>
         <main>
           <Suspense
