@@ -87,7 +87,9 @@ function ContributorPageEffect({ params, searchParams }: Props) {
       </main>
     )
   }).pipe(
-    Effect.withSpan('Render c/[slug]/page'),
+    Effect.withSpan(`Render c/${params.slug}/page`, {
+      attributes: { slug: params.slug },
+    }),
     Effect.catchTags({
       DbError: (cause) => Effect.succeed(<main>Database error</main>),
     }),
@@ -116,7 +118,9 @@ function generateMetadataEffect({ params, searchParams }: Props) {
     Effect.map(mapMetadata(params)),
     Effect.orElseSucceed(() => ({})),
     setLogLevelFromSearchParams({ searchParams }),
-    Effect.withSpan('Generate metadata c/[slug]/page')
+    Effect.withSpan('Generate metadata c/[slug]/page', {
+      attributes: { slug: params.slug },
+    })
   ) satisfies Effect.Effect<any, never, Metadata>
 }
 
