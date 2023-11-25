@@ -13,21 +13,23 @@ export interface SourceRepository {
 
 export const SourceRepository = Context.Tag<SourceRepository>()
 
-export const SourceRepositoryLive = Layer.effect(
-  SourceRepository,
-  Effect.map(DB, (database) =>
-    SourceRepository.of({
-      getAllSourcesByCo2ProducerId: (id) =>
-        database.sources.getAllByProducerId(id).pipe(
-          Effect.flatMap(
-            Effect.forEach(transformMarkdownToHTML, { concurrency: 5 })
-          ),
-          Effect.tap((_) => Effect.logTrace(`id: ${id}`)),
-          Effect.withSpan('getAllSourcesByCo2ProducerId')
-        ),
-    })
-  )
+export const SourceRepositoryLive = DB.pipe(
+  Effect.map(make),
+  Layer.effect(SourceRepository)
 )
+
+function make(database: DB): SourceRepository {
+  return SourceRepository.of({
+    getAllSourcesByCo2ProducerId: (id) =>
+      database.sources.getAllByProducerId(id).pipe(
+        Effect.flatMap(
+          Effect.forEach(transformMarkdownToHTML, { concurrency: 5 })
+        ),
+        Effect.tap((_) => Effect.logTrace(`id: ${id}`)),
+        Effect.withSpan('getAllSourcesByCo2ProducerId')
+      ),
+  })
+}
 
 function transformMarkdownToHTML(source: Source) {
   return Effect.promise(() =>

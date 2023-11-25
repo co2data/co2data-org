@@ -15,29 +15,31 @@ export type Co2Repository = {
 
 export const Co2Repository = Context.Tag<Co2Repository>()
 
-export const Co2RepositoryLive = Layer.effect(
-  Co2Repository,
-  Effect.map(DB, (db) =>
-    Co2Repository.of({
-      getAllCo2Averages: () => {
-        return db.co2Averages
-          .findMany({ orderBy: desc(co2Average.avgPerYear) })
-          .pipe(
-            Effect.map(ReadonlyArray.map(co2AverageFromDbToDomain)),
-            Effect.withSpan('getAllCo2Averages')
-          )
-      },
-      getCo2AverageBySlug: (slug) => {
-        return db.co2Averages
-          .findOne({ where: eq(co2Average.slug, slug) })
-          .pipe(
-            Effect.map(Option.map(co2AverageFromDbToDomain)),
-            Effect.withSpan('getCo2AverageBySlug')
-          )
-      },
-    })
-  )
+export const Co2RepositoryLive = DB.pipe(
+  Effect.map(make),
+  Layer.effect(Co2Repository)
 )
+
+function make(db: DB): Co2Repository {
+  return Co2Repository.of({
+    getAllCo2Averages: () => {
+      return db.co2Averages
+        .findMany({ orderBy: desc(co2Average.avgPerYear) })
+        .pipe(
+          Effect.map(ReadonlyArray.map(co2AverageFromDbToDomain)),
+          Effect.withSpan('getAllCo2Averages')
+        )
+    },
+    getCo2AverageBySlug: (slug) => {
+      return db.co2Averages
+        .findOne({ where: eq(co2Average.slug, slug) })
+        .pipe(
+          Effect.map(Option.map(co2AverageFromDbToDomain)),
+          Effect.withSpan('getCo2AverageBySlug')
+        )
+    },
+  })
+}
 
 function co2AverageFromDbToDomain(co2Average: schema.Co2Average) {
   return {
