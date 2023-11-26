@@ -116,7 +116,7 @@ const make = Effect.gen(function* (_) {
   })
 })
 
-export const DbLive = make.pipe(Layer.effect(DB))
+export const DbLive = Layer.effect(DB, make)
 
 export class DbError extends Data.TaggedError('DbError')<BaseError> {}
 
