@@ -1,5 +1,5 @@
 import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
-import { DB, DbError } from '@/infra/db'
+import { DB, DbError, DbLive } from '@/infra/db'
 import { mockPlanetScale } from '@/infra/mock/server'
 import { ConfigProvider, Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
@@ -180,20 +180,22 @@ describe('co2-repository', () => {
 function runWithLiveDb(
   f: (repo: Co2Repository) => Effect.Effect<never, DbError, any>
 ) {
-  const mockConfigProvider = ConfigProvider.fromMap(
+  const ConfigTest = ConfigProvider.fromMap(
     new Map([
       [
         'DATABASE_URL',
         'mysql://xxxx:xxxxx@eu-central.connect.psdb.cloud/co2data-org',
       ],
     ])
+  ).pipe(Layer.setConfigProvider)
+
+  const Co2RepositoryLiveConfigTest = Co2RepositoryLive.pipe(
+    Layer.use(DbLive),
+    Layer.use(ConfigTest)
   )
-
-  const layer = Layer.setConfigProvider(mockConfigProvider)
-
   return Co2Repository.pipe(
     Effect.flatMap(f),
-    Effect.provide(Layer.merge(co2RepoLive, layer)),
+    Effect.provide(Co2RepositoryLiveConfigTest),
     Effect.runPromise
   )
 }
@@ -214,11 +216,11 @@ function runWithTestDb(
     )
   )
 
-  const Co2RepoTest = Co2RepositoryLive.pipe(Layer.use(DbTest))
+  const Co2RepositoryTest = Co2RepositoryLive.pipe(Layer.use(DbTest))
 
   const getAllCo2Averages = Co2Repository.pipe(
     Effect.flatMap(f),
-    Effect.provide(Co2RepoTest),
+    Effect.provide(Co2RepositoryTest),
     Effect.runPromise
   )
   return getAllCo2Averages
