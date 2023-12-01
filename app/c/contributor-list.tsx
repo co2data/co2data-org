@@ -1,9 +1,9 @@
-import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
-import { setLogLevelFromSearchParams } from '@/lib/utils'
-import { Effect, Layer, flow } from 'effect'
-import Link from 'next/link'
+import { run } from '@/adapter/effect'
 import Co2AverageCmp from '@/components/co2-average'
-import { NodeSdkLive } from '@/infra/tracing/NodeSdkLive'
+import { Co2Average, Co2Repository } from '@/domain/co2'
+import { setLogLevelFromSearchParams } from '@/lib/utils'
+import { Effect } from 'effect'
+import Link from 'next/link'
 
 export function ContributorListEffect(props: {
   searchParams: {
@@ -58,9 +58,5 @@ function handleDbError() {
   return Effect.succeed(<main>The database is not reachable...</main>)
 }
 
-const ContributorList = flow(
-  ContributorListEffect,
-  Effect.provide(Layer.merge(co2RepoLive, NodeSdkLive)),
-  Effect.runPromise
-)
+const ContributorList = run(ContributorListEffect)
 export default ContributorList

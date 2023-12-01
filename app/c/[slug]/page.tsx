@@ -1,12 +1,12 @@
+import { run } from '@/adapter/effect'
 import { baseUrl } from '@/app/config'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
-import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
-import { SourceRepository, sourceRepoLive } from '@/domain/source'
-import { NodeSdkLive } from '@/infra/tracing/NodeSdkLive'
+import { Co2Average, Co2Repository } from '@/domain/co2'
+import { SourceRepository } from '@/domain/source'
 import { mapToJSX, setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
-import { Effect, Layer, Option, Struct, flow, pipe } from 'effect'
+import { Effect, Option, Struct, pipe } from 'effect'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
@@ -154,17 +154,7 @@ function mapMetadata(params: { slug: string }) {
   }
 }
 
-const ContributorPage = flow(
-  ContributorPageEffect,
-  Effect.provide(Layer.merge(co2RepoLive, sourceRepoLive)),
-  Effect.provide(NodeSdkLive),
-  Effect.runPromise
-)
+const ContributorPage = run(ContributorPageEffect)
 export default ContributorPage
 
-export const generateMetadata = flow(
-  generateMetadataEffect,
-  Effect.provide(co2RepoLive),
-  Effect.provide(NodeSdkLive),
-  Effect.runPromise
-)
+export const generateMetadata = run(generateMetadataEffect)
