@@ -21,4 +21,4 @@ export type Link = {
   url: string
 }
 
-export const sourceRepoLive = SourceRepositoryLive.pipe(Layer.use(DbLive))
+export const sourceRepoLive = SourceRepositoryLive.pipe(Layer.provide(DbLive))

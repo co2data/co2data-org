@@ -88,7 +88,7 @@ function runWithTestDb(
     )
   )
 
-  const SourceRepoTest = SourceRepositoryLive.pipe(Layer.use(DbTest))
+  const SourceRepoTest = SourceRepositoryLive.pipe(Layer.provide(DbTest))
 
   const getAllCo2Averages = SourceRepository.pipe(
     Effect.flatMap(f),

@@ -190,8 +190,8 @@ function runWithLiveDb(
   ).pipe(Layer.setConfigProvider)
 
   const Co2RepositoryLiveConfigTest = Co2RepositoryLive.pipe(
-    Layer.use(DbLive),
-    Layer.use(ConfigTest)
+    Layer.provide(DbLive),
+    Layer.provide(ConfigTest)
   )
   return Co2Repository.pipe(
     Effect.flatMap(f),
@@ -216,7 +216,7 @@ function runWithTestDb(
     )
   )
 
-  const Co2RepositoryTest = Co2RepositoryLive.pipe(Layer.use(DbTest))
+  const Co2RepositoryTest = Co2RepositoryLive.pipe(Layer.provide(DbTest))
 
   const getAllCo2Averages = Co2Repository.pipe(
     Effect.flatMap(f),
