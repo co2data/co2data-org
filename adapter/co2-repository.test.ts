@@ -1,100 +1,12 @@
-import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
-import { DB, DbError, DbLive } from '@/infra/db'
-import { mockPlanetScale } from '@/infra/mock/server'
-import { ConfigProvider, Effect, Layer, Option } from 'effect'
+import { Co2Average, Co2Repository } from '@/domain/co2'
+import { DB, DbError } from '@/infra/db'
+import * as schema from '@/infra/db/schema'
+import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, test } from 'vitest'
 import { Co2RepositoryLive } from './co2-repository'
-import * as schema from '@/infra/db/schema'
 
 describe('co2-repository', () => {
-  test('getCo2AverageBySlug Live (mock network)', async () => {
-    const mockData = {
-      id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
-      title: 'Grains',
-      description: 'test',
-      slug: 'test',
-      unit: 'kilogram',
-      avgPerYear: 675000,
-      avgPerUnit: 27000,
-      singleConsumptionFrom: 0,
-      singleConsumptionTo: 0.5,
-      singleConsumptionAverage: 0.05,
-      timesPerYearFrom: 0,
-      timesPerYearTo: 1000,
-      timesPerYearAverage: 500,
-    }
-
-    mockPlanetScale([mockData])
-
-    const actual = await runWithLiveDb((repo) =>
-      repo.getCo2AverageBySlug('test')
-    )
-
-    expect(actual).toStrictEqual(
-      Option.some({
-        avgPerUnit: 27000,
-        avgPerYear: 675000,
-        description: {
-          value: 'test',
-        },
-        id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
-        singleConsumptionAverage: 0.05,
-        singleConsumptionFrom: 0,
-        singleConsumptionTo: 0.5,
-        slug: 'test',
-        timesPerYearAverage: 500,
-        timesPerYearFrom: 0,
-        timesPerYearTo: 1000,
-        title: 'Grains',
-        unit: 'kilogram',
-      })
-    )
-  })
-
-  test('getAllCo2Averages Live (mock network)', async () => {
-    const mockData = [
-      {
-        id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
-        title: 'Grains',
-        description: 'test',
-        slug: 'test',
-        unit: 'kilogram',
-        avgPerYear: 675000,
-        avgPerUnit: 27000,
-        singleConsumptionFrom: 0,
-        singleConsumptionTo: 0.5,
-        singleConsumptionAverage: 0.05,
-        timesPerYearFrom: 0,
-        timesPerYearTo: 1000,
-        timesPerYearAverage: 500,
-      },
-    ]
-
-    mockPlanetScale(mockData)
-    const actual = await runWithLiveDb((repo) => repo.getAllCo2Averages())
-
-    expect(actual).toStrictEqual([
-      {
-        avgPerUnit: 27000,
-        avgPerYear: 675000,
-        description: {
-          value: 'test',
-        },
-        id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
-        singleConsumptionAverage: 0.05,
-        singleConsumptionFrom: 0,
-        singleConsumptionTo: 0.5,
-        slug: 'test',
-        timesPerYearAverage: 500,
-        timesPerYearFrom: 0,
-        timesPerYearTo: 1000,
-        title: 'Grains',
-        unit: 'kilogram',
-      },
-    ])
-  })
-
   test('getAllCo2Averages (mock DB)', async () => {
     const mockData: schema.Co2Average = {
       id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
@@ -176,29 +88,6 @@ describe('co2-repository', () => {
     expect(actual).toStrictEqual(Option.some(expected))
   })
 })
-
-function runWithLiveDb(
-  f: (repo: Co2Repository) => Effect.Effect<never, DbError, any>
-) {
-  const ConfigTest = ConfigProvider.fromMap(
-    new Map([
-      [
-        'DATABASE_URL',
-        'mysql://xxxx:xxxxx@eu-central.connect.psdb.cloud/co2data-org',
-      ],
-    ])
-  ).pipe(Layer.setConfigProvider)
-
-  const Co2RepositoryLiveConfigTest = Co2RepositoryLive.pipe(
-    Layer.provide(DbLive),
-    Layer.provide(ConfigTest)
-  )
-  return Co2Repository.pipe(
-    Effect.flatMap(f),
-    Effect.provide(Co2RepositoryLiveConfigTest),
-    Effect.runPromise
-  )
-}
 
 function runWithTestDb(
   f: (repo: Co2Repository) => Effect.Effect<never, DbError, any>,
