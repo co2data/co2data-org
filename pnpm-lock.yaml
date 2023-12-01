@@ -101,6 +101,9 @@ dependencies:
   remark-html:
     specifier: ^16.0.1
     version: 16.0.1
+  server-only:
+    specifier: ^0.0.1
+    version: 0.0.1
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.3.5)

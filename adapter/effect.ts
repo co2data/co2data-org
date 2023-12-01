@@ -1,3 +1,4 @@
+import 'server-only'
 import { Effect, Layer, flow } from 'effect'
 import { Co2Repository } from './co2-repository'
 import { SourceRepository, SourceRepositoryLive } from './source-repository'
