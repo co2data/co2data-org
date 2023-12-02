@@ -1,10 +1,10 @@
-import { Co2Average, Co2Repository } from '@/domain/co2'
 import { DB, DbError } from '@/adapter/db'
 import * as schema from '@/adapter/db/schema'
+import { Co2Average, Co2Repository } from '@/domain/co2'
 import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, test } from 'vitest'
-import { Co2RepositoryLive } from './co2-repository'
+import { Co2RepositoryLive } from './repository'
 
 describe('co2-repository', () => {
   test('getAllCo2Averages (mock DB)', async () => {

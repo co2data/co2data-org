@@ -1,6 +1,6 @@
-import { Co2Average } from '@/domain/co2'
 import { DB, DbError } from '@/adapter/db'
 import { co2Average } from '@/adapter/db/schema'
+import { Co2Average } from '@/domain/co2'
 import { desc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
 

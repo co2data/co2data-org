@@ -1,7 +1,8 @@
-import { SourceRepositoryLive } from '@/adapter/source-repository'
 import { DbLive } from '@/adapter/db'
+import { SourceRepositoryLive } from '@/domain/source/repository'
 import { Layer, Option } from 'effect'
-export { SourceRepository } from '@/adapter/source-repository'
+
+export { SourceRepository } from '@/domain/source/repository'
 export type Source = {
   id: string
   region: string | null

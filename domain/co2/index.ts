@@ -1,7 +1,8 @@
-import { Co2RepositoryLive } from '@/adapter/co2-repository'
 import { DbLive } from '@/adapter/db'
+import { Co2RepositoryLive } from '@/domain/co2/repository'
 import { Layer, Option } from 'effect'
-export { Co2Repository } from '@/adapter/co2-repository'
+
+export { Co2Repository } from '@/domain/co2/repository'
 export type Unit =
   | 'gram'
   | 'hour'

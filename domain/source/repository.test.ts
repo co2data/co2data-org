@@ -1,10 +1,10 @@
-import { Effect, Layer } from 'effect'
-import { SourceRepository, SourceRepositoryLive } from './source-repository'
 import { DB, DbError } from '@/adapter/db'
-import { mock } from 'testtriple'
 import { Source } from '@/domain/source'
-import { describe, expect, it } from 'vitest'
 import { makeSource } from '@/domain/source/example-data'
+import { Effect, Layer } from 'effect'
+import { mock } from 'testtriple'
+import { describe, expect, it } from 'vitest'
+import { SourceRepository, SourceRepositoryLive } from './repository'
 
 describe('source repository', () => {
   describe('getAllByProducerId', () => {

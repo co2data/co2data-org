@@ -1,14 +1,17 @@
-import { Co2Average, Co2Repository, co2RepoLive } from '@/domain/co2'
+import { run } from '@/adapter/effect'
+import { Co2Average, Co2Repository } from '@/domain/co2'
+import { Effect, Metric } from 'effect'
 import { baseUrl } from '../config'
-import { Effect } from 'effect'
+
+const taskCount = Metric.counter('task_count').pipe(Metric.withConstantInput(1))
 
 export async function GET() {
-  return Co2Repository.pipe(
+  const response = Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
     Effect.map(renderResponse),
-    Effect.provide(co2RepoLive),
-    Effect.runPromise
+    Effect.catchAll(() => Effect.succeed(new Response()))
   )
+  return run(() => response)
 }
 function renderResponse(co2Averages: Co2Average[]) {
   return new Response(`

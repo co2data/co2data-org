@@ -1,10 +1,10 @@
-import { Co2Repository } from '@/adapter/co2-repository'
 import { Co2Average } from '@/domain/co2'
+import { makeCo2Average } from '@/domain/co2/example-data'
+import { Co2Repository } from '@/domain/co2/repository'
 import { render, screen } from '@testing-library/react'
 import { Effect, Layer, Option } from 'effect'
 import { expect, test, vi } from 'vitest'
 import { ContributorListEffect } from './contributor-list'
-import { makeCo2Average } from '@/domain/co2/example-data'
 
 vi.mock('server-only', () => ({}))
 test('render no contributor found', async () => {
