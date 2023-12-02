@@ -1,5 +1,5 @@
 import { Co2RepositoryLive } from '@/adapter/co2-repository'
-import { DbLive } from '@/infra/db'
+import { DbLive } from '@/adapter/db'
 import { Layer, Option } from 'effect'
 export { Co2Repository } from '@/adapter/co2-repository'
 export type Unit =

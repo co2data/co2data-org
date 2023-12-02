@@ -1,6 +1,6 @@
 import { Effect, Layer } from 'effect'
 import { SourceRepository, SourceRepositoryLive } from './source-repository'
-import { DB, DbError } from '@/infra/db'
+import { DB, DbError } from '@/adapter/db'
 import { mock } from 'testtriple'
 import { Source } from '@/domain/source'
 import { describe, expect, it } from 'vitest'

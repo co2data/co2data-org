@@ -1,10 +1,10 @@
 import { Co2Average } from '@/domain/co2'
-import { DB, DbError } from '@/infra/db'
-import { co2Average } from '@/infra/db/schema'
+import { DB, DbError } from '@/adapter/db'
+import { co2Average } from '@/adapter/db/schema'
 import { desc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
 
-import * as schema from '@/infra/db/schema'
+import * as schema from '@/adapter/db/schema'
 
 export type Co2Repository = {
   readonly getAllCo2Averages: () => Effect.Effect<never, DbError, Co2Average[]>

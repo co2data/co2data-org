@@ -1,5 +1,5 @@
 import { SourceRepositoryLive } from '@/adapter/source-repository'
-import { DbLive } from '@/infra/db'
+import { DbLive } from '@/adapter/db'
 import { Layer, Option } from 'effect'
 export { SourceRepository } from '@/adapter/source-repository'
 export type Source = {

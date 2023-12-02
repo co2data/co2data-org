@@ -1,6 +1,6 @@
 import OgImageFrame from '@/components/og-image-frame'
 import { Co2Average, Co2Repository } from '@/domain/co2'
-import { DbError } from '@/infra/db'
+import { DbError } from '@/adapter/db'
 import { BaseError } from '@/lib/types'
 import convert from 'convert'
 import { Data, Effect } from 'effect'

@@ -1,6 +1,6 @@
 import { Co2Average, Co2Repository } from '@/domain/co2'
-import { DB, DbError } from '@/infra/db'
-import * as schema from '@/infra/db/schema'
+import { DB, DbError } from '@/adapter/db'
+import * as schema from '@/adapter/db/schema'
 import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, test } from 'vitest'

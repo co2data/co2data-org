@@ -1,6 +1,6 @@
 // import { SourceRepository } from '@/domain/source'
 import { Source } from '@/domain/source'
-import { DB, DbError } from '@/infra/db'
+import { DB, DbError } from '@/adapter/db'
 import { Context, Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'

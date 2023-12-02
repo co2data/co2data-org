@@ -2,7 +2,7 @@ import 'server-only'
 import { Effect, Layer, flow } from 'effect'
 import { Co2Repository } from './co2-repository'
 import { SourceRepository, SourceRepositoryLive } from './source-repository'
-import { NodeSdkLive } from '@/infra/tracing/NodeSdkLive'
+import { NodeSdkLive } from '@/adapter/tracing/NodeSdkLive'
 import { sourceRepoLive } from '@/domain/source'
 import { co2RepoLive } from '@/domain/co2'
 
