@@ -1,6 +1,4 @@
-import { DbLive } from '@/adapter/db'
-import { Co2RepositoryLive } from '@/domain/co2/repository'
-import { Layer, Option } from 'effect'
+import { Option } from 'effect'
 
 export { Co2Repository } from '@/domain/co2/repository'
 export type Unit =
@@ -27,5 +25,3 @@ export type Co2Average = {
   timesPerYearTo: number
   timesPerYearAverage: number
 }
-
-export const co2RepoLive = Co2RepositoryLive.pipe(Layer.provide(DbLive))
