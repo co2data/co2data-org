@@ -8,8 +8,8 @@ import { SourceRepository } from '../domain/source/repository'
 
 export function run<P, Q, A>(
   effect: (
-    arg1: P,
-    arg2: Q
+    arg1?: P,
+    arg2?: Q
   ) => Effect.Effect<Co2Repository | SourceRepository, never, A>
 ) {
   return flow(

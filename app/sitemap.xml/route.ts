@@ -3,15 +3,21 @@ import { Co2Average, Co2Repository } from '@/domain/co2'
 import { Effect, Metric } from 'effect'
 import { baseUrl } from '../config'
 
-const taskCount = Metric.counter('task_count').pipe(Metric.withConstantInput(1))
+const dbErrorCount = Metric.counter('db_error_count').pipe(
+  Metric.withConstantInput(1)
+)
 
-export async function GET() {
-  const response = Co2Repository.pipe(
+export const GET = run(route)
+
+function route() {
+  return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
     Effect.map(renderResponse),
-    Effect.catchAll(() => Effect.succeed(new Response()))
+    // Metric.trackErrorWith(dbErrorCount, constant(1)),  // I don't know how Metrics work...
+    Effect.catchAll((error) =>
+      Effect.succeed(new Response(error._tag, { status: 500 }))
+    )
   )
-  return run(() => response)
 }
 function renderResponse(co2Averages: Co2Average[]) {
   return new Response(`
