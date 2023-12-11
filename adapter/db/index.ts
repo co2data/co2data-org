@@ -39,7 +39,7 @@ export const DB = Context.Tag<DB>()
 
 const make = Effect.gen(function* (_) {
   const url = yield* _(
-    Effect.config(Config.string('DATABASE_URL')),
+    Config.string('DATABASE_URL'),
     Effect.orDie
   )
   const database = yield* _(

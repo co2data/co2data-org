@@ -1,7 +1,7 @@
 import { NodeSdk } from '@effect/opentelemetry'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { Config, ConfigSecret, Duration, Effect, Layer, Option } from 'effect'
+import { Config, Duration, Effect, Layer, Option, Secret } from 'effect'
 
 const GrafanaTempoConfig = Config.nested('OTLP')(
   Config.all({
@@ -12,7 +12,7 @@ const GrafanaTempoConfig = Config.nested('OTLP')(
 
 export const NodeSdkLive = Layer.unwrapEffect(
   Effect.gen(function* ($) {
-    const { url, auth } = yield* $(Effect.config(GrafanaTempoConfig))
+    const { url, auth } = yield* $(GrafanaTempoConfig)
     const headers = yield* $(makeHeaders(auth))
     const traceExporter = new OTLPTraceExporter({ url, headers })
 
@@ -27,10 +27,10 @@ export const NodeSdkLive = Layer.unwrapEffect(
   })
 )
 
-function makeHeaders(auth: Option.Option<ConfigSecret.ConfigSecret>) {
+function makeHeaders(auth: Option.Option<Secret.Secret>) {
   return auth.pipe(
     Effect.map((a) => ({
-      Authorization: ConfigSecret.value(a),
+      Authorization: Secret.value(a),
     })),
     Effect.orElseSucceed(() => ({}))
   )
