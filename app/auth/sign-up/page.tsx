@@ -1,14 +1,15 @@
 'use client'
 import { startRegistration } from '@simplewebauthn/browser'
+import { generateSignUpOptions, verifySignUp } from '../server-action'
 
 export default function Login() {
   const onLogin = async () => {
-    const resp = await fetch('/auth/sign-up/generate-registration-options')
+    const resp = await generateSignUpOptions()
 
     let attResp
     try {
       // Pass the options to the authenticator and wait for a response
-      attResp = await startRegistration(await resp.json())
+      attResp = await startRegistration(resp)
     } catch (error: unknown) {
       // Some basic error handling
       if (
@@ -29,16 +30,7 @@ export default function Login() {
 
     // POST the response to the endpoint that calls
     // @simplewebauthn/server -> verifyRegistrationResponse()
-    const verificationResp = await fetch('/auth/sign-up/verify-registration', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(attResp),
-    })
-
-    // Wait for the results of verification
-    const verificationJSON = await verificationResp.json()
+    const verificationJSON = await verifySignUp(attResp)
 
     // Show UI appropriate for the `verified` status
     if (verificationJSON && verificationJSON.verified) {
@@ -54,8 +46,8 @@ export default function Login() {
 
   return (
     <section>
-      <h1>Login</h1>
-      <button onClick={onLogin}>Login</button>
+      <h1>Sign Up</h1>
+      <button onClick={onLogin}>Sign up</button>
     </section>
   )
 }
