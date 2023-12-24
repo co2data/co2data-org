@@ -6,5 +6,6 @@
     "**/node_modules/**",
     "**/dist/**",
     "**/.{idea,git,cache,output,temp}/**"
-  ]
+  ],
+  "testing.automaticallyOpenPeekView": "never"
 }
