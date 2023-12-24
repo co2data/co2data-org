@@ -31,6 +31,8 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@simplewebauthn/browser": "^8.3.4",
+    "@simplewebauthn/server": "^8.3.5",
     "@vercel/analytics": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "convert": "^4.14.0",
