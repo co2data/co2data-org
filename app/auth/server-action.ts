@@ -1,14 +1,45 @@
 'use server'
 
+import { mainLive } from '@/adapter/effect/main'
+import { PassKey } from '@/adapter/pass-key'
+import { NodeSdkLive } from '@/adapter/tracing/NodeSdkLive'
+import { UserRepository } from '@/domain/user/repository'
+import { Effect, Option } from 'effect'
 import {
-  generateAuthenticationOptions,
-  generateRegistrationOptions,
-  verifyAuthenticationResponse,
-  verifyRegistrationResponse,
-} from '@simplewebauthn/server'
-import { notFound } from 'next/navigation'
-import { rpID, rpName, rpOrigin } from './relying-partner'
-import { uInt8ArrayToURLBase64 } from './users/route'
+  CouldNotFindAuthenticator,
+  NoChallengeOnUser,
+  NoUserFound,
+  NotVerified,
+} from './errors'
+
+export async function generateLoginOptions(username: string) {
+  const result = await Effect.gen(function* ($) {
+    const userRepo = yield* $(UserRepository)
+    const user = yield* $(
+      userRepo.findByEmail(username),
+      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
+      Effect.map((_) => _.value)
+    )
+    const passKeyService = yield* $(PassKey)
+    const options = yield* $(
+      passKeyService.generateAuthenticationOptions({
+        userAuthenticators: user.authenticators,
+      })
+    )
+
+    yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
+    return options
+  }).pipe(
+    Effect.withSpan('generateLoginOptions'),
+    Effect.mapError((e) => e._tag),
+    Effect.either,
+    Effect.provide(mainLive),
+    Effect.provide(NodeSdkLive),
+    Effect.runPromise
+  )
+
+  return result.toJSON() as unknown as typeof result
+}
 
 export async function verifyLogin(body: {
   id: string
@@ -16,119 +47,125 @@ export async function verifyLogin(body: {
   response: any
   clientExtensionResults: any
   type: any
+  username: string
 }) {
-  // (Pseudocode) Retrieve the logged-in user
-  const user = globalThis.users?.get('phi.sch@hotmail.ch') ?? notFound()
-  // (Pseudocode) Get `options.challenge` that was saved above
-  const expectedChallenge = user.currentChallenge ?? notFound()
-  // (Pseudocode} Retrieve an authenticator from the DB that
-  // should match the `id` in the returned credential
-  const authenticator = user.authenticators.find((authenticator) => {
-    const cId = uInt8ArrayToURLBase64(authenticator.credentialID)
-    console.log('cId:', cId, body.id)
+  const result = await Effect.gen(function* ($) {
+    const userRepo = yield* $(UserRepository)
+    const user = yield* $(
+      userRepo.findByEmail(body.username),
+      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
+      Effect.map((_) => _.value)
+    )
 
-    return cId === body.id
-  })
+    if (Option.isNone(user.currentChallenge)) {
+      return yield* $(new NoChallengeOnUser())
+    }
 
-  console.log('verify with', body, authenticator, user)
+    const authenticator = user.authenticators.find(
+      (authenticator) => authenticator.credentialID === body.id
+    )
 
-  if (!authenticator) {
-    throw `Could not find authenticator ${body.id} for user ${user.id}`
-  }
+    if (!authenticator) {
+      return yield* $(new CouldNotFindAuthenticator())
+    }
 
-  let verification
-  try {
-    verification = await verifyAuthenticationResponse({
-      response: body,
-      expectedChallenge,
-      expectedOrigin: rpOrigin,
-      expectedRPID: rpID,
-      authenticator,
-    })
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+    const passKeyService = yield* $(PassKey)
+    const verification = yield* $(
+      passKeyService.verifyAuthenticationResponse({
+        body: body,
+        expectedChallenge: user.currentChallenge.value,
+        authenticator,
+      })
+    )
 
-  const { verified } = verification
+    const { verified } = verification
 
-  if (verified) {
-    const { authenticationInfo } = verification
-    const { newCounter } = authenticationInfo
-    authenticator.counter = newCounter
-    return { verified }
-  } else {
-    throw 'not verified'
-  }
-}
+    if (verified) {
+      const { authenticationInfo } = verification
+      yield* $(userRepo.updateCounter(user.id, authenticationInfo.newCounter))
+      return { verified }
+    } else {
+      return yield* $(new NotVerified())
+    }
+  }).pipe(
+    Effect.withSpan('verifyLogin'),
+    Effect.mapError((e) => e._tag),
+    Effect.either,
+    Effect.provide(mainLive),
+    Effect.provide(NodeSdkLive),
+    Effect.runPromise
+  )
 
-export async function generateLoginOptions() {
-  const user = globalThis.users?.get('phi.sch@hotmail.ch') ?? notFound()
-  const userAuthenticators = user.authenticators
-
-  const options = await generateAuthenticationOptions({
-    rpID,
-    // Require users to use a previously-registered authenticator
-    allowCredentials: userAuthenticators.map((authenticator) => ({
-      id: authenticator.credentialID,
-      type: 'public-key',
-      transports: authenticator.transports,
-    })),
-    userVerification: 'preferred',
-  })
-
-  user.currentChallenge = options.challenge
-
-  return options
+  return result.toJSON() as unknown as typeof result
 }
 
 export async function generateSignUpOptions() {
-  const user = globalThis.users?.get('phi.sch@hotmail.ch') ?? notFound()
+  const result = await Effect.gen(function* ($) {
+    const userRepo = yield* $(UserRepository)
 
-  const options = await generateRegistrationOptions({
-    rpID,
-    rpName,
-    userID: user.id,
-    userName: user.username,
-  })
+    const user = yield* $(
+      userRepo.findByEmail('phi.sch@hotmail.ch'),
+      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
+      Effect.map((_) => _.value)
+    )
 
-  console.log('Challenge', options.challenge)
+    const passKeyService = yield* $(PassKey)
+    const options = yield* $(
+      passKeyService.generateRegistrationOptions({
+        userId: user.id,
+        userName: user.email,
+      })
+    )
+    yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
+    return options
+  }).pipe(
+    Effect.withSpan('generateSignUpOptions'),
+    Effect.mapError((e) => e._tag),
+    Effect.either,
+    Effect.provide(mainLive),
+    Effect.provide(NodeSdkLive),
+    Effect.runPromise
+  )
 
-  user.currentChallenge = options.challenge
-
-  return options
+  return result.toJSON() as unknown as typeof result
 }
 
 export async function verifySignUp(body: any) {
-  const user = globalThis.users?.get('phi.sch@hotmail.ch') ?? notFound()
-  const { currentChallenge } = user ?? {}
-  if (!currentChallenge) {
-    throw 'no user with challenge'
-  }
+  const result = await Effect.gen(function* ($) {
+    const userRepo = yield* $(UserRepository)
+    const user = yield* $(
+      userRepo.findByEmail('phi.sch@hotmail.ch'),
+      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
+      Effect.map((_) => _.value)
+    )
 
-  console.log('verifyRegistration', body, currentChallenge)
+    if (Option.isNone(user.currentChallenge)) {
+      return yield* $(new NoChallengeOnUser())
+    }
 
-  let verification
-  try {
-    verification = await verifyRegistrationResponse({
-      response: body,
-      expectedChallenge: currentChallenge,
-      expectedOrigin: rpOrigin,
-      expectedRPID: rpID,
-    })
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+    const passKeyService = yield* $(PassKey)
+    const verification = yield* $(
+      passKeyService.verifyRegistrationResponse({
+        responseBody: body,
+        currentChallenge: user.currentChallenge.value,
+      })
+    )
 
-  const { verified, registrationInfo } = verification
+    const { verified, registrationInfo } = verification
 
-  if (verified && registrationInfo) {
-    user.authenticators = [registrationInfo]
-    console.log('registrationInfo', registrationInfo)
-
-    return { verified }
-  } else {
-    throw 'Not verified'
-  }
+    if (verified && registrationInfo) {
+      yield* $(userRepo.addAuthenticator(user.id, registrationInfo))
+      return { verified }
+    } else {
+      return yield* $(new NotVerified())
+    }
+  }).pipe(
+    Effect.withSpan('verifySignUp'),
+    Effect.mapError((e) => e._tag),
+    Effect.either,
+    Effect.provide(mainLive),
+    Effect.provide(NodeSdkLive),
+    Effect.runPromise
+  )
+  return result.toJSON() as unknown as typeof result
 }

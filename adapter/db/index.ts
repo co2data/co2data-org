@@ -2,7 +2,10 @@ import { Source } from '@/domain/source'
 import { BaseError } from '@/lib/types'
 import { connect } from '@planetscale/database'
 import { SQL, eq } from 'drizzle-orm'
-import { drizzle as planetscaleDrizzle } from 'drizzle-orm/planetscale-serverless'
+import {
+  PlanetScaleDatabase,
+  drizzle as planetscaleDrizzle,
+} from 'drizzle-orm/planetscale-serverless'
 import {
   Config,
   Context,
@@ -33,20 +36,34 @@ export type DB = {
       id: string
     ) => Effect.Effect<never, DbError, Source[]>
   }
+  users: {
+    readonly findOne: ({
+      where,
+    }: {
+      where: SQL<unknown>
+    }) => Effect.Effect<never, DbError, Option.Option<schema.SelectUsers>>
+  }
+  query: <A>(
+    body: (client: PlanetScaleDatabase<typeof schema>) => Promise<A>
+  ) => Effect.Effect<never, DbError, A>
 }
 
-export const DB = Context.Tag<DB>()
+export const DB = Context.Tag<DB>('@app/db')
 
 const make = Effect.gen(function* (_) {
-  const url = yield* _(
-    Config.string('DATABASE_URL'),
-    Effect.orDie
-  )
+  const url = yield* _(Config.string('DATABASE_URL'), Effect.orDie)
   const database = yield* _(
-    Effect.succeed(planetscaleDrizzle(connect({ url }), { schema }))
+    Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema }))
   )
 
+  const query = <A>(body: (client: typeof database) => Promise<A>) =>
+    Effect.tryPromise<A, DbError>({
+      try: () => body(database),
+      catch: handleDbError,
+    })
+
   return DB.of({
+    query,
     co2Averages: {
       findMany: ({ orderBy } = {}) =>
         Effect.tryPromise({
@@ -111,6 +128,21 @@ const make = Effect.gen(function* (_) {
           Effect.map(combineLinks),
           Effect.tap(Effect.logDebug),
           Effect.withSpan('getAllByProducerId')
+        ),
+    },
+    users: {
+      findOne: ({ where }) =>
+        Effect.tryPromise({
+          try: () => database.select().from(schema.users).where(where),
+          catch: handleDbError,
+        }).pipe(
+          Effect.tap((data) =>
+            Effect.logDebug(
+              `Read from DB: ${data.map((entry) => `${entry.email}`)}`
+            )
+          ),
+          Effect.map(ReadonlyArray.head),
+          Effect.withSpan('findOne')
         ),
     },
   })

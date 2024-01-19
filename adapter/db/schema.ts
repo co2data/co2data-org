@@ -1,15 +1,17 @@
 import { InferSelectModel, relations, sql } from 'drizzle-orm'
 import {
+  bigint,
+  boolean,
   char,
   decimal,
   double,
   index,
   int,
+  json,
   mysqlEnum,
   mysqlTable,
   mysqlView,
   text,
-  timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core'
 
@@ -167,7 +169,39 @@ export const users = mysqlTable('users', {
     .primaryKey()
     .notNull(),
   email: varchar('email', { length: 255 }).notNull(),
-  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
-  lockedAt: timestamp('locked_at', { mode: 'string' }),
-  failedLoginAttempts: int('failed_login_attempts').default(0).notNull(),
+  currentChallenge: varchar('current_callenge', { length: 255 }),
 })
+export type SelectUsers = InferSelectModel<typeof users>
+
+export const authenticators = mysqlTable(
+  'authenticators',
+  {
+    credentialId: text('credential_id').notNull(),
+    credentialPublicKey: text('credential_public_key').notNull(),
+    counter: bigint('counter', { mode: 'bigint' }).notNull(),
+    credentialDeviceType: varchar('credential_device_type', {
+      length: 32,
+    }).notNull(),
+    credentialBackedUp: boolean('credential_backed_up').notNull(),
+    userId: char('user_id', { length: 36 }).notNull(),
+    transports: json('transports').$type<string[]>(),
+  },
+  (table) => {
+    return {
+      indexCredentialId: index('index_authenticators_credential_id').on(
+        table.credentialId
+      ),
+    }
+  }
+)
+
+export const userRelations = relations(users, ({ many }) => ({
+  authenticators: many(authenticators),
+}))
+
+export const authenticatorRelations = relations(authenticators, ({ one }) => ({
+  users: one(users, {
+    fields: [authenticators.userId],
+    references: [users.id],
+  }),
+}))
