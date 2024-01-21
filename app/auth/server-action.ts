@@ -31,7 +31,6 @@ export async function generateLoginOptions(username: string) {
     return options
   }).pipe(
     Effect.withSpan('generateLoginOptions'),
-    Effect.mapError((e) => e._tag),
     Effect.either,
     Effect.provide(mainLive),
     Effect.provide(NodeSdkLive),
@@ -89,7 +88,6 @@ export async function verifyLogin(body: {
     }
   }).pipe(
     Effect.withSpan('verifyLogin'),
-    Effect.mapError((e) => e._tag),
     Effect.either,
     Effect.provide(mainLive),
     Effect.provide(NodeSdkLive),
@@ -120,7 +118,6 @@ export async function generateSignUpOptions() {
     return options
   }).pipe(
     Effect.withSpan('generateSignUpOptions'),
-    Effect.mapError((e) => e._tag),
     Effect.either,
     Effect.provide(mainLive),
     Effect.provide(NodeSdkLive),
@@ -161,7 +158,6 @@ export async function verifySignUp(body: any) {
     }
   }).pipe(
     Effect.withSpan('verifySignUp'),
-    Effect.mapError((e) => e._tag),
     Effect.either,
     Effect.provide(mainLive),
     Effect.provide(NodeSdkLive),

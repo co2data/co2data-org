@@ -1,8 +1,10 @@
 'use client'
+import { AuthError } from '@/adapter/pass-key'
 import { startRegistration } from '@simplewebauthn/browser'
 import { pipe } from 'effect/Function'
-import { exhaustive, value, when, whenOr } from 'effect/Match'
+import { discriminator, exhaustive, tag, value } from 'effect/Match'
 import { useFormState } from 'react-dom'
+import { AlreadyRegistered } from '../errors'
 import { generateSignUpOptions, verifySignUp } from '../server-action'
 
 const onSignUp = async () => {
@@ -23,9 +25,9 @@ const onSignUp = async () => {
       'name' in error &&
       error.name === 'InvalidStateError'
     ) {
-      return { _tag: 'Left', left: 'AlreadyRegisteredError' } as const
+      return { _tag: 'Left', left: new AlreadyRegistered() } as const
     } else {
-      return { _tag: 'Left', left: 'OtherError', error: error } as const
+      return { _tag: 'Left', left: new AuthError({ cause: error }) } as const
     }
   }
 
@@ -45,16 +47,15 @@ export default function Login() {
         state._tag === 'Left' &&
         pipe(
           value(state.left),
-          when('NoUserFoundError', (_) => <p>No User found</p>),
-          when('AlreadyRegisteredError', (_) => <p>Already registered.</p>),
-          whenOr(
+          tag('NoUserFoundError', (_) => <p>No User found</p>),
+          tag('AlreadyRegisteredError', (_) => <p>Already registered.</p>),
+          tag('AuthError', (_) => <p>Error authenticating.</p>),
+          discriminator('_tag')(
             'DbError',
             'NotVerifiedError',
             'NoChallengeOnUserError',
             'CouldNotSetChallengeError',
             'UnknownException',
-            'AuthError',
-            'OtherError',
             (_) => <p>Upps, that did not work. Try again later.</p>
           ),
           exhaustive

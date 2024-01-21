@@ -1,15 +1,16 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { startAuthentication } from '@simplewebauthn/browser'
-import { generateLoginOptions, verifyLogin } from '../server-action'
-import { useFormState, useFormStatus } from 'react-dom'
 import { pipe } from 'effect/Function'
-import { exhaustive, value, when, whenOr } from 'effect/Match'
+import { discriminator, exhaustive, tag, value } from 'effect/Match'
+import { useFormState, useFormStatus } from 'react-dom'
+import { MissingUserName, StartAuthenticationFailed } from '../errors'
+import { generateLoginOptions, verifyLogin } from '../server-action'
 
 const onLogin = async (prevState: any, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
-    return { _tag: 'Left', left: 'MissingUserNameError' } as const
+    return { _tag: 'Left', left: new MissingUserName() } as const
   }
   const resp = await generateLoginOptions(username.toString())
 
@@ -22,7 +23,7 @@ const onLogin = async (prevState: any, formData: FormData) => {
     asseResp = await startAuthentication(resp.right)
   } catch (error) {
     console.error(error)
-    return { _tag: 'Left', left: 'StartAuthenticationError' } as const
+    return { _tag: 'Left', left: new StartAuthenticationFailed() } as const
   }
 
   const verificationJSON = await verifyLogin({
@@ -49,20 +50,23 @@ export default function Login() {
             Error:{' '}
             {pipe(
               value(state.left),
-              when(
+              tag(
                 'MissingUserNameError',
                 (_) => 'User name is empty. Please insert your user name.'
               ),
-              when('NotVerifiedError', (_) => 'Not verified'),
-              whenOr(
+              tag('NotVerifiedError', (_) => 'Not verified'),
+              tag(
+                'NoUserFoundError',
+                (_) => 'User not found. Please register first.'
+              ),
+              discriminator('_tag')(
                 'AuthError',
                 'CouldNotFindAuthenticatorError',
                 'NoChallengeOnUserError',
-                'NoUserFoundError',
-                'StartAuthenticationError',
-                (_) => 'Authentication not possible'
+                'StartAuthenticationFailedError',
+                (_) => `Authentication not possible`
               ),
-              whenOr(
+              discriminator('_tag')(
                 'DbError',
                 'CouldNotSetChallengeError',
                 (_) => 'Try again later.'
