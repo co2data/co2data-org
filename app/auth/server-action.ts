@@ -1,8 +1,7 @@
 'use server'
 
-import { mainLive } from '@/adapter/effect/main'
+import { runServerAction } from '@/adapter/effect'
 import { PassKey } from '@/adapter/pass-key'
-import { NodeSdkLive } from '@/adapter/tracing/NodeSdkLive'
 import { UserRepository } from '@/domain/user/repository'
 import { Effect, Option } from 'effect'
 import {
@@ -13,7 +12,7 @@ import {
 } from './errors'
 
 export async function generateLoginOptions(username: string) {
-  const result = await Effect.gen(function* ($) {
+  return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByEmail(username),
@@ -29,15 +28,7 @@ export async function generateLoginOptions(username: string) {
 
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
     return options
-  }).pipe(
-    Effect.withSpan('generateLoginOptions'),
-    Effect.either,
-    Effect.provide(mainLive),
-    Effect.provide(NodeSdkLive),
-    Effect.runPromise
-  )
-
-  return result.toJSON() as unknown as typeof result
+  }).pipe(runServerAction('generateLoginOptions'))
 }
 
 export async function verifyLogin(body: {
@@ -48,7 +39,7 @@ export async function verifyLogin(body: {
   type: any
   username: string
 }) {
-  const result = await Effect.gen(function* ($) {
+  return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByEmail(body.username),
@@ -86,19 +77,11 @@ export async function verifyLogin(body: {
     } else {
       return yield* $(new NotVerified())
     }
-  }).pipe(
-    Effect.withSpan('verifyLogin'),
-    Effect.either,
-    Effect.provide(mainLive),
-    Effect.provide(NodeSdkLive),
-    Effect.runPromise
-  )
-
-  return result.toJSON() as unknown as typeof result
+  }).pipe(runServerAction('verifyLogin'))
 }
 
 export async function generateSignUpOptions() {
-  const result = await Effect.gen(function* ($) {
+  return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
 
     const user = yield* $(
@@ -116,19 +99,11 @@ export async function generateSignUpOptions() {
     )
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
     return options
-  }).pipe(
-    Effect.withSpan('generateSignUpOptions'),
-    Effect.either,
-    Effect.provide(mainLive),
-    Effect.provide(NodeSdkLive),
-    Effect.runPromise
-  )
-
-  return result.toJSON() as unknown as typeof result
+  }).pipe(runServerAction('generateSignUpOptions'))
 }
 
 export async function verifySignUp(body: any) {
-  const result = await Effect.gen(function* ($) {
+  return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByEmail('phi.sch@hotmail.ch'),
@@ -156,12 +131,5 @@ export async function verifySignUp(body: any) {
     } else {
       return yield* $(new NotVerified())
     }
-  }).pipe(
-    Effect.withSpan('verifySignUp'),
-    Effect.either,
-    Effect.provide(mainLive),
-    Effect.provide(NodeSdkLive),
-    Effect.runPromise
-  )
-  return result.toJSON() as unknown as typeof result
+  }).pipe(runServerAction('verifySignUp'))
 }

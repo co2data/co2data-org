@@ -91,6 +91,7 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export const PassKey = Context.Tag<Effect.Effect.Success<typeof make>>()
+export type PassKey = Effect.Effect.Success<typeof make>
+export const PassKey = Context.Tag<PassKey>()
 
 export const PassKeyLive = Layer.effect(PassKey, make)
