@@ -16,18 +16,15 @@ const onSignUp = async () => {
   try {
     attResp = await startRegistration(resp.right)
   } catch (error: unknown) {
+    console.error('Error:', error)
     if (
       error &&
       typeof error === 'object' &&
       'name' in error &&
       error.name === 'InvalidStateError'
     ) {
-      console.log(
-        'Error: Authenticator was probably already registered by user'
-      )
       return { _tag: 'Left', left: 'AlreadyRegisteredError' } as const
     } else {
-      console.log(`Error: ${error}`)
       return { _tag: 'Left', left: 'OtherError', error: error } as const
     }
   }

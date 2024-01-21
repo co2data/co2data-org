@@ -14,7 +14,6 @@ const onLogin = async (prevState: any, formData: FormData) => {
   const resp = await generateLoginOptions(username.toString())
 
   if (resp._tag === 'Left') {
-    console.error('login options error', resp.left)
     return resp
   }
 
