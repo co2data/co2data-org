@@ -11,10 +11,5 @@ export function run<P, Q, A>(
     arg2: Q
   ) => Effect.Effect<Co2Repository | SourceRepository, never, A>
 ) {
-  return flow(
-    effect,
-    Effect.provide(mainLive),
-    Effect.provide(NodeSdkLive),
-    Effect.runPromise
-  )
+  return flow(effect, Effect.provide(mainLive), Effect.runPromise)
 }
