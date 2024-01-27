@@ -10,7 +10,7 @@ import {
 import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
-} from '@simplewebauthn/typescript-types'
+} from '@simplewebauthn/types'
 import { Context, Data, Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { rpID, rpName, rpOrigin } from './relying-partner'
