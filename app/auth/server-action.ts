@@ -2,6 +2,7 @@
 
 import { runServerAction } from '@/adapter/effect'
 import { PassKey } from '@/adapter/pass-key'
+import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
 import { UserRepository } from '@/domain/user/repository'
 import { Effect, Option, flow } from 'effect'
 import {
@@ -15,26 +16,6 @@ export const generateLoginOptions = flow(
   generateLoginOptionsEffect,
   runServerAction('generateLoginOptions')
 )
-function generateLoginOptionsEffect(username: string) {
-  return Effect.gen(function* ($) {
-    const userRepo = yield* $(UserRepository)
-    const user = yield* $(
-      userRepo.findByEmail(username),
-      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map((_) => _.value)
-    )
-    const passKeyService = yield* $(PassKey)
-    const options = yield* $(
-      passKeyService.generateAuthenticationOptions({
-        userAuthenticators: user.authenticators,
-      })
-    )
-
-    yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
-    return options
-  })
-}
-
 export async function verifyLogin(body: {
   id: string
   rawId: string
@@ -137,5 +118,3 @@ export async function verifySignUp(body: any) {
     }
   }).pipe(runServerAction('verifySignUp'))
 }
-
-export const __test__ = { generateLoginOptionsEffect }
