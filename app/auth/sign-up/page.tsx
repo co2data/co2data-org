@@ -40,9 +40,9 @@ export default function Login() {
   const [state, formAction] = useFormState(onSignUp, undefined)
 
   return (
-    <section>
+    <form action={formAction}>
       <h1>Sign Up</h1>
-      <button formAction={formAction}>Sign up</button>
+      <button type='submit'>Sign up</button>
       {state &&
         state._tag === 'Left' &&
         pipe(
@@ -60,6 +60,6 @@ export default function Login() {
           ),
           exhaustive
         )}
-    </section>
+    </form>
   )
 }
