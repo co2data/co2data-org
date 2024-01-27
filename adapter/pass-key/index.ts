@@ -12,6 +12,7 @@ import {
   RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types'
 import { Context, Data, Effect, Layer } from 'effect'
+import { mock } from 'testtriple'
 import { rpID, rpName, rpOrigin } from './relying-partner'
 
 export class AuthError extends Data.TaggedError('AuthError')<BaseError> {}
@@ -91,7 +92,23 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export type PassKey = Effect.Effect.Success<typeof make>
-export const PassKey = Context.Tag<PassKey>()
+export interface PassKey {
+  readonly _: unique symbol
+}
+
+export const PassKey = Context.Tag<
+  PassKey,
+  Effect.Effect.Success<typeof make>
+>()
 
 export const PassKeyLive = Layer.effect(PassKey, make)
+
+export const PassKeyTest = Layer.succeed(
+  PassKey,
+  PassKey.of(
+    mock({
+      generateAuthenticationOptions: () =>
+        Effect.succeed({ json: 'hi', challenge: 'challenge' }),
+    })
+  )
+)

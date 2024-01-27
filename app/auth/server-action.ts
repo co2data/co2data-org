@@ -3,7 +3,7 @@
 import { runServerAction } from '@/adapter/effect'
 import { PassKey } from '@/adapter/pass-key'
 import { UserRepository } from '@/domain/user/repository'
-import { Effect, Option } from 'effect'
+import { Effect, Option, flow } from 'effect'
 import {
   CouldNotFindAuthenticator,
   NoChallengeOnUser,
@@ -11,7 +11,11 @@ import {
   NotVerified,
 } from './errors'
 
-export async function generateLoginOptions(username: string) {
+export const generateLoginOptions = flow(
+  generateLoginOptionsEffect,
+  runServerAction('generateLoginOptions')
+)
+function generateLoginOptionsEffect(username: string) {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
@@ -28,7 +32,7 @@ export async function generateLoginOptions(username: string) {
 
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
     return options
-  }).pipe(runServerAction('generateLoginOptions'))
+  })
 }
 
 export async function verifyLogin(body: {
@@ -133,3 +137,5 @@ export async function verifySignUp(body: any) {
     }
   }).pipe(runServerAction('verifySignUp'))
 }
+
+export const __test__ = { generateLoginOptionsEffect }

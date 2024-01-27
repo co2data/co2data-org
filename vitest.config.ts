@@ -9,6 +9,7 @@ export default defineConfig({
     setupFiles: ['./setup.ts'],
     environment: 'jsdom',
     exclude: ['e2e', 'node_modules', '.devenv'],
+    chaiConfig: { truncateThreshold: 0 },
   },
   resolve: {
     alias: {
