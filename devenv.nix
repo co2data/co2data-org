@@ -12,7 +12,7 @@
 
   languages.javascript = {
     enable = true;
-    package = pkgs.nodejs_18;
+    package = pkgs.nodejs;
     corepack.enable = true;
   };
 
