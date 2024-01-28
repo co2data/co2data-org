@@ -9,6 +9,7 @@ import {
 } from '@simplewebauthn/server'
 import {
   AuthenticationResponseJSON,
+  PublicKeyCredentialUserEntityJSON,
   RegistrationResponseJSON,
 } from '@simplewebauthn/types'
 import { Context, Data, Effect, Layer } from 'effect'
@@ -109,6 +110,17 @@ export const PassKeyTest = Layer.succeed(
     mock({
       generateAuthenticationOptions: () =>
         Effect.succeed({ json: 'hi', challenge: 'challenge' }),
+      generateRegistrationOptions: mock(
+        (props: { userId: string; userName: string }) =>
+          Effect.succeed({
+            challenge: 'challenge',
+            user: {
+              displayName: props.userName,
+              id: props.userId,
+              name: props.userName,
+            } satisfies PublicKeyCredentialUserEntityJSON,
+          })
+      ),
     })
   )
 )

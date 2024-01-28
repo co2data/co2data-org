@@ -1,7 +1,7 @@
 import { DB } from '@/adapter/db'
 import { PassKey, PassKeyTest } from '@/adapter/pass-key'
 import { UserRepository, UserRepositoryLive } from '@/domain/user/repository'
-import { Effect, Either, Layer } from 'effect'
+import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it } from 'vitest'
 import { NoUserFound } from '../../app/auth/errors'
@@ -10,9 +10,7 @@ import { generateLoginOptionsEffect } from './generate-login-options'
 describe('generateLoginOptions', () => {
   it('runs happy path', async () =>
     Effect.gen(function* ($) {
-      const actual = yield* $(
-        generateLoginOptionsEffect('philip@co2data.org')
-      )
+      const actual = yield* $(generateLoginOptionsEffect('philip@co2data.org'))
       expect(actual).toMatchInlineSnapshot(`
         {
           "challenge": "challenge",
@@ -42,10 +40,10 @@ describe('generateLoginOptions', () => {
     Effect.gen(function* ($) {
       const actual = yield* $(
         generateLoginOptionsEffect('unknown@user.org'),
-        Effect.either
+        Effect.flip
       )
 
-      expect(actual).toEqual(Either.left(new NoUserFound()))
+      expect(actual).toBeInstanceOf(NoUserFound)
     }).pipe(runTest(null)))
 })
 
