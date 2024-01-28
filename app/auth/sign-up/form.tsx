@@ -1,15 +1,15 @@
 'use client'
+import { AuthError } from '@/adapter/pass-key'
+import { CardContent } from '@/components/ui/card'
+import Spinner from '@/components/ui/spinner'
+import { startRegistration } from '@simplewebauthn/browser'
 import { pipe } from 'effect/Function'
 import { discriminator, exhaustive, tag, value } from 'effect/Match'
-
-import { AuthError } from '@/adapter/pass-key'
-import { startRegistration } from '@simplewebauthn/browser'
-import { MissingUserName, AlreadyRegistered } from '../errors'
-import { generateSignUpOptions, verifySignUp } from '../server-action'
+import Link from 'next/link'
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
-import Link from 'next/link'
-import { CardContent } from '@/components/ui/card'
+import { AlreadyRegistered, MissingUserName } from '../errors'
+import { generateSignUpOptions, verifySignUp } from '../server-action'
 import Warning from '../warning'
 
 const onSignUp = async (prevState: any, formData: FormData) => {
@@ -52,6 +52,7 @@ export default function Form(props: {
   submit: React.ReactNode
 }) {
   const [state, formAction] = useFormState(onSignUp, undefined)
+  const { pending } = useFormStatus()
 
   return (
     <form action={formAction}>
@@ -85,6 +86,11 @@ export default function Form(props: {
       </CardContent>
 
       {props.submit}
+      {pending && (
+        <div className="mx-8 mb-4 flex justify-center">
+          <Spinner />
+        </div>
+      )}
     </form>
   )
 }

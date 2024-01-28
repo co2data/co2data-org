@@ -1,15 +1,14 @@
 import { Button } from '@/components/ui/button'
 import {
   Card,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import Form from './form'
 import { Label } from '@/components/ui/label'
+import Form from './form'
 
 export default function Login() {
   return (

@@ -1,15 +1,17 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import { CardContent } from '@/components/ui/card'
+import Spinner from '@/components/ui/spinner'
 import { startAuthentication } from '@simplewebauthn/browser'
 import { pipe } from 'effect/Function'
-import { tag, discriminator, exhaustive, value } from 'effect/Match'
+import { discriminator, exhaustive, tag, value } from 'effect/Match'
+import { Check } from 'lucide-react'
+import Link from 'next/link'
+import { useFormState, useFormStatus } from 'react-dom'
 import { MissingUserName, StartAuthenticationFailed } from '../errors'
 import { generateLoginOptions, verifyLogin } from '../server-action'
-import { useFormState } from 'react-dom'
-import { CardContent } from '@/components/ui/card'
 import Warning from '../warning'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 
 const onLogin = async (prevState: any, formData: FormData) => {
   const username = formData.get('username')
@@ -43,12 +45,22 @@ export default function Form(props: {
   submit: React.ReactNode
 }) {
   const [state, formAction] = useFormState(onLogin, undefined)
+  const { pending } = useFormStatus()
 
   return (
     <form action={formAction}>
       <CardContent>
         {props.children}
-        {state && state._tag === 'Right' && <p>Login successful!</p>}
+        {state && state._tag === 'Right' && (
+          <p className="mt-4 rounded border border-green-500/40 bg-green-500/20 p-4">
+            <Check
+              className="inline-block text-green-700"
+              size={30}
+              strokeWidth={3}
+            />{' '}
+            Login successful!
+          </p>
+        )}
         {state && state._tag === 'Left' && (
           <Warning className="mt-4">
             {pipe(
@@ -85,8 +97,14 @@ export default function Form(props: {
             )}
           </Warning>
         )}
+        {}
       </CardContent>
       {props.submit}
+      {pending && (
+        <div className="mx-8 mb-4 flex justify-center">
+          <Spinner />
+        </div>
+      )}
     </form>
   )
 }
