@@ -4,10 +4,11 @@ import { uInt8ArrayToUrlBase64 } from '@/lib/utils'
 import { VerifiedRegistrationResponse } from '@simplewebauthn/server'
 import { CredentialDeviceType } from '@simplewebauthn/types'
 import { eq } from 'drizzle-orm'
-import { Context, Data, Effect, Layer, Option } from 'effect'
+import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
 import { User } from '.'
 
 export interface UserRepository {
+  createUser: (username: string) => Effect.Effect<never, DbError, User>
   findByEmail: (
     email: string
   ) => Effect.Effect<never, DbError, Option.Option<User>>
@@ -36,6 +37,28 @@ export const UserRepositoryLive = DB.pipe(
 
 function make(database: DB): UserRepository {
   return UserRepository.of({
+    createUser: (username) =>
+      database
+        .query((_) => _.insert(schema.users).values({ email: username }))
+        .pipe(
+          Effect.andThen(
+            database.query((_) =>
+              _.query.users.findFirst({
+                where: eq(schema.users.email, username),
+              })
+            )
+          ),
+          Effect.filterOrFail(
+            Predicate.isNotNullable,
+            (_) =>
+              new DbError({ cause: `Could not find created user ${username}` })
+          ),
+          Effect.map((user) => ({
+            ...user,
+            currentChallenge: Option.none(),
+            authenticators: [],
+          }))
+        ),
     findByEmail: (email) =>
       database
         .query((_) =>

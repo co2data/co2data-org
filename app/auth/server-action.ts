@@ -4,8 +4,10 @@ import { runServerAction } from '@/adapter/effect'
 import { PassKey } from '@/adapter/pass-key'
 import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
 import { UserRepository } from '@/domain/user/repository'
+import { RegistrationResponseJSON } from '@simplewebauthn/types'
 import { Effect, Option, flow } from 'effect'
 import {
+  AlreadyRegistered,
   CouldNotFindAuthenticator,
   NoChallengeOnUser,
   NoUserFound,
@@ -65,33 +67,37 @@ export async function verifyLogin(body: {
   }).pipe(runServerAction('verifyLogin'))
 }
 
-export async function generateSignUpOptions() {
+export async function generateSignUpOptions(username: string) {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
 
-    const user = yield* $(
-      userRepo.findByEmail('phi.sch@hotmail.ch'),
-      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map((_) => _.value)
-    )
+    const alreadyRegisteredUser = yield* $(userRepo.findByEmail(username))
+
+    if (Option.isSome(alreadyRegisteredUser)) {
+      yield* $(new AlreadyRegistered())
+    }
+
+    const newUser = yield* $(userRepo.createUser(username))
 
     const passKeyService = yield* $(PassKey)
     const options = yield* $(
       passKeyService.generateRegistrationOptions({
-        userId: user.id,
-        userName: user.email,
+        userId: newUser.id,
+        userName: newUser.email,
       })
     )
-    yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
+    yield* $(userRepo.setCurrentChallenge(newUser.id, options.challenge))
     return options
   }).pipe(runServerAction('generateSignUpOptions'))
 }
 
-export async function verifySignUp(body: any) {
+export async function verifySignUp(
+  body: RegistrationResponseJSON & { username: string }
+) {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
-      userRepo.findByEmail('phi.sch@hotmail.ch'),
+      userRepo.findByEmail(body.username),
       Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
       Effect.map((_) => _.value)
     )
