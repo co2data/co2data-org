@@ -6,13 +6,14 @@ import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options
 import { generateSignUpOptionsEffect } from '@/domain/auth/generate-sign-up-options'
 import { UserRepository } from '@/domain/user/repository'
 import { RegistrationResponseJSON } from '@simplewebauthn/types'
-import { Effect, Option, flow } from 'effect'
+import { Effect, Either, Option, flow } from 'effect'
 import {
   CouldNotFindAuthenticator,
   NoChallengeOnUser,
   NoUserFound,
   NotVerified,
 } from './errors'
+import { redirect } from 'next/navigation'
 
 export const generateLoginOptions = flow(
   generateLoginOptionsEffect,
@@ -75,7 +76,7 @@ export const generateSignUpOptions = flow(
 export async function verifySignUp(
   body: RegistrationResponseJSON & { username: string }
 ) {
-  return Effect.gen(function* ($) {
+  const result = await Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByEmail(body.username),
@@ -104,4 +105,9 @@ export async function verifySignUp(
       return yield* $(new NotVerified())
     }
   }).pipe(runServerAction('verifySignUp'))
+
+  if (Either.isRight(result) && result.right.verified) {
+    redirect('/auth/sign-up-success')
+  }
+  return result
 }
