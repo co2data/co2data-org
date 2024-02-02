@@ -1,4 +1,5 @@
 import { DB } from '@/adapter/db'
+import * as schema from '@/adapter/db/schema'
 import { PassKey, PassKeyTest } from '@/adapter/pass-key'
 import { AlreadyRegistered } from '@/app/auth/errors'
 import { Effect, Layer } from 'effect'
@@ -7,6 +8,18 @@ import { describe, expect, it, vi } from 'vitest'
 import { UserRepository, UserRepositoryLive } from '../user/repository'
 import { generateSignUpOptionsEffect } from './generate-sign-up-options'
 
+const userNoAuthenticator = {
+  id: '1',
+  username: 'user',
+  currentChallenge: null,
+  authenticators: [],
+}
+const userAuthenticator = {
+  id: '1',
+  username: 'user',
+  currentChallenge: null,
+  authenticators: ['has authenticator'],
+}
 describe('generateSignUpOptionsEffect', () => {
   it('registers new users', () =>
     Effect.gen(function* ($) {
@@ -19,7 +32,7 @@ describe('generateSignUpOptionsEffect', () => {
     }).pipe(
       runTest({
         existingUser: null,
-        newUser: { id: '1', email: 'user', authenticators: [] },
+        newUser: userNoAuthenticator,
       })
     ))
 
@@ -29,11 +42,11 @@ describe('generateSignUpOptionsEffect', () => {
 
       expect(actual).toEqual({
         challenge: 'challenge',
-        user: { displayName: 'user', id: '2', name: 'user' },
+        user: { displayName: 'user', id: '1', name: 'user' },
       })
     }).pipe(
       runTest({
-        existingUser: { id: '2', email: 'user', authenticators: [] },
+        existingUser: userNoAuthenticator,
         newUser: null,
       })
     ))
@@ -44,18 +57,20 @@ describe('generateSignUpOptionsEffect', () => {
       expect(actual).toBeInstanceOf(AlreadyRegistered)
     }).pipe(
       runTest({
-        existingUser: {
-          id: 1,
-          email: 'user',
-          authenticators: ['has authenticator'],
-        },
+        existingUser: userAuthenticator,
         newUser: null,
       })
     ))
 })
 
+type DbUser =
+  | (schema.SelectUsers & {
+      authenticators: string[]
+    })
+  | null
+
 const runTest =
-  (queryData: { existingUser: any; newUser: any }) =>
+  (queryData: { existingUser: DbUser; newUser: DbUser }) =>
   (effect: Effect.Effect<UserRepository | PassKey, any, any>) => {
     const queryMock = vi.fn()
     queryMock.mockImplementationOnce(() =>

@@ -9,8 +9,8 @@ import { User } from '.'
 
 export interface UserRepository {
   createUser: (username: string) => Effect.Effect<never, DbError, User>
-  findByEmail: (
-    email: string
+  findByUsername: (
+    username: string
   ) => Effect.Effect<never, DbError, Option.Option<User>>
   setCurrentChallenge: (
     userId: string,
@@ -39,12 +39,12 @@ function make(database: DB): UserRepository {
   return UserRepository.of({
     createUser: (username) =>
       database
-        .query((_) => _.insert(schema.users).values({ email: username }))
+        .query((_) => _.insert(schema.users).values({ username }))
         .pipe(
           Effect.andThen(
             database.query((_) =>
               _.query.users.findFirst({
-                where: eq(schema.users.email, username),
+                where: eq(schema.users.username, username),
               })
             )
           ),
@@ -59,18 +59,18 @@ function make(database: DB): UserRepository {
             authenticators: [],
           }))
         ),
-    findByEmail: (email) =>
+    findByUsername: (username) =>
       database
         .query((_) =>
           _.query.users.findFirst({
-            where: eq(schema.users.email, email),
+            where: eq(schema.users.username, username),
             with: { authenticators: true },
           })
         )
         .pipe(
           Effect.map(Option.fromNullable),
           Effect.map(Option.map(userFromDbToDomain)),
-          Effect.tap((_) => Effect.logTrace(`id: ${email}`)),
+          Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
           Effect.withSpan('getUserByEmail')
         ),
 
@@ -113,7 +113,7 @@ function make(database: DB): UserRepository {
 
 type UserWithAuthenticators = {
   id: string
-  email: string
+  username: string
   currentChallenge: string | null
   authenticators: {
     userId: string

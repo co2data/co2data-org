@@ -4,7 +4,7 @@ import { CredentialDeviceType } from 'node_modules/@simplewebauthn/server/esm/de
 export { SourceRepository } from '@/domain/source/repository'
 export type User = {
   id: string
-  email: string
+  username: string
   currentChallenge: Option.Option<string>
   authenticators: Array<Authenticator>
 }

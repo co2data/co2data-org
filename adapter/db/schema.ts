@@ -168,7 +168,7 @@ export const users = mysqlTable('users', {
     .default(sql`(uuid())`)
     .primaryKey()
     .notNull(),
-  email: varchar('email', { length: 255 }).notNull(),
+  username: varchar('username', { length: 255 }).notNull(),
   currentChallenge: varchar('current_callenge', { length: 255 }),
 })
 export type SelectUsers = InferSelectModel<typeof users>

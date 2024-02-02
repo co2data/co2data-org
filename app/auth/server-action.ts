@@ -30,7 +30,7 @@ export async function verifyLogin(body: {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
-      userRepo.findByEmail(body.username),
+      userRepo.findByUsername(body.username),
       Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
       Effect.map((_) => _.value)
     )
@@ -79,7 +79,7 @@ export async function verifySignUp(
   const result = await Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
-      userRepo.findByEmail(body.username),
+      userRepo.findByUsername(body.username),
       Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
       Effect.map((_) => _.value)
     )

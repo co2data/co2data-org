@@ -7,7 +7,7 @@ export function generateSignUpOptionsEffect(username: string) {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
 
-    const existingUser = yield* $(userRepo.findByEmail(username))
+    const existingUser = yield* $(userRepo.findByUsername(username))
 
     if (
       Option.isSome(existingUser) &&
@@ -24,7 +24,7 @@ export function generateSignUpOptionsEffect(username: string) {
     const options = yield* $(
       passKeyService.generateRegistrationOptions({
         userId: user.id,
-        userName: user.email,
+        userName: user.username,
       })
     )
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))

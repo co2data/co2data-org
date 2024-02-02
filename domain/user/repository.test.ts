@@ -9,7 +9,7 @@ describe('user repository', () => {
   it('finds user by email', () =>
     Effect.gen(function* ($) {
       const userRepo = yield* $(UserRepository)
-      const user = yield* $(userRepo.findByEmail('philip@co2data.org'))
+      const user = yield* $(userRepo.findByUsername('philip@co2data.org'))
       expect(user).toEqual(Option.some(makeUser()))
     }).pipe(
       runTest({
@@ -25,7 +25,7 @@ describe('user repository', () => {
   it('finds no user by email', () =>
     Effect.gen(function* ($) {
       const userRepo = yield* $(UserRepository)
-      const user = yield* $(userRepo.findByEmail('unknown@user.org'))
+      const user = yield* $(userRepo.findByUsername('unknown@user.org'))
       expect(user).toStrictEqual(Option.none())
     }).pipe(
       runTest({
