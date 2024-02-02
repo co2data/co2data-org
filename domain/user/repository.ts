@@ -57,7 +57,9 @@ function make(database: DB): UserRepository {
             ...user,
             currentChallenge: Option.none(),
             authenticators: [],
-          }))
+          })),
+          Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
+          Effect.withSpan('createUser')
         ),
     findByUsername: (username) =>
       database
@@ -71,7 +73,7 @@ function make(database: DB): UserRepository {
           Effect.map(Option.fromNullable),
           Effect.map(Option.map(userFromDbToDomain)),
           Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
-          Effect.withSpan('getUserByEmail')
+          Effect.withSpan('getUserByName')
         ),
 
     setCurrentChallenge: (userId, currentChallenge) =>

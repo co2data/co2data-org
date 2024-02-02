@@ -1,7 +1,7 @@
 import { PassKey } from '@/adapter/pass-key'
 import { UserRepository } from '@/domain/user/repository'
 import { Effect, Option } from 'effect'
-import { AlreadyRegistered } from '../../app/auth/errors'
+import { AlreadyRegistered } from '../../app/(auth)/errors'
 
 export function generateSignUpOptionsEffect(username: string) {
   return Effect.gen(function* ($) {

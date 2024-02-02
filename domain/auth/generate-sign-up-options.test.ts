@@ -1,7 +1,7 @@
 import { DB } from '@/adapter/db'
 import * as schema from '@/adapter/db/schema'
 import { PassKey, PassKeyTest } from '@/adapter/pass-key'
-import { AlreadyRegistered } from '@/app/auth/errors'
+import { AlreadyRegistered } from '@/app/(auth)/errors'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it, vi } from 'vitest'

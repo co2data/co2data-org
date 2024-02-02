@@ -4,7 +4,7 @@ import { UserRepository, UserRepositoryLive } from '@/domain/user/repository'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it } from 'vitest'
-import { NoUserFound } from '../../app/auth/errors'
+import { NoUserFound } from '../../app/(auth)/errors'
 import { generateLoginOptionsEffect } from './generate-login-options'
 
 describe('generateLoginOptions', () => {

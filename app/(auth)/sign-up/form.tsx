@@ -67,7 +67,7 @@ export default function Form(props: {
               tag('AlreadyRegisteredError', (_) => (
                 <>
                   A user with this name already exists. Choose a different name
-                  or <Link href={'/auth/login'}>login</Link> instead.
+                  or <Link href={'/login'}>login</Link> instead.
                 </>
               )),
               tag('AuthError', (_) => 'Error authenticating.'),

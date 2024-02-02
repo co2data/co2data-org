@@ -107,7 +107,7 @@ export async function verifySignUp(
   }).pipe(runServerAction('verifySignUp'))
 
   if (Either.isRight(result) && result.right.verified) {
-    redirect('/auth/sign-up-success')
+    redirect('/sign-up-success')
   }
   return result
 }

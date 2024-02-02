@@ -138,7 +138,7 @@ const make = Effect.gen(function* (_) {
         }).pipe(
           Effect.tap((data) =>
             Effect.logDebug(
-              `Read from DB: ${data.map((entry) => `${entry.email}`)}`
+              `Read from DB: ${data.map((entry) => `${entry.username}`)}`
             )
           ),
           Effect.map(ReadonlyArray.head),
