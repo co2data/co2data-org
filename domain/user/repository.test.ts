@@ -15,7 +15,7 @@ describe('user repository', () => {
       runTest({
         queryResult: {
           id: '1',
-          email: 'philip@co2data.org',
+          username: 'philip@co2data.org',
           currentChallenge: null,
           authenticators: [],
         },
