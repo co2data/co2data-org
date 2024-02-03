@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ModeToggle } from './mode-toggle'
 import { GithubLink } from './github-link'
+import { ModeToggle } from './mode-toggle'
+import User from './user'
 
 const Header = () => {
   return (
@@ -15,6 +16,7 @@ const Header = () => {
             <div className="flex">
               <GithubLink />
               <ModeToggle className="-my-2" />
+              <User className="-my-2" />
             </div>
           </div>
         </div>

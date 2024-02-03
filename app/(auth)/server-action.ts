@@ -2,18 +2,19 @@
 
 import { runServerAction } from '@/adapter/effect'
 import { PassKey } from '@/adapter/pass-key'
+import { setSession } from '@/adapter/session'
 import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
 import { generateSignUpOptionsEffect } from '@/domain/auth/generate-sign-up-options'
 import { UserRepository } from '@/domain/user/repository'
 import { RegistrationResponseJSON } from '@simplewebauthn/types'
 import { Effect, Either, Option, flow } from 'effect'
+import { redirect } from 'next/navigation'
 import {
   CouldNotFindAuthenticator,
   NoChallengeOnUser,
   NoUserFound,
   NotVerified,
 } from './errors'
-import { redirect } from 'next/navigation'
 
 export const generateLoginOptions = flow(
   generateLoginOptionsEffect,
@@ -61,6 +62,7 @@ export async function verifyLogin(body: {
     if (verified) {
       const { authenticationInfo } = verification
       yield* $(userRepo.updateCounter(user.id, authenticationInfo.newCounter))
+      yield* $(setSession(user.username))
       return { verified }
     } else {
       return yield* $(new NotVerified())

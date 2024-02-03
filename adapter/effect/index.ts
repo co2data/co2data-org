@@ -5,12 +5,13 @@ import 'server-only'
 import { Co2Repository } from '../../domain/co2/repository'
 import { SourceRepository } from '../../domain/source/repository'
 import { mainLive } from './main'
+import { Session } from '../session'
 
 export function run<P, Q, A>(
   effect: (
     arg1: P,
     arg2: Q
-  ) => Effect.Effect<Co2Repository | SourceRepository, never, A>
+  ) => Effect.Effect<Co2Repository | SourceRepository | Session, never, A>
 ) {
   return flow(effect, Effect.provide(mainLive), Effect.runPromise)
 }
@@ -19,7 +20,7 @@ export const runServerAction =
   (span: string) =>
   <E, A>(
     effect: Effect.Effect<
-      Co2Repository | SourceRepository | UserRepository | PassKey,
+      Co2Repository | SourceRepository | UserRepository | PassKey | Session,
       E,
       A
     >
