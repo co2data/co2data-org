@@ -5,7 +5,8 @@ import { baseUrl } from './config'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import type { Metadata, Viewport } from 'next'
-import { GeistMono, GeistSans } from 'geist/font'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 
 export default function RootLayout({
   children,
