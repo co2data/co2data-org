@@ -31,7 +31,7 @@ const UserEffect = (props: { className?: string }) => {
     if (!username) {
       return (
         <div className="flex gap-4">
-          <Link href={'/login'}>Sign up</Link>
+          <Link href={'/sign-up'}>Sign up</Link>
           <Link href={'/login'}>Login</Link>
         </div>
       )
