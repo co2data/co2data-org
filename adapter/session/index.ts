@@ -1,25 +1,26 @@
-import { Context, Effect, Layer } from 'effect'
+import { Config, Context, Effect, Layer, Secret } from 'effect'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
-const getSessionEffect = () =>
+const getSessionEffect = (password: Secret.Secret) =>
   Effect.tryPromise(() =>
     // @ts-ignore
     getIronSession<{ username?: string }>(cookies(), {
-      password: 'Qq9zRhembX7RkTTZnwkNhZbTNrfNVXpn',
+      password: Secret.value(password),
       cookieName: 'user-session',
     })
   ).pipe(Effect.orDie)
 
 const make = Effect.gen(function* ($) {
+  const sessionPassword = yield* $(Config.secret('SESSION_PASSWORD'))
   return {
     getSession: () =>
-      getSessionEffect().pipe(
+      getSessionEffect(sessionPassword).pipe(
         Effect.map((session) => session.username),
         Effect.withSpan('get session')
       ),
     setSession: (username: string) => {
-      return getSessionEffect().pipe(
+      return getSessionEffect(sessionPassword).pipe(
         Effect.flatMap((session) =>
           Effect.tryPromise(() => {
             session.username = username
@@ -31,7 +32,7 @@ const make = Effect.gen(function* ($) {
       )
     },
     deleteSession: () =>
-      getSessionEffect().pipe(
+      getSessionEffect(sessionPassword).pipe(
         Effect.map((session) => session.destroy()),
         Effect.withSpan('deleteSession')
       ),
