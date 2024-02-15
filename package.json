@@ -16,7 +16,8 @@
     "db-migrate": "drizzle-kit generate:mysql",
     "db-update": "drizzle-kit up:mysql",
     "db-push": "drizzle-kit push:mysql",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "lefthook install"
   },
   "dependencies": {
     "@effect/opentelemetry": "^0.30.11",
@@ -53,6 +54,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3-nightly.dca6a7a",
     "@playwright/test": "^1.41.1",
     "@simplewebauthn/types": "^9.0.1",
     "@tailwindcss/typography": "^0.5.10",
@@ -70,6 +72,7 @@
     "eslint-config-prettier": "^9.1.0",
     "happy-dom": "^13.3.1",
     "jsdom": "^24.0.0",
+    "lefthook": "^1.6.1",
     "mysql2": "^3.9.0",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
