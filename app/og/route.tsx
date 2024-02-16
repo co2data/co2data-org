@@ -17,10 +17,19 @@ export function GET(request: Request) {
         height: 630,
       },
     )
-  } catch (e: any) {
-    console.log(`${e.message}`)
-    return new Response(`Failed to generate the image`, {
+  } catch (e: unknown) {
+    console.log(`${isErrorMessage(e) ? e.message : e}`)
+    return new Response('Failed to generate the image', {
       status: 500,
     })
   }
+}
+
+function isErrorMessage(error: unknown): error is { message: string } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof error.message === 'string'
+  )
 }

@@ -13,7 +13,7 @@ import Form from './form'
 export default function Login() {
   return (
     <section>
-      <h1 className="my-6 text-4xl font-bold">Sign Up</h1>
+      <h1 className="my-6 font-bold text-4xl">Sign Up</h1>
       <Card className="max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>

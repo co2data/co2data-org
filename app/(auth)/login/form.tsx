@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
 import Spinner from '@/components/ui/spinner'
 import { startAuthentication } from '@simplewebauthn/browser'
+import { AuthenticationResponseJSON } from '@simplewebauthn/types'
 import { pipe } from 'effect/Function'
 import { discriminator, exhaustive, tag, value } from 'effect/Match'
 import { Check } from 'lucide-react'
@@ -13,7 +14,7 @@ import { MissingUserName, StartAuthenticationFailed } from '../errors'
 import { generateLoginOptions, verifyLogin } from '../server-action'
 import Warning from '../warning'
 
-const onLogin = async (prevState: any, formData: FormData) => {
+const onLogin = async (prevState: unknown, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
     return { _tag: 'Left', left: new MissingUserName() } as const
@@ -24,7 +25,7 @@ const onLogin = async (prevState: any, formData: FormData) => {
     return resp
   }
 
-  let asseResp
+  let asseResp: AuthenticationResponseJSON
   try {
     asseResp = await startAuthentication(resp.right)
   } catch (error) {

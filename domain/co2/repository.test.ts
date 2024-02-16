@@ -90,7 +90,7 @@ describe('co2-repository', () => {
 })
 
 function runWithTestDb(
-  f: (repo: Co2Repository) => Effect.Effect<never, DbError, any>,
+  f: (repo: Co2Repository) => Effect.Effect<never, DbError, unknown>,
   mockData: schema.Co2Average,
 ) {
   const DbTest = Layer.succeed(

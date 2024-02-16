@@ -23,7 +23,7 @@ export function format(
 export function setLogLevelFromSearchParams(props: {
   searchParams: { logLevel?: string | undefined }
 }) {
-  const logLevel = props.searchParams['logLevel'] as LogLevel.Literal
+  const logLevel = props.searchParams.logLevel as LogLevel.Literal
 
   if (
     logLevel === undefined ||
