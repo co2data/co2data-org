@@ -31,7 +31,7 @@ const make = Effect.gen(function* ($) {
             allowCredentials: props.userAuthenticators.map((authenticator) => ({
               id: base64UrlStringToUInt8Array(authenticator.credentialID),
               type: 'public-key',
-              transports: authenticator.transports,
+              transports: authenticator.transports ?? [],
             })),
             userVerification: 'preferred',
           }),
