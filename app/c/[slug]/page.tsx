@@ -97,7 +97,7 @@ function ContributorPageEffect({ params, searchParams }: Props) {
       DbError: (cause) => Effect.succeed(<main>Database error</main>),
     }),
     setLogLevelFromSearchParams({ searchParams }),
-  ) satisfies Effect.Effect<unknown, never, JSX.Element>
+  ) satisfies Effect.Effect<JSX.Element, never, unknown>
 }
 
 function getCo2Average(slug: string) {
@@ -124,7 +124,7 @@ function generateMetadataEffect({ params, searchParams }: Props) {
     Effect.withSpan('Generate metadata c/[slug]/page', {
       attributes: { slug: params.slug },
     }),
-  ) satisfies Effect.Effect<unknown, never, Metadata>
+  ) satisfies Effect.Effect<Metadata, never, unknown>
 }
 
 function mapMetadata(params: { slug: string }) {

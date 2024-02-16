@@ -24,31 +24,31 @@ export type DB = {
       orderBy,
     }: {
       orderBy?: SQL<unknown>
-    }) => Effect.Effect<never, DbError, schema.Co2Average[]>
+    }) => Effect.Effect<schema.Co2Average[], DbError>
     readonly findOne: ({
       where,
     }: {
       where: SQL<unknown>
-    }) => Effect.Effect<never, DbError, Option.Option<schema.Co2Average>>
+    }) => Effect.Effect<Option.Option<schema.Co2Average>, DbError>
   }
   sources: {
     readonly getAllByProducerId: (
       id: string,
-    ) => Effect.Effect<never, DbError, Source[]>
+    ) => Effect.Effect<Source[], DbError>
   }
   users: {
     readonly findOne: ({
       where,
     }: {
       where: SQL<unknown>
-    }) => Effect.Effect<never, DbError, Option.Option<schema.SelectUsers>>
+    }) => Effect.Effect<Option.Option<schema.SelectUsers>, DbError>
   }
   query: <A>(
     body: (client: PlanetScaleDatabase<typeof schema>) => Promise<A>,
-  ) => Effect.Effect<never, DbError, A>
+  ) => Effect.Effect<A, DbError>
 }
 
-export const DB = Context.Tag<DB>('@app/db')
+export const DB = Context.GenericTag<DB>('@app/db')
 
 const make = Effect.gen(function* (_) {
   const url = yield* _(Config.string('DATABASE_URL'), Effect.orDie)

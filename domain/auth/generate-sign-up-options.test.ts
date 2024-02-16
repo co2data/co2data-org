@@ -72,7 +72,7 @@ type DbUser =
 const runTest =
   (queryData: { existingUser: DbUser; newUser: DbUser }) =>
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  (effect: Effect.Effect<UserRepository | PassKey, any, any>) => {
+  (effect: Effect.Effect<any, any, UserRepository | PassKey>) => {
     const queryMock = vi.fn()
     queryMock.mockImplementationOnce(() =>
       Effect.succeed(queryData.existingUser),

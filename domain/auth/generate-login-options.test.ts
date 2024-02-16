@@ -49,7 +49,7 @@ describe('generateLoginOptions', () => {
 
 const runTest =
   (queryData: unknown) =>
-  (effect: Effect.Effect<UserRepository | PassKey, unknown, unknown>) => {
+  (effect: Effect.Effect<unknown, unknown, UserRepository | PassKey>) => {
     const DbTest = Layer.succeed(
       DB,
       DB.of(

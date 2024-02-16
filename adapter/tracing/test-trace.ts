@@ -14,10 +14,10 @@ Test Trace with
 */
 
 export interface Random {
-  readonly next: Effect.Effect<never, never, number>
+  readonly next: Effect.Effect<number>
 }
 
-export const Random = Context.Tag<Random>()
+export const Random = Context.GenericTag<Random>('@services/Random')
 
 const RandomLive = Layer.succeed(
   Random,
@@ -40,7 +40,7 @@ const NodeSdkLive = NodeSdk.layer(() => ({
 const task = (
   name: string,
   delay: number,
-  children: ReadonlyArray<Effect.Effect<never, never, void>> = [],
+  children: ReadonlyArray<Effect.Effect<void>> = [],
 ) =>
   Effect.gen(function* (_) {
     // const random = yield* _(Random)

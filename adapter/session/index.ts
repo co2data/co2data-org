@@ -43,10 +43,10 @@ export interface Session {
   readonly _: unique symbol
 }
 
-export const Session = Context.Tag<
+export const Session = Context.GenericTag<
   Session,
   Effect.Effect.Success<typeof make>
->()
+>('@services/Session')
 
 export const { getSession, setSession, deleteSession } =
   Effect.serviceFunctions(Session)

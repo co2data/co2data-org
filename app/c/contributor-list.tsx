@@ -17,7 +17,7 @@ export function ContributorListEffect(props: {
     Effect.withSpan('Render /c/'),
     Effect.catchTag('DbError', handleDbError),
     setLogLevelFromSearchParams(props),
-  ) satisfies Effect.Effect<unknown, never, JSX.Element>
+  ) satisfies Effect.Effect<JSX.Element, never, unknown>
 }
 
 function render(co2Averages: Co2Average[]) {

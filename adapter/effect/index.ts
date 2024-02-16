@@ -11,7 +11,7 @@ export function run<P, Q, A>(
   effect: (
     arg1: P,
     arg2: Q,
-  ) => Effect.Effect<Co2Repository | SourceRepository | Session, never, A>,
+  ) => Effect.Effect<A, never, Co2Repository | SourceRepository | Session>,
 ) {
   return flow(effect, Effect.provide(mainLive), Effect.runPromise)
 }
@@ -20,9 +20,9 @@ export const runServerAction =
   (span: string) =>
   <E, A>(
     effect: Effect.Effect<
-      Co2Repository | SourceRepository | UserRepository | PassKey | Session,
+      A,
       E,
-      A
+      Co2Repository | SourceRepository | UserRepository | PassKey | Session
     >,
   ) => {
     return pipe(

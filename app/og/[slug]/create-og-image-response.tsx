@@ -15,7 +15,7 @@ export function createOgImageResponse(
     Effect.flatMap(getCo2Average),
     Effect.flatMap(renderImageAsResponse),
     Effect.catchAll(handleErrors),
-  ) satisfies Effect.Effect<unknown, never, ImageResponse>
+  ) satisfies Effect.Effect<ImageResponse, never, unknown>
 }
 
 export function renderImageAsResponse(co2Avg: Co2Average) {

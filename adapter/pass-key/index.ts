@@ -97,10 +97,10 @@ export interface PassKey {
   readonly _: unique symbol
 }
 
-export const PassKey = Context.Tag<
+export const PassKey = Context.GenericTag<
   PassKey,
   Effect.Effect.Success<typeof make>
->()
+>('@services/PassKey')
 
 export const PassKeyLive = Layer.effect(PassKey, make)
 

@@ -8,27 +8,29 @@ import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
 import { User } from '.'
 
 export interface UserRepository {
-  createUser: (username: string) => Effect.Effect<never, DbError, User>
+  createUser: (username: string) => Effect.Effect<User, DbError>
   findByUsername: (
     username: string,
-  ) => Effect.Effect<never, DbError, Option.Option<User>>
+  ) => Effect.Effect<Option.Option<User>, DbError>
   setCurrentChallenge: (
     userId: string,
     currentChallenge: string,
-  ) => Effect.Effect<never, DbError | CouldNotSetChallenge, void>
+  ) => Effect.Effect<void, DbError | CouldNotSetChallenge>
   addAuthenticator: (
     userId: string,
     registrationInfo: NonNullable<
       VerifiedRegistrationResponse['registrationInfo']
     >,
-  ) => Effect.Effect<never, DbError, void>
+  ) => Effect.Effect<void, DbError>
   updateCounter: (
     userId: string,
     counter: number,
-  ) => Effect.Effect<never, DbError, void>
+  ) => Effect.Effect<void, DbError>
 }
 
-export const UserRepository = Context.Tag<UserRepository>()
+export const UserRepository = Context.GenericTag<UserRepository>(
+  '@services/UserRepository',
+)
 
 export const UserRepositoryLive = DB.pipe(
   Effect.map(make),

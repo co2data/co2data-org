@@ -74,7 +74,7 @@ describe('source repository', () => {
 })
 
 function runWithTestDb(
-  f: (repo: SourceRepository) => Effect.Effect<never, DbError, unknown>,
+  f: (repo: SourceRepository) => Effect.Effect<unknown, DbError>,
   mockData: Source,
 ) {
   const DbTest = Layer.succeed(

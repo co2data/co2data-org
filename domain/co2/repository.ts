@@ -5,13 +5,15 @@ import { desc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
 
 export type Co2Repository = {
-  readonly getAllCo2Averages: () => Effect.Effect<never, DbError, Co2Average[]>
+  readonly getAllCo2Averages: () => Effect.Effect<Co2Average[], DbError>
   readonly getCo2AverageBySlug: (
     slug: string,
-  ) => Effect.Effect<never, DbError, Option.Option<Co2Average>>
+  ) => Effect.Effect<Option.Option<Co2Average>, DbError>
 }
 
-export const Co2Repository = Context.Tag<Co2Repository>()
+export const Co2Repository = Context.GenericTag<Co2Repository>(
+  '@services/Co2Repository',
+)
 
 export const Co2RepositoryLive = DB.pipe(
   Effect.map(make),

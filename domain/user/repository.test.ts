@@ -38,7 +38,7 @@ const runTest =
   // biome-ignore lint/suspicious/noExplicitAny: Test
     (testData: { queryResult: any }) =>
     // biome-ignore lint/suspicious/noExplicitAny: Test
-    (effect: Effect.Effect<UserRepository, any, any>) => {
+    (effect: Effect.Effect<any, any, UserRepository>) => {
       const DbTest = Layer.succeed(
         DB,
         DB.of(

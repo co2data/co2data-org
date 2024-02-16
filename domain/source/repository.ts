@@ -5,12 +5,12 @@ import { remark } from 'remark'
 import html from 'remark-html'
 
 export interface SourceRepository {
-  getAllSourcesByCo2ProducerId: (
-    id: string,
-  ) => Effect.Effect<never, DbError, Source[]>
+  getAllSourcesByCo2ProducerId: (id: string) => Effect.Effect<Source[], DbError>
 }
 
-export const SourceRepository = Context.Tag<SourceRepository>()
+export const SourceRepository = Context.GenericTag<SourceRepository>(
+  '@services/SourceRepository',
+)
 
 export const SourceRepositoryLive = DB.pipe(
   Effect.map(make),

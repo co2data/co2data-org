@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@effect/opentelemetry':
-    specifier: ^0.30.11
-    version: 0.30.11(@opentelemetry/api@1.7.0)(@opentelemetry/resources@1.21.0)(@opentelemetry/sdk-trace-base@1.21.0)(@opentelemetry/sdk-trace-node@1.21.0)(@opentelemetry/sdk-trace-web@1.21.0)(@opentelemetry/semantic-conventions@1.21.0)(effect@2.2.2)
+    specifier: ^0.31.7
+    version: 0.31.7(@opentelemetry/api@1.7.0)(@opentelemetry/resources@1.21.0)(@opentelemetry/sdk-trace-base@1.21.0)(@opentelemetry/sdk-trace-node@1.21.0)(@opentelemetry/sdk-trace-web@1.21.0)(@opentelemetry/semantic-conventions@1.21.0)(effect@2.3.6)
   '@next/bundle-analyzer':
     specifier: ^14.1.0
     version: 14.1.0
@@ -66,8 +66,8 @@ dependencies:
     specifier: ^0.29.3
     version: 0.29.3(@opentelemetry/api@1.7.0)(@planetscale/database@1.14.0)(@types/react@18.2.48)(mysql2@3.9.0)(react@18.2.0)
   effect:
-    specifier: 2.2.2
-    version: 2.2.2
+    specifier: 2.3.6
+    version: 2.3.6
   geist:
     specifier: ^1.2.1
     version: 1.2.1(next@14.1.0)
@@ -555,8 +555,8 @@ packages:
       superjson: 2.2.1
     dev: true
 
-  /@effect/opentelemetry@0.30.11(@opentelemetry/api@1.7.0)(@opentelemetry/resources@1.21.0)(@opentelemetry/sdk-trace-base@1.21.0)(@opentelemetry/sdk-trace-node@1.21.0)(@opentelemetry/sdk-trace-web@1.21.0)(@opentelemetry/semantic-conventions@1.21.0)(effect@2.2.2):
-    resolution: {integrity: sha512-dziSvGI4t3j/OVABE2agqk3SiqDVgOupElx7OGy6EZqznxeaXWoKjt1Syn2eDEcRv/mcwKJZC85acdzxutdrDg==}
+  /@effect/opentelemetry@0.31.7(@opentelemetry/api@1.7.0)(@opentelemetry/resources@1.21.0)(@opentelemetry/sdk-trace-base@1.21.0)(@opentelemetry/sdk-trace-node@1.21.0)(@opentelemetry/sdk-trace-web@1.21.0)(@opentelemetry/semantic-conventions@1.21.0)(effect@2.3.6):
+    resolution: {integrity: sha512-fUDj6SX+IVrsltbR0OEtmYsrGGzLVDvpaTlKsHvA/G8mtJW/yFa20MDDm2llPNcHACR9Grg2Ri75FR2Op4xU3g==}
     peerDependencies:
       '@opentelemetry/api': ^1.6
       '@opentelemetry/resources': ^1.17
@@ -565,7 +565,7 @@ packages:
       '@opentelemetry/sdk-trace-node': ^1.17
       '@opentelemetry/sdk-trace-web': ^1.17
       '@opentelemetry/semantic-conventions': ^1.17
-      effect: ^2.2.2
+      effect: ^2.3.6
     peerDependenciesMeta:
       '@opentelemetry/sdk-metrics':
         optional: true
@@ -582,7 +582,7 @@ packages:
       '@opentelemetry/sdk-trace-node': 1.21.0(@opentelemetry/api@1.7.0)
       '@opentelemetry/sdk-trace-web': 1.21.0(@opentelemetry/api@1.7.0)
       '@opentelemetry/semantic-conventions': 1.21.0
-      effect: 2.2.2
+      effect: 2.3.6
     dev: false
 
   /@esbuild-kit/core-utils@3.3.2:
@@ -3285,8 +3285,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.2.2:
-    resolution: {integrity: sha512-hY/37Ssd2Zfn0r09vDe9tSYPVS5HZBbmW4DMBO7OIIvRADgp5cnWfLhY6pVy+Bm5DXV9luFycjDcB1731WGyTA==}
+  /effect@2.3.6:
+    resolution: {integrity: sha512-R7Sqjc/6Wg+hZbtotklWunLUe5hoEG/a8SP/4BGydNCbR2DZuc15ZApoZA1gVMcT/PDMN3WHEiVlqLkt+TtdBA==}
     dev: false
 
   /electron-to-chromium@1.4.648:
