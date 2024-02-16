@@ -160,6 +160,9 @@ devDependencies:
   lefthook:
     specifier: ^1.6.1
     version: 1.6.1
+  lefthook-linux-x64:
+    specifier: ^1.6.1
+    version: 1.6.1
   mysql2:
     specifier: ^3.9.0
     version: 3.9.0
@@ -5122,7 +5125,6 @@ packages:
     os: [linux]
     requiresBuild: true
     dev: true
-    optional: true
 
   /lefthook-windows-arm64@1.6.1:
     resolution: {integrity: sha512-RyQ8S4/45BpJpRPy7KsOuJeXQ5FOa7MASoPtOYvrXt4A8kayCv1jlGs7MTv3XJbUosCJhfNpw3ReeHVGfw1KIw==}

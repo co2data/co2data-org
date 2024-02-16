@@ -73,6 +73,7 @@
     "happy-dom": "^13.3.1",
     "jsdom": "^24.0.0",
     "lefthook": "^1.6.1",
+    "lefthook-linux-x64": "^1.6.1",
     "mysql2": "^3.9.0",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
