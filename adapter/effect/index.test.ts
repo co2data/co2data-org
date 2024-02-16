@@ -23,13 +23,13 @@ describe('effect basics', () => {
 
   test('get config that is provided', () => {
     const mockConfigProvider = ConfigProvider.fromMap(
-      new Map([['MY_ENV_VAR', 'localhost']])
+      new Map([['MY_ENV_VAR', 'localhost']]),
     )
     const layer = Layer.setConfigProvider(mockConfigProvider)
 
     const actual = Config.string('MY_ENV_VAR').pipe(
       Effect.provide(layer),
-      Effect.runSync
+      Effect.runSync,
     )
 
     expect(actual).toBe('localhost')
@@ -37,9 +37,9 @@ describe('effect basics', () => {
 
   test('get config that is not provided', async () => {
     expect(
-      Effect.runPromise(Config.string('MY_ENV_VAR'))
+      Effect.runPromise(Config.string('MY_ENV_VAR')),
     ).rejects.toMatchInlineSnapshot(
-      `[(Missing data at MY_ENV_VAR: "Expected MY_ENV_VAR to exist in the process context")]`
+      `[(Missing data at MY_ENV_VAR: "Expected MY_ENV_VAR to exist in the process context")]`,
     )
   })
 
@@ -52,10 +52,10 @@ describe('effect basics', () => {
     ]
     const tokens = HashSet.fromIterable(testData).pipe(
       HashSet.flatMap((guardian) =>
-        HashSet.fromIterable(guardian.devices ?? [])
+        HashSet.fromIterable(guardian.devices ?? []),
       ),
       HashSet.map((device) => device.token),
-      ReadonlyArray.fromIterable
+      ReadonlyArray.fromIterable,
     )
     expect(tokens).toMatchInlineSnapshot(`
       [
@@ -70,10 +70,10 @@ describe('effect basics', () => {
     const guardian = { devices: [{ token: 'hi' }, { token: 'more' }] }
 
     const devices = HashSet.fromIterable(
-      guardian.devices.map(Data.struct) ?? []
+      guardian.devices.map(Data.struct) ?? [],
     ).pipe(
       HashSet.add(Data.struct({ token: 'more' })),
-      ReadonlyArray.fromIterable
+      ReadonlyArray.fromIterable,
     )
     expect(devices).toMatchInlineSnapshot(`
       [
@@ -91,7 +91,7 @@ describe('effect basics', () => {
 
     const devices = HashSet.fromIterable(guardian.devices ?? []).pipe(
       HashSet.add({ token: 'more' }),
-      ReadonlyArray.fromIterable
+      ReadonlyArray.fromIterable,
     )
     expect(devices.length).toBe(3)
   })
