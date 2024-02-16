@@ -141,9 +141,7 @@
       "indexes": {
         "category_id": {
           "name": "category_id",
-          "columns": [
-            "category_id"
-          ],
+          "columns": ["category_id"],
           "isUnique": false
         }
       },
@@ -193,9 +191,7 @@
       "indexes": {
         "links_sources_id_idx": {
           "name": "links_sources_id_idx",
-          "columns": [
-            "sources_id"
-          ],
+          "columns": ["sources_id"],
           "isUnique": false
         }
       },
@@ -280,10 +276,7 @@
       "indexes": {
         "sourced_co2_amounts_source_id_co2_producer_id_idx": {
           "name": "sourced_co2_amounts_source_id_co2_producer_id_idx",
-          "columns": [
-            "source_id",
-            "co2_producer_id"
-          ],
+          "columns": ["source_id", "co2_producer_id"],
           "isUnique": false
         }
       },
@@ -341,9 +334,7 @@
       "indexes": {
         "index_co2_producers": {
           "name": "index_co2_producers",
-          "columns": [
-            "co2_producer_id"
-          ],
+          "columns": ["co2_producer_id"],
           "isUnique": false
         }
       },

@@ -42,7 +42,7 @@ describe('co2-repository', () => {
 
     const actual = await runWithTestDb(
       (repo) => repo.getAllCo2Averages(),
-      mockData
+      mockData,
     )
     expect(actual).toStrictEqual([expected])
   })
@@ -82,7 +82,7 @@ describe('co2-repository', () => {
 
     const actual = await runWithTestDb(
       (repo) => repo.getCo2AverageBySlug('test'),
-      mockData
+      mockData,
     )
 
     expect(actual).toStrictEqual(Option.some(expected))
@@ -90,8 +90,8 @@ describe('co2-repository', () => {
 })
 
 function runWithTestDb(
-  f: (repo: Co2Repository) => Effect.Effect<never, DbError, any>,
-  mockData: schema.Co2Average
+  f: (repo: Co2Repository) => Effect.Effect<never, DbError, unknown>,
+  mockData: schema.Co2Average,
 ) {
   const DbTest = Layer.succeed(
     DB,
@@ -101,8 +101,8 @@ function runWithTestDb(
           findMany: () => Effect.succeed([mockData]),
           findOne: () => Effect.succeed(Option.some(mockData)),
         },
-      })
-    )
+      }),
+    ),
   )
 
   const Co2RepositoryTest = Co2RepositoryLive.pipe(Layer.provide(DbTest))
@@ -110,7 +110,7 @@ function runWithTestDb(
   const getAllCo2Averages = Co2Repository.pipe(
     Effect.flatMap(f),
     Effect.provide(Co2RepositoryTest),
-    Effect.runPromise
+    Effect.runPromise,
   )
   return getAllCo2Averages
 }

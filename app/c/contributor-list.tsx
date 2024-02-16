@@ -12,12 +12,12 @@ export function ContributorListEffect(props: {
 }) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getAllCo2Averages()),
-    Effect.map(filter(props.searchParams['search'])),
+    Effect.map(filter(props.searchParams.search)),
     Effect.map(render),
     Effect.withSpan('Render /c/'),
     Effect.catchTag('DbError', handleDbError),
-    setLogLevelFromSearchParams(props)
-  ) satisfies Effect.Effect<any, never, JSX.Element>
+    setLogLevelFromSearchParams(props),
+  ) satisfies Effect.Effect<unknown, never, JSX.Element>
 }
 
 function render(co2Averages: Co2Average[]) {
@@ -49,7 +49,7 @@ function filter(term: string | null | undefined) {
   return (co2Averges: Co2Average[]) =>
     term
       ? co2Averges.filter((item) =>
-          item.title.toLowerCase().includes(term.toLowerCase())
+          item.title.toLowerCase().includes(term.toLowerCase()),
         )
       : co2Averges
 }

@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-muted">
       <div className="container flex py-3">
-        <p className="flex-1">2023&ensp;•&ensp;co2data.org</p>
+        <p className="flex-1">2024&ensp;•&ensp;co2data.org</p>
         <GithubLink />
       </div>
     </footer>

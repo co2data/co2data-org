@@ -7,7 +7,7 @@ import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
 export type Co2Repository = {
   readonly getAllCo2Averages: () => Effect.Effect<never, DbError, Co2Average[]>
   readonly getCo2AverageBySlug: (
-    slug: string
+    slug: string,
   ) => Effect.Effect<never, DbError, Option.Option<Co2Average>>
 }
 
@@ -15,7 +15,7 @@ export const Co2Repository = Context.Tag<Co2Repository>()
 
 export const Co2RepositoryLive = DB.pipe(
   Effect.map(make),
-  Layer.effect(Co2Repository)
+  Layer.effect(Co2Repository),
 )
 
 function make(db: DB): Co2Repository {
@@ -25,7 +25,7 @@ function make(db: DB): Co2Repository {
         .findMany({ orderBy: desc(co2Average.avgPerYear) })
         .pipe(
           Effect.map(ReadonlyArray.map(co2AverageFromDbToDomain)),
-          Effect.withSpan('getAllCo2Averages')
+          Effect.withSpan('getAllCo2Averages'),
         )
     },
     getCo2AverageBySlug: (slug) => {
@@ -33,7 +33,7 @@ function make(db: DB): Co2Repository {
         .findOne({ where: eq(co2Average.slug, slug) })
         .pipe(
           Effect.map(Option.map(co2AverageFromDbToDomain)),
-          Effect.withSpan('getCo2AverageBySlug')
+          Effect.withSpan('getCo2AverageBySlug'),
         )
     },
   })

@@ -19,12 +19,12 @@ export default function PersonalCo2({
   co2Average: Omit<Co2Average, 'description'>
 }) {
   const [consumption, setConsumption] = useState(
-    co2Average.singleConsumptionAverage
+    co2Average.singleConsumptionAverage,
   )
   const [times, setTimes] = useState(co2Average.timesPerYearAverage)
   const co2PerConsumption = calcCo2PerConsumption(
     co2Average.avgPerUnit,
-    consumption
+    consumption,
   )
   const co2PerYear = calcCo2PerYear(times, co2PerConsumption)
   const factorOfPersonYearFootprint =
@@ -36,7 +36,7 @@ export default function PersonalCo2({
     <div className="rounded-lg border border-border bg-card p-8">
       <div className="flex flex-col justify-between gap-x-24 gap-y-8 lg:flex-row">
         <div className="flex-1">
-          <h2 className="text-lg font-bold">
+          <h2 className="font-bold text-lg">
             Personal CO<sub>2</sub> footprint
           </h2>
 
@@ -101,7 +101,7 @@ export default function PersonalCo2({
                 (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) /
                 Math.min(
                   co2Average.timesPerYearTo - co2Average.timesPerYearFrom,
-                  50
+                  50,
                 )
               }
               value={[times]}
@@ -116,6 +116,7 @@ export default function PersonalCo2({
           </h3>
           <div className="mx-auto flex max-w-md justify-around px-12">
             <svg className="absolute h-0 w-0">
+              <title>Pie chart of percentage per year</title>
               <defs>
                 <mask id="segmentMask">
                   <polygon
@@ -143,8 +144,9 @@ export default function PersonalCo2({
               of a{' '}
               <svg
                 viewBox="0 -2 20 55"
-                className="inline-block h-6 w-2 -translate-y-1 fill-current"
+                className="-translate-y-1 inline-block h-6 w-2 fill-current"
               >
+                <title>Person</title>
                 <circle cx="9" cy="9" r="4" />
                 <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
               </svg>
@@ -159,8 +161,9 @@ export default function PersonalCo2({
                   The average{' '}
                   <svg
                     viewBox="0 -2 20 55"
-                    className="inline-block h-6 w-2 -translate-y-1 fill-current"
+                    className="-translate-y-1 inline-block h-6 w-2 fill-current"
                   >
+                    <title>Person</title>
                     <circle cx="9" cy="9" r="4" />
                     <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
                   </svg>{' '}
@@ -193,6 +196,7 @@ function PieChart({ state }: { state: 'partial' | 'full' }) {
   return (
     <div className="-mx-36 text-primary">
       <svg className="w-full" viewBox="0 0 300 200">
+        <title>Additional pie chart for 100%</title>
         <circle
           cx="150"
           cy="100"
@@ -209,7 +213,7 @@ function PieChart({ state }: { state: 'partial' | 'full' }) {
         />
         <g
           transform="translate(135,50) scale(1.8)"
-          className="stroke-linejoin-round fill-white stroke-gray-800 stroke-1"
+          className="fill-white stroke-1 stroke-gray-800 stroke-linejoin-round"
         >
           <circle cx="9" cy="9" r="4" />
           <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />
@@ -222,7 +226,7 @@ function PieChart({ state }: { state: 'partial' | 'full' }) {
 function generatePieParts(factorOfPersonYearFootprint: number) {
   const parts: Array<'full' | 'partial'> = Array.from(
     Array(Math.floor(factorOfPersonYearFootprint)),
-    (_) => 'full' as const
+    (_) => 'full' as const,
   )
   if (
     Math.floor(factorOfPersonYearFootprint) - factorOfPersonYearFootprint !==

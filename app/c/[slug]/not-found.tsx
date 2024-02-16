@@ -11,7 +11,7 @@ export default function NotFound() {
             </li>
           </ol>
         </nav>
-        <h1 className="text-4xl font-bold">Not Found</h1>
+        <h1 className="font-bold text-4xl">Not Found</h1>
       </header>
       <p>Could not find the requested contributor.</p>
       <p>

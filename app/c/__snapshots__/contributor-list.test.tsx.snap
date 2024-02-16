@@ -18,7 +18,7 @@ exports[`render  1`] = `
         </a>
       </p>
       <p
-        class="px-4 py-2 text-xs "
+        class="px-4 py-2 text-xs"
       >
         Possible CO
         <sub>
@@ -30,17 +30,17 @@ exports[`render  1`] = `
         class="px-4 text-right"
       >
         <span
-          class="text-4xl font-extrabold"
+          class="font-extrabold text-4xl"
         >
           500
         </span>
         <span
-          class="text-sm font-extrabold"
+          class="font-extrabold text-sm"
         >
           .
         </span>
         <span
-          class="text-sm font-extrabold"
+          class="font-extrabold text-sm"
         >
           000
         </span>

@@ -12,6 +12,7 @@ export default function Spinner({
       height="2em"
       width="2em"
     >
+      <title>Spinner indicating a loading state</title>
       <circle
         className="path"
         r="10"

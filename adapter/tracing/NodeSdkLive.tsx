@@ -7,7 +7,7 @@ const GrafanaTempoConfig = Config.nested('OTLP')(
   Config.all({
     url: Config.string('URL'),
     auth: Config.option(Config.secret('AUTH')),
-  })
+  }),
 )
 
 export const NodeSdkLive = Layer.unwrapEffect(
@@ -24,7 +24,7 @@ export const NodeSdkLive = Layer.unwrapEffect(
         scheduledDelayMillis: Duration.toMillis('1 seconds'),
       }),
     }))
-  })
+  }),
 )
 
 function makeHeaders(auth: Option.Option<Secret.Secret>) {
@@ -32,6 +32,6 @@ function makeHeaders(auth: Option.Option<Secret.Secret>) {
     Effect.map((a) => ({
       Authorization: Secret.value(a),
     })),
-    Effect.orElseSucceed(() => ({}))
+    Effect.orElseSucceed(() => ({})),
   )
 }

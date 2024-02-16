@@ -11,7 +11,7 @@ describe('source repository', () => {
     it('takes happy path', async () => {
       const actual = await runWithTestDb(
         (repo) => repo.getAllSourcesByCo2ProducerId('1'),
-        makeSource()
+        makeSource(),
       )
 
       expect(actual).toStrictEqual([
@@ -43,7 +43,7 @@ describe('source repository', () => {
         (repo) => repo.getAllSourcesByCo2ProducerId('1'),
         makeSource({
           description: 'Some **bold** text with a [link](https://link.to)',
-        })
+        }),
       )
 
       expect(actual).toStrictEqual([
@@ -74,8 +74,8 @@ describe('source repository', () => {
 })
 
 function runWithTestDb(
-  f: (repo: SourceRepository) => Effect.Effect<never, DbError, any>,
-  mockData: Source
+  f: (repo: SourceRepository) => Effect.Effect<never, DbError, unknown>,
+  mockData: Source,
 ) {
   const DbTest = Layer.succeed(
     DB,
@@ -84,8 +84,8 @@ function runWithTestDb(
         sources: {
           getAllByProducerId: () => Effect.succeed([mockData]),
         },
-      })
-    )
+      }),
+    ),
   )
 
   const SourceRepoTest = SourceRepositoryLive.pipe(Layer.provide(DbTest))
@@ -93,7 +93,7 @@ function runWithTestDb(
   const getAllCo2Averages = SourceRepository.pipe(
     Effect.flatMap(f),
     Effect.provide(SourceRepoTest),
-    Effect.runPromise
+    Effect.runPromise,
   )
   return getAllCo2Averages
 }

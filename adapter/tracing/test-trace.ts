@@ -23,7 +23,7 @@ const RandomLive = Layer.succeed(
   Random,
   Random.of({
     next: Effect.succeed(1),
-  })
+  }),
 )
 const NodeSdkLive = NodeSdk.layer(() => ({
   resource: {
@@ -32,7 +32,7 @@ const NodeSdkLive = NodeSdk.layer(() => ({
   spanProcessor: new BatchSpanProcessor(
     new OTLPTraceExporter({
       url: 'http://127.0.0.1:4318/v1/traces',
-    })
+    }),
   ),
 }))
 
@@ -40,7 +40,7 @@ const NodeSdkLive = NodeSdk.layer(() => ({
 const task = (
   name: string,
   delay: number,
-  children: ReadonlyArray<Effect.Effect<never, never, void>> = []
+  children: ReadonlyArray<Effect.Effect<never, never, void>> = [],
 ) =>
   Effect.gen(function* (_) {
     // const random = yield* _(Random)
@@ -72,5 +72,5 @@ pipe(
   Effect.delay(program, seconds(1)),
   Effect.provide(NodeSdkLive),
   Effect.catchAllCause(Effect.logError),
-  Effect.runPromise
+  Effect.runPromise,
 )

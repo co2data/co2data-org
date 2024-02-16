@@ -1,31 +1,28 @@
 import { InferSelectModel, relations, sql } from 'drizzle-orm'
 import {
+  bigint,
+  boolean,
   char,
   decimal,
   double,
   index,
   int,
+  json,
   mysqlEnum,
   mysqlTable,
   mysqlView,
   text,
-  timestamp,
   varchar,
 } from 'drizzle-orm/mysql-core'
 
 export const categories = mysqlTable('categories', {
-  id: char('id', { length: 36 })
-    .default(sql`(uuid())`)
-    .primaryKey()
-    .notNull(),
+  id: char('id', { length: 36 }).default(sql`(uuid())`).primaryKey().notNull(),
   title: text('title').notNull(),
   slug: varchar('slug', { length: 255 }).default('').notNull(),
 })
 
 export const co2Average = mysqlView('co2_average', {
-  id: char('id', { length: 36 })
-    .default(sql`(uuid())`)
-    .notNull(),
+  id: char('id', { length: 36 }).default(sql`(uuid())`).notNull(),
   title: varchar('title', { length: 255 }).notNull(),
   description: text('description'),
   slug: varchar('slug', { length: 255 }).notNull(),
@@ -89,7 +86,7 @@ export const co2Producers = mysqlTable(
     return {
       categoryId: index('category_id').on(table.categoryId),
     }
-  }
+  },
 )
 
 export const links = mysqlTable(
@@ -108,7 +105,7 @@ export const links = mysqlTable(
     return {
       sourcesIdIdx: index('links_sources_id_idx').on(table.sourcesId),
     }
-  }
+  },
 )
 
 export const sourcedCo2Amounts = mysqlTable(
@@ -131,10 +128,10 @@ export const sourcedCo2Amounts = mysqlTable(
   (table) => {
     return {
       sourceIdCo2ProducerIdIdx: index(
-        'sourced_co2_amounts_source_id_co2_producer_id_idx'
+        'sourced_co2_amounts_source_id_co2_producer_id_idx',
       ).on(table.sourceId, table.co2ProducerId),
     }
-  }
+  },
 )
 export type SelectSourcedCo2Amounts = InferSelectModel<typeof sourcedCo2Amounts>
 export const sources = mysqlTable(
@@ -154,7 +151,7 @@ export const sources = mysqlTable(
     return {
       indexCo2Producers: index('index_co2_producers').on(table.co2ProducerId),
     }
-  }
+  },
 )
 
 export const sourceRelations = relations(sources, ({ many }) => ({
@@ -162,12 +159,41 @@ export const sourceRelations = relations(sources, ({ many }) => ({
 }))
 
 export const users = mysqlTable('users', {
-  id: char('id', { length: 36 })
-    .default(sql`(uuid())`)
-    .primaryKey()
-    .notNull(),
-  email: varchar('email', { length: 255 }).notNull(),
-  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
-  lockedAt: timestamp('locked_at', { mode: 'string' }),
-  failedLoginAttempts: int('failed_login_attempts').default(0).notNull(),
+  id: char('id', { length: 36 }).default(sql`(uuid())`).primaryKey().notNull(),
+  username: varchar('username', { length: 255 }).notNull(),
+  currentChallenge: varchar('current_callenge', { length: 255 }),
 })
+export type SelectUsers = InferSelectModel<typeof users>
+
+export const authenticators = mysqlTable(
+  'authenticators',
+  {
+    credentialId: text('credential_id').notNull(),
+    credentialPublicKey: text('credential_public_key').notNull(),
+    counter: bigint('counter', { mode: 'bigint' }).notNull(),
+    credentialDeviceType: varchar('credential_device_type', {
+      length: 32,
+    }).notNull(),
+    credentialBackedUp: boolean('credential_backed_up').notNull(),
+    userId: char('user_id', { length: 36 }).notNull(),
+    transports: json('transports').$type<string[]>(),
+  },
+  (table) => {
+    return {
+      indexCredentialId: index('index_authenticators_credential_id').on(
+        table.credentialId,
+      ),
+    }
+  },
+)
+
+export const userRelations = relations(users, ({ many }) => ({
+  authenticators: many(authenticators),
+}))
+
+export const authenticatorRelations = relations(authenticators, ({ one }) => ({
+  users: one(users, {
+    fields: [authenticators.userId],
+    references: [users.id],
+  }),
+}))

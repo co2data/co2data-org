@@ -1,6 +1,6 @@
+import { DbError } from '@/adapter/db'
 import OgImageFrame from '@/components/og-image-frame'
 import { Co2Average, Co2Repository } from '@/domain/co2'
-import { DbError } from '@/adapter/db'
 import { BaseError } from '@/lib/types'
 import convert from 'convert'
 import { Data, Effect } from 'effect'
@@ -9,13 +9,13 @@ import { Fragment } from 'react'
 
 export function createOgImageResponse(
   request: Request,
-  { params }: { params: { slug: string | undefined } }
+  { params }: { params: { slug: string | undefined } },
 ) {
   return parseSlug(params.slug).pipe(
     Effect.flatMap(getCo2Average),
     Effect.flatMap(renderImageAsResponse),
-    Effect.catchAll(handleErrors)
-  ) satisfies Effect.Effect<any, never, ImageResponse>
+    Effect.catchAll(handleErrors),
+  ) satisfies Effect.Effect<unknown, never, ImageResponse>
 }
 
 export function renderImageAsResponse(co2Avg: Co2Average) {
@@ -25,11 +25,11 @@ export function renderImageAsResponse(co2Avg: Co2Average) {
 }
 function renderNumberParts(co2Avg: Co2Average) {
   const formattedParts = formatter.formatToParts(
-    convert(co2Avg.avgPerUnit, 'grams').to('kg')
+    convert(co2Avg.avgPerUnit, 'grams').to('kg'),
   )
 
   const formattedInteger = formattedParts.find(
-    (part) => part.type === 'integer'
+    (part) => part.type === 'integer',
   )?.value
   const formattedAvgRest = formattedParts.map(({ type, value }) => {
     switch (type) {
@@ -51,7 +51,7 @@ function renderNumberParts(co2Avg: Co2Average) {
 export function renderImage(
   co2Avg: Co2Average,
   formattedInteger: string | undefined,
-  formattedAvgRest: JSX.Element[]
+  formattedAvgRest: JSX.Element[],
 ) {
   return (
     <OgImageFrame>
@@ -93,14 +93,14 @@ const formatter = new Intl.NumberFormat('en', {
 
 function parseSlug(slug: string | undefined) {
   return Effect.fromNullable(slug).pipe(
-    Effect.mapError(() => new NoParamError())
+    Effect.mapError(() => new NoParamError()),
   )
 }
 
 function getCo2Average(slug: string) {
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(slug)),
-    Effect.flatMap(Effect.orElseFail(notFound(slug)))
+    Effect.flatMap(Effect.orElseFail(notFound(slug))),
   )
 }
 function notFound(slug: string | undefined) {
@@ -110,7 +110,7 @@ function notFound(slug: string | undefined) {
     })
 }
 
-class NoParamError extends Data.TaggedError('NoParam')<{}> {
+class NoParamError extends Data.TaggedError('NoParam') {
   readonly cause = 'No parameter defined.'
 }
 class NotFoundError extends Data.TaggedError('NotFound')<BaseError> {}
@@ -118,11 +118,11 @@ class NotFoundError extends Data.TaggedError('NotFound')<BaseError> {}
 class ImageRenderError extends Data.TaggedError('ImageRender')<BaseError> {}
 
 function handleErrors(
-  error: NoParamError | DbError | NotFoundError | ImageRenderError
+  error: NoParamError | DbError | NotFoundError | ImageRenderError,
 ) {
   return Effect.succeed(
     new Response(`Failed to generate the image. ${error.cause}`, {
       status: 500,
-    })
+    }),
   )
 }

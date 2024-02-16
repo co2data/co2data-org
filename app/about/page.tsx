@@ -1,14 +1,14 @@
-import { Sun, Cloud, Globe2, Trees, Leaf, PersonStanding } from 'lucide-react'
+import { Cloud, Globe2, Leaf, PersonStanding, Sun, Trees } from 'lucide-react'
 
 const About = () => {
   return (
     <main className="flex flex-wrap items-start justify-between gap-x-32 gap-y-8 py-6 md:py-10">
       <article className="grow basis-[32rem] space-y-6">
         <section>
-          <h1 className="text-4xl font-extrabold">
+          <h1 className="font-extrabold text-4xl">
             About CO<sub>2</sub> Data
           </h1>
-          <blockquote className="my-4 border-l-4 bg-card px-4 py-3 text-lg italic text-border [text-wrap:balance] dark:text-white/70">
+          <blockquote className="my-4 border-l-4 bg-card px-4 py-3 text-border text-lg italic [text-wrap:balance] dark:text-white/70">
             What are the CO2 emissions of things?
           </blockquote>
           <p>
@@ -19,7 +19,7 @@ const About = () => {
           </p>
         </section>
         <section>
-          <h2 className="text-2xl font-bold">Contribution</h2>
+          <h2 className="font-bold text-2xl">Contribution</h2>
           <p>
             I would love for you to contribute to the CO2 database. Either by
             contributing of emitters or by improving the database. You can find
@@ -36,7 +36,7 @@ const About = () => {
           </p>
         </section>
         <section>
-          <h2 className="text-2xl font-bold">About me</h2>
+          <h2 className="font-bold text-2xl">About me</h2>
           <p>
             My name is Philip Schönholzer. Get in touch on{' '}
             <a

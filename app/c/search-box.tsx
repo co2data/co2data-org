@@ -22,15 +22,15 @@ export default function SearchBox({
 
       return params.toString()
     },
-    [searchParams]
+    [searchParams],
   )
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     startTransition(() =>
-      replace(('/c?' + createQueryString('search', value)) as Route, {
+      replace(`/c?${createQueryString('search', value)}` as Route, {
         scroll: false,
-      })
+      }),
     )
   }
 
@@ -46,11 +46,11 @@ export default function SearchBox({
           id="search"
           placeholder="Search"
           onChange={handleInputChange}
-          defaultValue={searchParams['search'] ?? ''}
+          defaultValue={searchParams.search ?? ''}
           autoComplete="one-time-code"
         />
         {isPending && (
-          <div className="absolute -right-10 bottom-1/2 top-1/2 -my-4">
+          <div className="-right-10 -my-4 absolute top-1/2 bottom-1/2">
             <Spinner />
           </div>
         )}
