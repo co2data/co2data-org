@@ -4,7 +4,7 @@ import { Effect, Metric } from 'effect'
 import { baseUrl } from '../config'
 
 const dbErrorCount = Metric.counter('db_error_count').pipe(
-  Metric.withConstantInput(1)
+  Metric.withConstantInput(1),
 )
 
 export const GET = run(route)
@@ -15,8 +15,8 @@ function route() {
     Effect.map(renderResponse),
     // Metric.trackErrorWith(dbErrorCount, constant(1)),  // I don't know how Metrics work...
     Effect.catchAll((error) =>
-      Effect.succeed(new Response(error._tag, { status: 500 }))
-    )
+      Effect.succeed(new Response(error._tag, { status: 500 })),
+    ),
   )
 }
 function renderResponse(co2Averages: Co2Average[]) {

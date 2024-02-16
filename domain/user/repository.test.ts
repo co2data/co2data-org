@@ -19,7 +19,7 @@ describe('user repository', () => {
           currentChallenge: null,
           authenticators: [],
         },
-      })
+      }),
     ))
 
   it('finds no user by email', () =>
@@ -30,23 +30,25 @@ describe('user repository', () => {
     }).pipe(
       runTest({
         queryResult: null,
-      })
+      }),
     ))
 })
 
 const runTest =
-  (testData: { queryResult: any }) =>
-  (effect: Effect.Effect<UserRepository, any, any>) => {
-    const DbTest = Layer.succeed(
-      DB,
-      DB.of(
-        mock({
-          query: mock(() => Effect.succeed(testData.queryResult)),
-        })
+  // biome-ignore lint/suspicious/noExplicitAny: Test
+    (testData: { queryResult: any }) =>
+    // biome-ignore lint/suspicious/noExplicitAny: Test
+    (effect: Effect.Effect<UserRepository, any, any>) => {
+      const DbTest = Layer.succeed(
+        DB,
+        DB.of(
+          mock({
+            query: mock(() => Effect.succeed(testData.queryResult)),
+          }),
+        ),
       )
-    )
 
-    const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))
+      const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))
 
-    return effect.pipe(Effect.provide(UserRepositoryTest), Effect.runPromise)
-  }
+      return effect.pipe(Effect.provide(UserRepositoryTest), Effect.runPromise)
+    }

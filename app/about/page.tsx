@@ -1,4 +1,4 @@
-import { Sun, Cloud, Globe2, Trees, Leaf, PersonStanding } from 'lucide-react'
+import { Cloud, Globe2, Leaf, PersonStanding, Sun, Trees } from 'lucide-react'
 
 const About = () => {
   return (

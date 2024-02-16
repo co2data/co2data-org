@@ -33,7 +33,7 @@ describe('generateSignUpOptionsEffect', () => {
       runTest({
         existingUser: null,
         newUser: userNoAuthenticator,
-      })
+      }),
     ))
 
   it('registers existing users without authenticators', () =>
@@ -48,7 +48,7 @@ describe('generateSignUpOptionsEffect', () => {
       runTest({
         existingUser: userNoAuthenticator,
         newUser: null,
-      })
+      }),
     ))
 
   it('fails with already registered user', () =>
@@ -59,7 +59,7 @@ describe('generateSignUpOptionsEffect', () => {
       runTest({
         existingUser: userAuthenticator,
         newUser: null,
-      })
+      }),
     ))
 })
 
@@ -71,10 +71,11 @@ type DbUser =
 
 const runTest =
   (queryData: { existingUser: DbUser; newUser: DbUser }) =>
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   (effect: Effect.Effect<UserRepository | PassKey, any, any>) => {
     const queryMock = vi.fn()
     queryMock.mockImplementationOnce(() =>
-      Effect.succeed(queryData.existingUser)
+      Effect.succeed(queryData.existingUser),
     )
     queryMock.mockImplementationOnce(() => Effect.succeed(null))
     queryMock.mockImplementationOnce(() => Effect.succeed(queryData.newUser))
@@ -84,8 +85,8 @@ const runTest =
       DB.of(
         mock({
           query: queryMock,
-        })
-      )
+        }),
+      ),
     )
 
     const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))

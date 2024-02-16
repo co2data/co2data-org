@@ -31,13 +31,13 @@ export function combineLinks(d: QueryResult[]) {
           ...existing,
           links: Option.map(
             existing.links,
-            ReadonlyArray.appendAll(ReadonlyArray.fromNullable(source.links))
+            ReadonlyArray.appendAll(ReadonlyArray.fromNullable(source.links)),
           ).pipe(
             Option.orElse(() =>
               Option.fromNullable(source.links).pipe(
-                Option.map(ReadonlyArray.of)
-              )
-            )
+                Option.map(ReadonlyArray.of),
+              ),
+            ),
           ),
         },
       ]
@@ -45,7 +45,7 @@ export function combineLinks(d: QueryResult[]) {
     acc.push({
       ...source,
       links: Option.fromNullable(source.links).pipe(
-        Option.map(ReadonlyArray.of)
+        Option.map(ReadonlyArray.of),
       ),
     })
     return acc

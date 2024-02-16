@@ -9,13 +9,13 @@ export function generateLoginOptionsEffect(username: string) {
     const user = yield* $(
       userRepo.findByUsername(username),
       Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map((_) => _.value)
+      Effect.map((_) => _.value),
     )
     const passKeyService = yield* $(PassKey)
     const options = yield* $(
       passKeyService.generateAuthenticationOptions({
         userAuthenticators: user.authenticators,
-      })
+      }),
     )
 
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))

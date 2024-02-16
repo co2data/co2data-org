@@ -12,7 +12,7 @@ export function raise(error: string): never {
 
 export function format(
   value: number,
-  options: { trialingZeros?: boolean; decimalPlaces?: number } = {}
+  options: { trialingZeros?: boolean; decimalPlaces?: number } = {},
 ) {
   const { trialingZeros = true, decimalPlaces = 3 } = options
   return trialingZeros

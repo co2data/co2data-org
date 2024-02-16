@@ -9,7 +9,7 @@ export default function SignUpSuccess() {
         Thank you for signing up. You can <Link href={'/login'}>login</Link>{' '}
         now.
       </p>
-      <div className="h-4"></div>
+      <div className="h-4" />
       <Button asChild>
         <Link href={'/login'} className="!no-underline">
           Go to Login

@@ -4,14 +4,14 @@ import { Effect, flow, pipe } from 'effect'
 import 'server-only'
 import { Co2Repository } from '../../domain/co2/repository'
 import { SourceRepository } from '../../domain/source/repository'
-import { mainLive } from './main'
 import { Session } from '../session'
+import { mainLive } from './main'
 
 export function run<P, Q, A>(
   effect: (
     arg1: P,
-    arg2: Q
-  ) => Effect.Effect<Co2Repository | SourceRepository | Session, never, A>
+    arg2: Q,
+  ) => Effect.Effect<Co2Repository | SourceRepository | Session, never, A>,
 ) {
   return flow(effect, Effect.provide(mainLive), Effect.runPromise)
 }
@@ -23,7 +23,7 @@ export const runServerAction =
       Co2Repository | SourceRepository | UserRepository | PassKey | Session,
       E,
       A
-    >
+    >,
   ) => {
     return pipe(
       effect,
@@ -31,6 +31,6 @@ export const runServerAction =
       Effect.either,
       Effect.map((a) => a.toJSON() as unknown as typeof a),
       Effect.provide(mainLive),
-      Effect.runPromise
+      Effect.runPromise,
     )
   }

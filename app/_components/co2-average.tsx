@@ -12,7 +12,7 @@ const formatter = new Intl.NumberFormat('en', {
 })
 
 type Props = { co2Average: Co2Average }
-const Co2Average = ({ co2Average }: Props) => {
+const Co2AverageComponent = ({ co2Average }: Props) => {
   return (
     <li
       key={co2Average.slug}
@@ -21,7 +21,7 @@ const Co2Average = ({ co2Average }: Props) => {
       <p className="bg-border px-4 py-2 font-bold text-white">
         <Link href={`/c/${co2Average.slug}`}>{co2Average.title}</Link>
       </p>
-      <p className="px-4 py-2 text-xs ">
+      <p className="px-4 py-2 text-xs">
         Possible CO<sub>2</sub>e per person-year
       </p>
       <p className="px-4 text-right">
@@ -42,10 +42,10 @@ const Co2Average = ({ co2Average }: Props) => {
   )
 }
 
-export default Co2Average
+export default Co2AverageComponent
 function formatAvgPerYear(avgPerYear: number) {
   const formattedParts = formatter.formatToParts(
-    convert(avgPerYear, 'grams').to('kg')
+    convert(avgPerYear, 'grams').to('kg'),
   )
 
   return formattedParts.map(({ type, value }) => {
@@ -55,13 +55,13 @@ function formatAvgPerYear(avgPerYear: number) {
         return <Fragment key={type} />
       case 'integer':
         return (
-          <span key={type} className="text-4xl font-extrabold">
+          <span key={type} className="font-extrabold text-4xl">
             {value}
           </span>
         )
       default:
         return (
-          <span key={type} className="text-sm font-extrabold">
+          <span key={type} className="font-extrabold text-sm">
             {value}
           </span>
         )

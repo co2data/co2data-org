@@ -25,7 +25,7 @@ export function generateSignUpOptionsEffect(username: string) {
       passKeyService.generateRegistrationOptions({
         userId: user.id,
         userName: user.username,
-      })
+      }),
     )
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
     return options

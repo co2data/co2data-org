@@ -1,12 +1,12 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import { ThemeProvider } from '@/components/theme-provider'
+import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans'
+import type { Metadata, Viewport } from 'next'
 import { AnalyticsWrapper } from './analytics'
 import { baseUrl } from './config'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
-import type { Metadata, Viewport } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <div className="container flex-1 pb-16 pt-4">{children}</div>
+          <div className="flex-1 container pt-4 pb-16">{children}</div>
           <Footer />
         </ThemeProvider>
         <AnalyticsWrapper />
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: `/og`,
+        url: '/og',
         width: 1200,
         height: 630,
       },

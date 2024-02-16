@@ -11,8 +11,8 @@ export default async function ContributorPage({
   return (
     <main className="py-6 md:py-10">
       <div className="min-h-screen space-y-16 md:space-y-20">
-        <div className="space-y-12 text-center md:space-y-16 ">
-          <h1 className="text-6xl font-extrabold text-foreground">
+        <div className="space-y-12 text-center md:space-y-16">
+          <h1 className="font-extrabold text-6xl text-foreground">
             CO<sub>2</sub> Data
           </h1>
           <SearchBox searchParams={searchParams} />

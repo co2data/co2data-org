@@ -19,12 +19,12 @@ export default function PersonalCo2({
   co2Average: Omit<Co2Average, 'description'>
 }) {
   const [consumption, setConsumption] = useState(
-    co2Average.singleConsumptionAverage
+    co2Average.singleConsumptionAverage,
   )
   const [times, setTimes] = useState(co2Average.timesPerYearAverage)
   const co2PerConsumption = calcCo2PerConsumption(
     co2Average.avgPerUnit,
-    consumption
+    consumption,
   )
   const co2PerYear = calcCo2PerYear(times, co2PerConsumption)
   const factorOfPersonYearFootprint =
@@ -101,7 +101,7 @@ export default function PersonalCo2({
                 (co2Average.timesPerYearTo - co2Average.timesPerYearFrom) /
                 Math.min(
                   co2Average.timesPerYearTo - co2Average.timesPerYearFrom,
-                  50
+                  50,
                 )
               }
               value={[times]}
@@ -222,7 +222,7 @@ function PieChart({ state }: { state: 'partial' | 'full' }) {
 function generatePieParts(factorOfPersonYearFootprint: number) {
   const parts: Array<'full' | 'partial'> = Array.from(
     Array(Math.floor(factorOfPersonYearFootprint)),
-    (_) => 'full' as const
+    (_) => 'full' as const,
   )
   if (
     Math.floor(factorOfPersonYearFootprint) - factorOfPersonYearFootprint !==

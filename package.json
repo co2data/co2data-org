@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest",
-    "lint": "next lint",
+    "lint": "biome check app domain adapter lib",
     "ci": "vitest run && next build",
     "analyze-bundle-size": "ANALYZE=true next build",
     "connect-to-prod-db": "pscale connect co2data-org main --role reader",

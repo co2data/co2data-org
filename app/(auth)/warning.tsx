@@ -8,7 +8,7 @@ export default function Warning(props: {
     <div
       className={cn(
         `rounded border border-red-400/60 bg-red-500/10 p-4`,
-        props.className
+        props.className,
       )}
     >
       {props.children}

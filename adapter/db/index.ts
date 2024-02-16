@@ -33,7 +33,7 @@ export type DB = {
   }
   sources: {
     readonly getAllByProducerId: (
-      id: string
+      id: string,
     ) => Effect.Effect<never, DbError, Source[]>
   }
   users: {
@@ -44,7 +44,7 @@ export type DB = {
     }) => Effect.Effect<never, DbError, Option.Option<schema.SelectUsers>>
   }
   query: <A>(
-    body: (client: PlanetScaleDatabase<typeof schema>) => Promise<A>
+    body: (client: PlanetScaleDatabase<typeof schema>) => Promise<A>,
   ) => Effect.Effect<never, DbError, A>
 }
 
@@ -53,7 +53,7 @@ export const DB = Context.Tag<DB>('@app/db')
 const make = Effect.gen(function* (_) {
   const url = yield* _(Config.string('DATABASE_URL'), Effect.orDie)
   const database = yield* _(
-    Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema }))
+    Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema })),
   )
 
   const query = <A>(body: (client: typeof database) => Promise<A>) =>
@@ -76,10 +76,10 @@ const make = Effect.gen(function* (_) {
         }).pipe(
           Effect.tap((data) =>
             Effect.logDebug(
-              `Read from DB: ${data.map((entry) => `${entry.slug}`)}`
-            )
+              `Read from DB: ${data.map((entry) => `${entry.slug}`)}`,
+            ),
           ),
-          Effect.withSpan('findMany')
+          Effect.withSpan('findMany'),
         ),
       findOne: ({ where }) =>
         Effect.tryPromise({
@@ -88,11 +88,11 @@ const make = Effect.gen(function* (_) {
         }).pipe(
           Effect.tap((data) =>
             Effect.logDebug(
-              `Read from DB: ${data.map((entry) => `${entry.slug}`)}`
-            )
+              `Read from DB: ${data.map((entry) => `${entry.slug}`)}`,
+            ),
           ),
           Effect.map(ReadonlyArray.head),
-          Effect.withSpan('findOne')
+          Effect.withSpan('findOne'),
         ),
     },
     sources: {
@@ -116,18 +116,18 @@ const make = Effect.gen(function* (_) {
               .from(schema.sourcedCo2Amounts)
               .innerJoin(
                 schema.sources,
-                eq(schema.sourcedCo2Amounts.sourceId, schema.sources.id)
+                eq(schema.sourcedCo2Amounts.sourceId, schema.sources.id),
               )
               .leftJoin(
                 schema.links,
-                eq(schema.sourcedCo2Amounts.sourceId, schema.links.sourcesId)
+                eq(schema.sourcedCo2Amounts.sourceId, schema.links.sourcesId),
               )
               .where(eq(schema.sourcedCo2Amounts.co2ProducerId, id)),
           catch: handleDbError,
         }).pipe(
           Effect.map(combineLinks),
           Effect.tap(Effect.logDebug),
-          Effect.withSpan('getAllByProducerId')
+          Effect.withSpan('getAllByProducerId'),
         ),
     },
     users: {
@@ -138,11 +138,11 @@ const make = Effect.gen(function* (_) {
         }).pipe(
           Effect.tap((data) =>
             Effect.logDebug(
-              `Read from DB: ${data.map((entry) => `${entry.username}`)}`
-            )
+              `Read from DB: ${data.map((entry) => `${entry.username}`)}`,
+            ),
           ),
           Effect.map(ReadonlyArray.head),
-          Effect.withSpan('findOne')
+          Effect.withSpan('findOne'),
         ),
     },
   })

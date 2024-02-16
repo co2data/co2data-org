@@ -67,7 +67,7 @@ export default function Form(props: {
               value(state.left),
               tag(
                 'MissingUserNameError',
-                (_) => 'User name is empty. Please insert your user name.'
+                (_) => 'User name is empty. Please insert your user name.',
               ),
               tag('NotVerifiedError', (_) => 'Not verified'),
               tag('NoUserFoundError', (_) => (
@@ -85,15 +85,15 @@ export default function Form(props: {
                 'CouldNotFindAuthenticatorError',
                 'NoChallengeOnUserError',
                 'StartAuthenticationFailedError',
-                (_) => `Authentication not possible`
+                (_) => 'Authentication not possible',
               ),
               discriminator('_tag')(
                 'DbError',
                 'CouldNotSetChallengeError',
-                (_) => 'Try again later.'
+                (_) => 'Try again later.',
               ),
 
-              exhaustive
+              exhaustive,
             )}
           </Warning>
         )}

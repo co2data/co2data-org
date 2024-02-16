@@ -33,14 +33,14 @@ describe('generateLoginOptions', () => {
             transports: null,
           },
         ],
-      })
+      }),
     ))
 
   it("can't find the user", () =>
     Effect.gen(function* ($) {
       const actual = yield* $(
         generateLoginOptionsEffect('unknown@user.org'),
-        Effect.flip
+        Effect.flip,
       )
 
       expect(actual).toBeInstanceOf(NoUserFound)
@@ -55,8 +55,8 @@ const runTest =
       DB.of(
         mock({
           query: mock(() => Effect.succeed(queryData)),
-        })
-      )
+        }),
+      ),
     )
 
     const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))

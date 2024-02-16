@@ -10,21 +10,21 @@ import { User } from '.'
 export interface UserRepository {
   createUser: (username: string) => Effect.Effect<never, DbError, User>
   findByUsername: (
-    username: string
+    username: string,
   ) => Effect.Effect<never, DbError, Option.Option<User>>
   setCurrentChallenge: (
     userId: string,
-    currentChallenge: string
+    currentChallenge: string,
   ) => Effect.Effect<never, DbError | CouldNotSetChallenge, void>
   addAuthenticator: (
     userId: string,
     registrationInfo: NonNullable<
       VerifiedRegistrationResponse['registrationInfo']
-    >
+    >,
   ) => Effect.Effect<never, DbError, void>
   updateCounter: (
     userId: string,
-    counter: number
+    counter: number,
   ) => Effect.Effect<never, DbError, void>
 }
 
@@ -32,7 +32,7 @@ export const UserRepository = Context.Tag<UserRepository>()
 
 export const UserRepositoryLive = DB.pipe(
   Effect.map(make),
-  Layer.effect(UserRepository)
+  Layer.effect(UserRepository),
 )
 
 function make(database: DB): UserRepository {
@@ -45,13 +45,13 @@ function make(database: DB): UserRepository {
             database.query((_) =>
               _.query.users.findFirst({
                 where: eq(schema.users.username, username),
-              })
-            )
+              }),
+            ),
           ),
           Effect.filterOrFail(
             Predicate.isNotNullable,
             (_) =>
-              new DbError({ cause: `Could not find created user ${username}` })
+              new DbError({ cause: `Could not find created user ${username}` }),
           ),
           Effect.map((user) => ({
             ...user,
@@ -59,7 +59,7 @@ function make(database: DB): UserRepository {
             authenticators: [],
           })),
           Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
-          Effect.withSpan('createUser')
+          Effect.withSpan('createUser'),
         ),
     findByUsername: (username) =>
       database
@@ -67,13 +67,13 @@ function make(database: DB): UserRepository {
           _.query.users.findFirst({
             where: eq(schema.users.username, username),
             with: { authenticators: true },
-          })
+          }),
         )
         .pipe(
           Effect.map(Option.fromNullable),
           Effect.map(Option.map(userFromDbToDomain)),
           Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
-          Effect.withSpan('getUserByName')
+          Effect.withSpan('getUserByName'),
         ),
 
     setCurrentChallenge: (userId, currentChallenge) =>
@@ -81,7 +81,7 @@ function make(database: DB): UserRepository {
         .query((_) =>
           _.update(schema.users)
             .set({ currentChallenge })
-            .where(eq(schema.users.id, userId))
+            .where(eq(schema.users.id, userId)),
         )
         .pipe(Effect.withSpan('setCurrentChallenge')),
     addAuthenticator: (userId, registrationInfo) =>
@@ -96,7 +96,7 @@ function make(database: DB): UserRepository {
             // saving as varbinary/binary/blob gets me some strange base64 back that I don't know how to convert to Uint8Array back...
             // I'm converting it to base64 myself and handel conversion back myself
             credentialPublicKey: uInt8ArrayToUrlBase64(
-              registrationInfo.credentialPublicKey
+              registrationInfo.credentialPublicKey,
             ),
           } satisfies typeof schema.authenticators.$inferInsert
           return _.insert(schema.authenticators).values(authenticator)
@@ -107,7 +107,7 @@ function make(database: DB): UserRepository {
         .query((_) =>
           _.update(schema.authenticators)
             .set({ counter: counter as unknown as bigint })
-            .where(eq(schema.authenticators.userId, userId))
+            .where(eq(schema.authenticators.userId, userId)),
         )
         .pipe(Effect.withSpan('updateCounter')),
   })
@@ -144,5 +144,5 @@ function userFromDbToDomain(user: UserWithAuthenticators): User {
 }
 
 class CouldNotSetChallenge extends Data.TaggedError(
-  'CouldNotSetChallengeError'
+  'CouldNotSetChallengeError',
 ) {}

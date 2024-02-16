@@ -38,30 +38,33 @@ function ContributorPageEffect({ params, searchParams }: Props) {
           </nav>
           <div className="space-y-4 rounded-lg border border-border bg-card p-8">
             <div className="flex flex-wrap items-baseline gap-4">
-              <h1 className="text-4xl font-extrabold">
+              <h1 className="font-extrabold text-4xl">
                 <div>{co2Average.title}</div>
-                <div className="text-sm font-normal">
+                <div className="font-normal text-sm">
                   CO<sub>2</sub> emissions
                 </div>
               </h1>
               {co2Average.description.pipe(
                 mapToJSX((description) => (
                   <p key="description">{description}</p>
-                ))
+                )),
               )}
             </div>
             <p className="text-4xl">
               <span>1 {co2Average.unit}</span>
               <svg className="inline-block h-6 w-12" viewBox="-40 0 140 120">
+                <title>is</title>
                 <path
                   fill="transparent"
                   stroke="currentColor"
                   strokeWidth="10"
                   d="M -10,50 L 90,50 M 50,10 L 90,50 L 50,90"
-                ></path>
+                />
               </svg>
               <span className="font-bold">
-                {convert(co2Average.avgPerUnit, 'grams').to('kg').toFixed(3)}{' '}
+                {convert(co2Average.avgPerUnit, 'grams')
+                  .to('kg')
+                  .toFixed(3)}{' '}
               </span>
               &nbsp;
               <span className="text-base">
@@ -78,7 +81,7 @@ function ContributorPageEffect({ params, searchParams }: Props) {
             />
           </section>
           <section className="space-y-4">
-            <h2 className="text-xl font-bold ">Sources</h2>
+            <h2 className="font-bold text-xl">Sources</h2>
             {sources.map((source) => (
               <Source key={source.id} source={source} unit={co2Average.unit} />
             ))}
@@ -93,21 +96,21 @@ function ContributorPageEffect({ params, searchParams }: Props) {
     Effect.catchTags({
       DbError: (cause) => Effect.succeed(<main>Database error</main>),
     }),
-    setLogLevelFromSearchParams({ searchParams })
-  ) satisfies Effect.Effect<any, never, JSX.Element>
+    setLogLevelFromSearchParams({ searchParams }),
+  ) satisfies Effect.Effect<unknown, never, JSX.Element>
 }
 
 function getCo2Average(slug: string) {
   return Effect.flatMap(Co2Repository, (co2Repo) =>
     co2Repo
       .getCo2AverageBySlug(slug)
-      .pipe(Effect.map(Option.getOrElse(notFound)))
+      .pipe(Effect.map(Option.getOrElse(notFound))),
   )
 }
 
 function getSources(id: string) {
   return Effect.flatMap(SourceRepository, (sourceRepo) =>
-    sourceRepo.getAllSourcesByCo2ProducerId(id)
+    sourceRepo.getAllSourcesByCo2ProducerId(id),
   )
 }
 
@@ -120,8 +123,8 @@ function generateMetadataEffect({ params, searchParams }: Props) {
     setLogLevelFromSearchParams({ searchParams }),
     Effect.withSpan('Generate metadata c/[slug]/page', {
       attributes: { slug: params.slug },
-    })
-  ) satisfies Effect.Effect<any, never, Metadata>
+    }),
+  ) satisfies Effect.Effect<unknown, never, Metadata>
 }
 
 function mapMetadata(params: { slug: string }) {

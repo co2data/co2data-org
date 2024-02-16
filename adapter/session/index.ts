@@ -8,7 +8,7 @@ const getSessionEffect = (password: Secret.Secret) =>
     getIronSession<{ username?: string }>(cookies(), {
       password: Secret.value(password),
       cookieName: 'user-session',
-    })
+    }),
   ).pipe(Effect.orDie)
 
 const make = Effect.gen(function* ($) {
@@ -17,7 +17,7 @@ const make = Effect.gen(function* ($) {
     getSession: () =>
       getSessionEffect(sessionPassword).pipe(
         Effect.map((session) => session.username),
-        Effect.withSpan('get session')
+        Effect.withSpan('get session'),
       ),
     setSession: (username: string) => {
       return getSessionEffect(sessionPassword).pipe(
@@ -25,16 +25,16 @@ const make = Effect.gen(function* ($) {
           Effect.tryPromise(() => {
             session.username = username
             return session.save()
-          })
+          }),
         ),
         Effect.orDie,
-        Effect.withSpan('set session')
+        Effect.withSpan('set session'),
       )
     },
     deleteSession: () =>
       getSessionEffect(sessionPassword).pipe(
         Effect.map((session) => session.destroy()),
-        Effect.withSpan('deleteSession')
+        Effect.withSpan('deleteSession'),
       ),
   }
 })

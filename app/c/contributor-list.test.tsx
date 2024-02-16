@@ -38,11 +38,11 @@ async function setup(props: {
     Co2Repository.of({
       getAllCo2Averages: () => Effect.succeed(props.mockData),
       getCo2AverageBySlug: (slug) => Effect.succeed(Option.none()),
-    })
+    }),
   )
   const result = await ContributorListEffect(props).pipe(
     Effect.provide(co2RepoTest),
-    Effect.runPromise
+    Effect.runPromise,
   )
 
   return render(result)

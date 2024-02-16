@@ -4,7 +4,10 @@ import convert from 'convert'
 import { ExternalLink } from 'lucide-react'
 import mime from 'mime'
 
-const Source = ({ source, unit }: { source: Source; unit: string }) => {
+const SourceComponent = ({
+  source,
+  unit,
+}: { source: Source; unit: string }) => {
   return (
     <li className="max-w-sm list-none overflow-hidden rounded border-4 border-border bg-card">
       <h3 className="bg-border px-4 py-2 text-white">
@@ -26,7 +29,7 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
         CO<sub>2</sub>e for {source.per} {unit}
       </p>
       <p className="px-4 pb-2 text-right">
-        <span className="text-3xl font-bold">
+        <span className="font-bold text-3xl">
           {format(convert(source.gCo2e, 'grams').to('kg'), {
             trialingZeros: false,
           })}
@@ -35,22 +38,23 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
           kg CO<sub>2</sub>e
         </span>
       </p>
-      <p className="px-4 pt-2 text-xs font-bold">Description</p>
+      <p className="px-4 pt-2 font-bold text-xs">Description</p>
       <div
-        className="prose prose-sm px-4 pb-2 dark:prose-invert prose-p:my-1 prose-ul:my-1 prose-li:my-0"
+        className="prose prose-sm dark:prose-invert px-4 pb-2 prose-li:my-0 prose-p:my-1 prose-ul:my-1"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: source.description }}
-      ></div>
+      />
       {source.links.pipe(
         mapToJSX((links) => (
           <>
-            <p className="px-4 pt-2 text-xs font-bold">
+            <p className="px-4 pt-2 font-bold text-xs">
               Links{' '}
               <ExternalLink
                 strokeWidth={3}
                 className="inline h-3 w-3 align-text-bottom opacity-60"
               />
             </p>
-            <ul className="space-y-2 px-4 pb-4 pt-2">
+            <ul className="space-y-2 px-4 pt-2 pb-4">
               {links.map((link) => {
                 const url = new URL(link.url)
                 const extension = mime.getExtension(link.mediaType)
@@ -66,21 +70,23 @@ const Source = ({ source, unit }: { source: Source; unit: string }) => {
                     </a>{' '}
                     {extension && (
                       <>
-                        <span className="inline-block rounded border px-1 font-mono text-xs font-bold opacity-60">
+                        <span className="inline-block rounded border px-1 font-bold font-mono text-xs opacity-60">
                           {extension}
                         </span>{' '}
                       </>
                     )}
-                    <span className="text-sm opacity-50">{url.hostname}</span>{' '}
+                    <span className="text-sm opacity-50">
+                      {url.hostname}
+                    </span>{' '}
                   </li>
                 )
               })}
             </ul>
           </>
-        ))
+        )),
       )}
     </li>
   )
 }
 
-export default Source
+export default SourceComponent

@@ -53,10 +53,10 @@ const make = Effect.gen(function* ($) {
             authenticator: {
               ...props.authenticator,
               credentialID: base64UrlStringToUInt8Array(
-                props.authenticator.credentialID
+                props.authenticator.credentialID,
               ),
               credentialPublicKey: base64UrlStringToUInt8Array(
-                props.authenticator.credentialPublicKey
+                props.authenticator.credentialPublicKey,
               ),
             },
           }),
@@ -88,7 +88,7 @@ const make = Effect.gen(function* ($) {
           expectedChallenge: props.currentChallenge,
           expectedOrigin: rpOrigin,
           expectedRPID: rpID,
-        })
+        }),
       ).pipe(Effect.withSpan('verifyRegistrationResponse')),
   }
 })
@@ -119,8 +119,8 @@ export const PassKeyTest = Layer.succeed(
               id: props.userId,
               name: props.userName,
             } satisfies PublicKeyCredentialUserEntityJSON,
-          })
+          }),
       ),
-    })
-  )
+    }),
+  ),
 )

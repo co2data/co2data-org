@@ -3,6 +3,7 @@ import { AuthError } from '@/adapter/pass-key'
 import { CardContent } from '@/components/ui/card'
 import Spinner from '@/components/ui/spinner'
 import { startRegistration } from '@simplewebauthn/browser'
+import { RegistrationResponseJSON } from '@simplewebauthn/types'
 import { pipe } from 'effect/Function'
 import { discriminator, exhaustive, tag, value } from 'effect/Match'
 import Link from 'next/link'
@@ -12,7 +13,7 @@ import { AlreadyRegistered, MissingUserName } from '../errors'
 import { generateSignUpOptions, verifySignUp } from '../server-action'
 import Warning from '../warning'
 
-const onSignUp = async (prevState: any, formData: FormData) => {
+const onSignUp = async (prevState: unknown, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
     return { _tag: 'Left', left: new MissingUserName() } as const
@@ -24,7 +25,7 @@ const onSignUp = async (prevState: any, formData: FormData) => {
     return resp
   }
 
-  let attResp
+  let attResp: RegistrationResponseJSON
   try {
     attResp = await startRegistration(resp.right)
   } catch (error: unknown) {
@@ -36,9 +37,8 @@ const onSignUp = async (prevState: any, formData: FormData) => {
       error.name === 'InvalidStateError'
     ) {
       return { _tag: 'Left', left: new AlreadyRegistered() } as const
-    } else {
-      return { _tag: 'Left', left: new AuthError({ cause: error }) } as const
     }
+    return { _tag: 'Left', left: new AuthError({ cause: error }) } as const
   }
 
   return verifySignUp({
@@ -77,9 +77,9 @@ export default function Form(props: {
                 'NoChallengeOnUserError',
                 'CouldNotSetChallengeError',
                 'UnknownException',
-                (_) => 'Upps, that did not work. Try again later.'
+                (_) => 'Upps, that did not work. Try again later.',
               ),
-              exhaustive
+              exhaustive,
             )}
           </Warning>
         )}
