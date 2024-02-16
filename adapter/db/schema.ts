@@ -168,6 +168,10 @@ export type SelectUsers = InferSelectModel<typeof users>
 export const authenticators = mysqlTable(
   'authenticators',
   {
+    id: char('id', { length: 36 })
+      .default(sql`(uuid())`)
+      .primaryKey()
+      .notNull(),
     credentialId: text('credential_id').notNull(),
     credentialPublicKey: text('credential_public_key').notNull(),
     counter: bigint('counter', { mode: 'bigint' }).notNull(),
