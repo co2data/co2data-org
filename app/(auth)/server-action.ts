@@ -1,7 +1,7 @@
 'use server'
 
 import { runServerAction } from '@/adapter/effect'
-import { PassKey } from '@/adapter/pass-key'
+import { AuthError, PassKey } from '@/adapter/pass-key'
 import { setSession } from '@/adapter/session'
 import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
 import { generateSignUpOptionsEffect } from '@/domain/auth/generate-sign-up-options'
@@ -69,7 +69,15 @@ export async function verifyLogin(body: {
       return { verified }
     }
     return yield* $(new NotVerified())
-  }).pipe(runServerAction('verifyLogin'))
+  }).pipe(
+    Effect.catchTags({
+      DbError: (cause) => new AuthError({ cause }),
+      CouldNotFindAuthenticatorError: (cause) => new AuthError({ cause }),
+      NoChallengeOnUserError: (cause) => new AuthError({ cause }),
+      NotVerifiedError: (cause) => new AuthError({ cause }),
+    }),
+    runServerAction('verifyLogin'),
+  )
 }
 
 export const generateSignUpOptions = flow(
@@ -107,7 +115,16 @@ export async function verifySignUp(
       return { verified }
     }
     return yield* $(new NotVerified())
-  }).pipe(runServerAction('verifySignUp'))
+  }).pipe(
+    Effect.catchTags({
+      DbError: (cause) => new AuthError({ cause }),
+      NoChallengeOnUserError: (cause) => new AuthError({ cause }),
+      NoUserFoundError: (cause) => new AuthError({ cause }),
+      UnknownException: (cause) => new AuthError({ cause }),
+      NotVerifiedError: (cause) => new AuthError({ cause }),
+    }),
+    runServerAction('verifySignUp'),
+  )
 
   if (Either.isRight(result) && result.right.verified) {
     redirect('/sign-up-success')

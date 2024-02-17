@@ -5,7 +5,7 @@ import Spinner from '@/components/ui/spinner'
 import { startRegistration } from '@simplewebauthn/browser'
 import { RegistrationResponseJSON } from '@simplewebauthn/types'
 import { pipe } from 'effect/Function'
-import { discriminator, exhaustive, tag, value } from 'effect/Match'
+import { valueTags } from 'effect/Match'
 import Link from 'next/link'
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
@@ -61,25 +61,20 @@ export default function Form(props: {
         {state && state._tag === 'Left' && (
           <Warning>
             {pipe(
-              value(state.left),
-              tag('MissingUserNameError', (_) => 'User name is missing.'),
-              tag('NoUserFoundError', (_) => 'No User found'),
-              tag('AlreadyRegisteredError', (_) => (
-                <>
-                  A user with this name already exists. Choose a different name
-                  or <Link href={'/login'}>login</Link> instead.
-                </>
-              )),
-              tag('AuthError', (_) => 'Error authenticating.'),
-              discriminator('_tag')(
-                'DbError',
-                'NotVerifiedError',
-                'NoChallengeOnUserError',
-                'CouldNotSetChallengeError',
-                'UnknownException',
-                (_) => 'Upps, that did not work. Try again later.',
-              ),
-              exhaustive,
+              state.left,
+              valueTags({
+                AlreadyRegisteredError: (_) => (
+                  <>
+                    A user with this name already exists. Choose a different
+                    name or <Link href={'/login'}>login</Link> instead.
+                  </>
+                ),
+                AuthError: (_) => {
+                  console.error('Auth error', _)
+                  return 'Ooops, that did not work. Try again later.'
+                },
+                MissingUserNameError: (_) => 'User name is missing.',
+              }),
             )}
           </Warning>
         )}

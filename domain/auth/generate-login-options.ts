@@ -1,4 +1,4 @@
-import { PassKey } from '@/adapter/pass-key'
+import { AuthError, PassKey } from '@/adapter/pass-key'
 import { UserRepository } from '@/domain/user/repository'
 import { Effect, Option } from 'effect'
 import { NoUserFound } from '../../app/(auth)/errors'
@@ -20,5 +20,10 @@ export function generateLoginOptionsEffect(username: string) {
 
     yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
     return options
-  })
+  }).pipe(
+    Effect.catchTags({
+      DbError: (cause) => new AuthError({ cause }),
+      CouldNotSetChallengeError: (cause) => new AuthError({ cause }),
+    }),
+  )
 }
