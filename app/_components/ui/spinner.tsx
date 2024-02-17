@@ -8,7 +8,7 @@ export default function Spinner({
   return (
     <svg
       viewBox="0 0 24 24"
-      className={`spinner text-sky-600 ${className}`}
+      className={`spinner ${className}`}
       height="2em"
       width="2em"
     >

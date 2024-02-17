@@ -1,11 +1,15 @@
+'use client'
+
 import { Slot } from '@radix-ui/react-slot'
 import { type VariantProps, cva } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { useFormStatus } from 'react-dom'
+import Spinner from './spinner'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md font-medium text-sm ring-offset-background transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 focus-visible:ring-offset-2',
+  'inline-flex items-center justify-center rounded-md font-medium text-sm ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 focus-visible:ring-offset-2',
   {
     variants: {
       variant: {
@@ -25,6 +29,10 @@ const buttonVariants = cva(
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
       },
+      state: {
+        enabled: '',
+        disabled: 'pointer-events-none cursor-wait opacity-60',
+      },
     },
     defaultVariants: {
       variant: 'default',
@@ -40,14 +48,29 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+    const { pending } = useFormStatus()
+
     const Comp = asChild ? Slot : 'button'
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({
+            variant,
+            size,
+            state: pending ? 'disabled' : 'enabled',
+            className,
+          }),
+        )}
+        aria-disabled={pending || props['aria-disabled']}
         ref={ref}
         {...props}
-      />
+      >
+        <div className="flex items-center gap-2">
+          {children}
+          {pending && <Spinner className="h-4 w-4" />}
+        </div>
+      </Comp>
     )
   },
 )

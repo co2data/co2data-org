@@ -30,7 +30,7 @@ const onLogin = async (prevState: unknown, formData: FormData) => {
   try {
     asseResp = await startAuthentication(resp.right)
   } catch (error) {
-    console.error(error)
+    console.error('Error at starting authentication:', error)
     return {
       _tag: 'Left',
       left: new AuthError({ cause: `StartAuthenticationFailed: ${error}` }),
@@ -50,7 +50,6 @@ export default function Form(props: {
   submit: React.ReactNode
 }) {
   const [state, formAction] = useFormState(onLogin, undefined)
-  const { pending } = useFormStatus()
 
   return (
     <form action={formAction}>
@@ -88,14 +87,8 @@ export default function Form(props: {
             )}
           </Warning>
         )}
-        {}
       </CardContent>
       {props.submit}
-      {pending && (
-        <div className="mx-8 mb-4 flex justify-center">
-          <Spinner />
-        </div>
-      )}
     </form>
   )
 }

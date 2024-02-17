@@ -1,7 +1,6 @@
 'use client'
 import { AuthError } from '@/adapter/pass-key'
 import { CardContent } from '@/components/ui/card'
-import Spinner from '@/components/ui/spinner'
 import { startRegistration } from '@simplewebauthn/browser'
 import { RegistrationResponseJSON } from '@simplewebauthn/types'
 import { pipe } from 'effect/Function'
@@ -81,11 +80,6 @@ export default function Form(props: {
       </CardContent>
 
       {props.submit}
-      {pending && (
-        <div className="mx-8 mb-4 flex justify-center">
-          <Spinner />
-        </div>
-      )}
     </form>
   )
 }
