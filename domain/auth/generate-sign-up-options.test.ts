@@ -5,7 +5,7 @@ import { AlreadyRegistered } from '@/app/(auth)/errors'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it, vi } from 'vitest'
-import { UserRepository, UserRepositoryLive } from '../user/repository'
+import { UserRepository } from '../user/repository'
 import { generateSignUpOptionsEffect } from './generate-sign-up-options'
 
 const userNoAuthenticator = {
@@ -89,7 +89,7 @@ const runTest =
       ),
     )
 
-    const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))
+    const UserRepositoryTest = UserRepository.Live.pipe(Layer.provide(DbTest))
 
     const mainTest = Layer.mergeAll(UserRepositoryTest, PassKey.Test)
 

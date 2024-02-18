@@ -3,7 +3,7 @@ import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it } from 'vitest'
 import { makeUser } from './example-data'
-import { UserRepository, UserRepositoryLive } from './repository'
+import { UserRepository } from './repository'
 
 describe('user repository', () => {
   it('finds user by email', () =>
@@ -48,7 +48,7 @@ const runTest =
         ),
       )
 
-      const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))
+      const UserRepositoryTest = UserRepository.Live.pipe(Layer.provide(DbTest))
 
       return effect.pipe(Effect.provide(UserRepositoryTest), Effect.runPromise)
     }

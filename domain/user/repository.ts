@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
 import { User } from '.'
 
-export interface UserRepository {
+export interface _UserRepository {
   createUser: (username: string) => Effect.Effect<User, DbError>
   findByUsername: (
     username: string,
@@ -27,10 +27,6 @@ export interface UserRepository {
     counter: number,
   ) => Effect.Effect<void, DbError>
 }
-
-export const UserRepository = Context.GenericTag<UserRepository>(
-  '@services/UserRepository',
-)
 
 const make = Effect.gen(function* ($) {
   const database = yield* $(DB)
@@ -111,7 +107,13 @@ const make = Effect.gen(function* ($) {
         .pipe(Effect.withSpan('updateCounter')),
   })
 })
-export const UserRepositoryLive = Layer.effect(UserRepository, make)
+
+export class UserRepository extends Context.Tag('@services/UserRepository')<
+  UserRepository,
+  _UserRepository
+>() {
+  static Live = Layer.effect(this, make)
+}
 
 type UserWithAuthenticators = {
   id: string
