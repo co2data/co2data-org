@@ -39,16 +39,12 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export interface Session {
-  readonly _: unique symbol
-}
-
-export const Session = Context.GenericTag<
+export class Session extends Context.Tag('@services/Session')<
   Session,
   Effect.Effect.Success<typeof make>
->('@services/Session')
+>() {
+  static Live = Layer.effect(this, make)
+}
 
 export const { getSession, setSession, deleteSession } =
   Effect.serviceFunctions(Session)
-
-export const SessionLive = Layer.effect(Session, make)
