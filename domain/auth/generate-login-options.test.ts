@@ -1,5 +1,5 @@
 import { DB } from '@/adapter/db'
-import { PassKey, PassKeyTest } from '@/adapter/pass-key'
+import { PassKey } from '@/adapter/pass-key'
 import { UserRepository, UserRepositoryLive } from '@/domain/user/repository'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
@@ -61,7 +61,7 @@ const runTest =
 
     const UserRepositoryTest = UserRepositoryLive.pipe(Layer.provide(DbTest))
 
-    const mainTest = Layer.mergeAll(UserRepositoryTest, PassKeyTest)
+    const mainTest = Layer.mergeAll(UserRepositoryTest, PassKey.Test)
 
     return effect.pipe(Effect.provide(mainTest), Effect.runPromise)
   }

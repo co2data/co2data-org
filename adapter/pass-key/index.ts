@@ -18,7 +18,7 @@ import { rpID, rpName, rpOrigin } from './relying-partner'
 
 export class AuthError extends Data.TaggedError('AuthError')<BaseError> {}
 
-const make = Effect.gen(function* ($) {
+const make = () => {
   return {
     generateAuthenticationOptions: (props: {
       userAuthenticators: Authenticator[]
@@ -91,36 +91,31 @@ const make = Effect.gen(function* ($) {
         }),
       ).pipe(Effect.withSpan('verifyRegistrationResponse')),
   }
-})
-
-export interface PassKey {
-  readonly _: unique symbol
 }
 
-export const PassKey = Context.GenericTag<
-  PassKey,
-  Effect.Effect.Success<typeof make>
->('@services/PassKey')
+const makeTest = mock<typeof make>(() => {
+  return {
+    generateAuthenticationOptions: () =>
+      Effect.succeed({ json: 'hi', challenge: 'challenge' }),
+    generateRegistrationOptions: (props: {
+      userId: string
+      userName: string
+    }) =>
+      Effect.succeed({
+        challenge: 'challenge',
+        user: {
+          displayName: props.userName,
+          id: props.userId,
+          name: props.userName,
+        } satisfies PublicKeyCredentialUserEntityJSON,
+      }),
+  }
+})
 
-export const PassKeyLive = Layer.effect(PassKey, make)
-
-export const PassKeyTest = Layer.succeed(
+export class PassKey extends Context.Tag('@services/PassKey')<
   PassKey,
-  PassKey.of(
-    mock({
-      generateAuthenticationOptions: () =>
-        Effect.succeed({ json: 'hi', challenge: 'challenge' }),
-      generateRegistrationOptions: mock(
-        (props: { userId: string; userName: string }) =>
-          Effect.succeed({
-            challenge: 'challenge',
-            user: {
-              displayName: props.userName,
-              id: props.userId,
-              name: props.userName,
-            } satisfies PublicKeyCredentialUserEntityJSON,
-          }),
-      ),
-    }),
-  ),
-)
+  ReturnType<typeof make>
+>() {
+  static Live = Layer.succeed(this, make())
+  static Test = Layer.succeed(this, makeTest())
+}
