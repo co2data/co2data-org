@@ -146,7 +146,7 @@ const make = Effect.gen(function* (_) {
   })
 })
 
-export class DB extends Context.Tag('@app/db')<DB, _DB>() {
+export class DB extends Context.Tag('@services/db')<DB, _DB>() {
   static Live = Layer.effect(this, make)
 }
 
