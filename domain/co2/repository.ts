@@ -4,16 +4,12 @@ import { Co2Average } from '@/domain/co2'
 import { desc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
 
-export type Co2Repository = {
+export type _Co2Repository = {
   readonly getAllCo2Averages: () => Effect.Effect<Co2Average[], DbError>
   readonly getCo2AverageBySlug: (
     slug: string,
   ) => Effect.Effect<Option.Option<Co2Average>, DbError>
 }
-
-export const Co2Repository = Context.GenericTag<Co2Repository>(
-  '@services/Co2Repository',
-)
 
 const make = Effect.gen(function* ($) {
   const db = yield* $(DB)
@@ -38,7 +34,12 @@ const make = Effect.gen(function* ($) {
   })
 })
 
-export const Co2RepositoryLive = Layer.effect(Co2Repository, make)
+export class Co2Repository extends Context.Tag('@services/Co2Repository')<
+  Co2Repository,
+  _Co2Repository
+>() {
+  static Live = Layer.effect(this, make)
+}
 
 function co2AverageFromDbToDomain(co2Average: DbCo2Average) {
   return {
