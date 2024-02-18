@@ -32,12 +32,9 @@ export const UserRepository = Context.GenericTag<UserRepository>(
   '@services/UserRepository',
 )
 
-export const UserRepositoryLive = DB.pipe(
-  Effect.map(make),
-  Layer.effect(UserRepository),
-)
+const make = Effect.gen(function* ($) {
+  const database = yield* $(DB)
 
-function make(database: DB): UserRepository {
   return UserRepository.of({
     createUser: (username) =>
       database
@@ -113,7 +110,8 @@ function make(database: DB): UserRepository {
         )
         .pipe(Effect.withSpan('updateCounter')),
   })
-}
+})
+export const UserRepositoryLive = Layer.effect(UserRepository, make)
 
 type UserWithAuthenticators = {
   id: string

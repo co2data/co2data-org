@@ -15,12 +15,9 @@ export const Co2Repository = Context.GenericTag<Co2Repository>(
   '@services/Co2Repository',
 )
 
-export const Co2RepositoryLive = DB.pipe(
-  Effect.map(make),
-  Layer.effect(Co2Repository),
-)
+const make = Effect.gen(function* ($) {
+  const db = yield* $(DB)
 
-function make(db: DB): Co2Repository {
   return Co2Repository.of({
     getAllCo2Averages: () => {
       return db.co2Averages
@@ -39,7 +36,9 @@ function make(db: DB): Co2Repository {
         )
     },
   })
-}
+})
+
+export const Co2RepositoryLive = Layer.effect(Co2Repository, make)
 
 function co2AverageFromDbToDomain(co2Average: DbCo2Average) {
   return {

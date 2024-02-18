@@ -18,7 +18,7 @@ import {
 import { combineLinks } from './combine-source-links'
 import * as schema from './schema'
 
-export type DB = {
+type _DB = {
   co2Averages: {
     readonly findMany: ({
       orderBy,
@@ -47,8 +47,6 @@ export type DB = {
     body: (client: PlanetScaleDatabase<typeof schema>) => Promise<A>,
   ) => Effect.Effect<A, DbError>
 }
-
-export const DB = Context.GenericTag<DB>('@app/db')
 
 const make = Effect.gen(function* (_) {
   const url = yield* _(Config.string('DATABASE_URL'), Effect.orDie)
@@ -148,7 +146,9 @@ const make = Effect.gen(function* (_) {
   })
 })
 
-export const DbLive = Layer.effect(DB, make)
+export class DB extends Context.Tag('@app/db')<DB, _DB>() {
+  static Live = Layer.effect(this, make)
+}
 
 export class DbError extends Data.TaggedError('DbError')<BaseError> {}
 

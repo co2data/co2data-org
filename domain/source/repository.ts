@@ -12,12 +12,9 @@ export const SourceRepository = Context.GenericTag<SourceRepository>(
   '@services/SourceRepository',
 )
 
-export const SourceRepositoryLive = DB.pipe(
-  Effect.map(make),
-  Layer.effect(SourceRepository),
-)
+const make = Effect.gen(function* ($) {
+  const database = yield* $(DB)
 
-function make(database: DB): SourceRepository {
   return SourceRepository.of({
     getAllSourcesByCo2ProducerId: (id) =>
       database.sources.getAllByProducerId(id).pipe(
@@ -28,7 +25,9 @@ function make(database: DB): SourceRepository {
         Effect.withSpan('getAllSourcesByCo2ProducerId'),
       ),
   })
-}
+})
+
+export const SourceRepositoryLive = Layer.effect(SourceRepository, make)
 
 function transformMarkdownToHTML(source: Source) {
   return Effect.promise(() =>
