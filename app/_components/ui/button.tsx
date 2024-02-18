@@ -9,7 +9,7 @@ import { useFormStatus } from 'react-dom'
 import Spinner from './spinner'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md font-medium text-sm ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 focus-visible:ring-offset-2',
+  'inline-flex items-center justify-center gap-2 rounded-md font-medium text-sm ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 focus-visible:ring-offset-2',
   {
     variants: {
       variant: {
@@ -66,10 +66,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        <div className="flex items-center gap-2">
-          {children}
-          {pending && <Spinner className="h-4 w-4" />}
-        </div>
+        {children}
+        {pending && <Spinner className="h-4 w-4" />}
       </Comp>
     )
   },
