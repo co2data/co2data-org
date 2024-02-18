@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
 import { User } from '.'
 
-export interface _UserRepository {
+interface _UserRepository {
   createUser: (username: string) => Effect.Effect<User, DbError>
   findByUsername: (
     username: string,

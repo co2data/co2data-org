@@ -4,13 +4,9 @@ import { Context, Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
-export interface SourceRepository {
+interface _SourceRepository {
   getAllSourcesByCo2ProducerId: (id: string) => Effect.Effect<Source[], DbError>
 }
-
-export const SourceRepository = Context.GenericTag<SourceRepository>(
-  '@services/SourceRepository',
-)
 
 const make = Effect.gen(function* ($) {
   const database = yield* $(DB)
@@ -27,7 +23,12 @@ const make = Effect.gen(function* ($) {
   })
 })
 
-export const SourceRepositoryLive = Layer.effect(SourceRepository, make)
+export class SourceRepository extends Context.Tag('@services/SourceRepository')<
+  SourceRepository,
+  _SourceRepository
+>() {
+  static Live = Layer.effect(this, make)
+}
 
 function transformMarkdownToHTML(source: Source) {
   return Effect.promise(() =>
