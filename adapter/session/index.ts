@@ -1,11 +1,11 @@
-import { Config, Context, Effect, Layer, Secret } from 'effect'
+import { Config, Context, Effect, Layer, Option, Secret } from 'effect'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
 const getSessionEffect = (password: Secret.Secret) =>
   Effect.tryPromise(() =>
     // @ts-ignore
-    getIronSession<{ username?: string }>(cookies(), {
+    getIronSession<{ id?: string; username?: string }>(cookies(), {
       password: Secret.value(password),
       cookieName: 'user-session',
     }),
@@ -16,13 +16,20 @@ const make = Effect.gen(function* ($) {
   return {
     getSession: () =>
       getSessionEffect(sessionPassword).pipe(
-        Effect.map((session) => session.username),
+        Effect.tap(({ username }) => Effect.annotateCurrentSpan({ username })), // does this break the tracing?
+        Effect.map(({ id, username }) => {
+          if (id && username) {
+            return Option.some({ id, username })
+          }
+          return Option.none()
+        }),
         Effect.withSpan('get session'),
       ),
-    setSession: (username: string) => {
+    setSession: (id: string, username: string) => {
       return getSessionEffect(sessionPassword).pipe(
         Effect.flatMap((session) =>
           Effect.tryPromise(() => {
+            session.id = id
             session.username = username
             return session.save()
           }),
