@@ -3,6 +3,7 @@ import { format, mapToJSX } from '@/lib/utils'
 import convert from 'convert'
 import { ExternalLink } from 'lucide-react'
 import mime from 'mime'
+import { editSource } from '../c/[slug]/actions'
 
 const SourceComponent = ({
   source,
@@ -28,6 +29,12 @@ const SourceComponent = ({
       <p className="px-4 pt-2">
         CO<sub>2</sub>e for {source.per} {unit}
       </p>
+      <form action={editSource}>
+        <label htmlFor="gCo2e">Grams</label>
+        <input type="number" name="gCo2e" id="gCo2e" />
+        <input type="hidden" name="id" value={source.id} />
+        <button type="submit">✔︎</button>
+      </form>
       <p className="px-4 pb-2 text-right">
         <span className="font-bold text-3xl">
           {format(convert(source.gCo2e, 'grams').to('kg'), {

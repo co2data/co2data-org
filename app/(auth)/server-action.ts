@@ -65,7 +65,7 @@ export async function verifyLogin(body: {
     if (verified) {
       const { authenticationInfo } = verification
       yield* $(userRepo.updateCounter(user.id, authenticationInfo.newCounter))
-      yield* $(setSession(user.username))
+      yield* $(setSession(user.id, user.username))
       return { verified }
     }
     return yield* $(new NotVerified())

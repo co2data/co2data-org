@@ -1,18 +1,17 @@
-import { DB, DbError } from '@/adapter/db'
+import { DB } from '@/adapter/db'
+import { SelectSourcedCo2Amounts, sourcedCo2Amounts } from '@/adapter/db/schema'
 import { Source } from '@/domain/source'
+import { eq } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
-
-interface _SourceRepository {
-  getAllSourcesByCo2ProducerId: (id: string) => Effect.Effect<Source[], DbError>
-}
+import { AuthorizedUser, WriteOwn } from '../user'
 
 const make = Effect.gen(function* ($) {
   const database = yield* $(DB)
 
-  return SourceRepository.of({
-    getAllSourcesByCo2ProducerId: (id) =>
+  return {
+    getAllSourcesByCo2ProducerId: (id: string) =>
       database.sources.getAllByProducerId(id).pipe(
         Effect.flatMap(
           Effect.forEach(transformMarkdownToHTML, { concurrency: 5 }),
@@ -20,12 +19,22 @@ const make = Effect.gen(function* ($) {
         Effect.tap((_) => Effect.logTrace(`id: ${id}`)),
         Effect.withSpan('getAllSourcesByCo2ProducerId'),
       ),
-  })
+    findById: (id: string) =>
+      database.query((_) =>
+        _.query.sourcedCo2Amounts.findFirst({
+          where: eq(sourcedCo2Amounts.id, id),
+        }),
+      ),
+    editOwn: (
+      source: SelectSourcedCo2Amounts,
+      user: AuthorizedUser<WriteOwn>,
+    ) => database.query((_) => _.update(sourcedCo2Amounts).set(source)),
+  }
 })
 
 export class SourceRepository extends Context.Tag('@services/SourceRepository')<
   SourceRepository,
-  _SourceRepository
+  Effect.Effect.Success<typeof make>
 >() {
   static Live = Layer.effect(this, make)
 }

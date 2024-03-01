@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/app/_components/ui/dropdown-menu'
-import { Effect } from 'effect'
+import { Effect, Option, Predicate } from 'effect'
 import { User as UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, AvatarFallback } from './ui/avatar'
@@ -20,7 +20,10 @@ export const logout = async () => {
 
 const UserEffect = (props: { className?: string }) => {
   return Effect.gen(function* ($) {
-    const username = yield* $(getSession())
+    const username = yield* $(
+      getSession(),
+      Effect.map(Option.map((_) => _.username)),
+    )
 
     return (
       <>
@@ -29,20 +32,27 @@ const UserEffect = (props: { className?: string }) => {
             <Button
               variant="ghost"
               size="icon"
-              title={`User ${username ?? 'not logged in'}`}
+              title={`User ${Option.getOrElse(
+                username,
+                () => 'not logged in',
+              )}`}
               className={props.className}
             >
               <Avatar>
                 <AvatarFallback>
-                  {username ? username.slice(0, 2) : <UserIcon size={18} />}
+                  {Option.isSome(username) ? (
+                    username.value.slice(0, 2)
+                  ) : (
+                    <UserIcon size={18} />
+                  )}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {username ? (
+            {Option.isSome(username) ? (
               <DropdownButton onClick={logout}>
-                Logout {username}
+                Logout {username.value}
               </DropdownButton>
             ) : (
               <>
