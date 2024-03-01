@@ -1,6 +1,6 @@
 'use client'
 
-import { Slot } from '@radix-ui/react-slot'
+import { Slot, Slottable } from '@radix-ui/react-slot'
 import { type VariantProps, cva } from 'class-variance-authority'
 import * as React from 'react'
 
@@ -66,7 +66,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {children}
+        <Slottable>{children}</Slottable>
         {pending && <Spinner className="h-4 w-4" />}
       </Comp>
     )
