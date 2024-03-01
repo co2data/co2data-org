@@ -88,7 +88,7 @@ export const generateSignUpOptions = flow(
 export async function verifySignUp(
   body: RegistrationResponseJSON & { username: string },
 ) {
-  const result = await Effect.gen(function* ($) {
+  return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByUsername(body.username),
@@ -124,10 +124,19 @@ export async function verifySignUp(
       NotVerifiedError: (cause) => new AuthError({ cause }),
     }),
     runServerAction('verifySignUp'),
+    then(redirectRight('/sign-up-success', (_) => _.verified)),
   )
+}
 
-  if (Either.isRight(result) && result.right.verified) {
-    redirect('/sign-up-success')
+function then<T, U>(a: (c: T) => U) {
+  return (p: Promise<T>) => p.then(a)
+}
+
+function redirectRight<E, T>(to: string, predicate?: (p: T) => boolean) {
+  return (result: Either.Either<E, T>) => {
+    if (Either.isRight(result) && predicate ? predicate(result.right) : true) {
+      return redirect(to)
+    }
+    return result
   }
-  return result
 }
