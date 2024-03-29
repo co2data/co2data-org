@@ -1,11 +1,9 @@
 import { Source } from '@/domain/source'
 import { BaseError } from '@/lib/types'
-import { connect } from '@planetscale/database'
 import { SQL, eq } from 'drizzle-orm'
-import {
-  PlanetScaleDatabase,
-  drizzle as planetscaleDrizzle,
-} from 'drizzle-orm/planetscale-serverless'
+import { type PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
+
 import {
   Config,
   Context,
@@ -14,6 +12,7 @@ import {
   Layer,
   Option,
   ReadonlyArray,
+  Secret,
 } from 'effect'
 import { combineLinks } from './combine-source-links'
 import * as schema from './schema'
@@ -44,14 +43,35 @@ type _DB = {
     }) => Effect.Effect<Option.Option<schema.SelectUsers>, DbError>
   }
   query: <A>(
-    body: (client: PlanetScaleDatabase<typeof schema>) => Promise<A>,
+    body: (client: PostgresJsDatabase<typeof schema>) => Promise<A>,
   ) => Effect.Effect<A, DbError>
 }
 
+const PostgresConfig = Config.nested('POSTGRES')(
+  Config.all({
+    host: Config.string('HOST'),
+    database: Config.string('DATABASE'),
+    user: Config.string('USER'),
+    password: Config.secret('PASSWORD'),
+    ssl: Config.literal('require', 'false')('SSL'),
+  }),
+)
+
 const make = Effect.gen(function* (_) {
-  const url = yield* _(Config.string('DATABASE_URL'), Effect.orDie)
+  const config = yield* _(PostgresConfig, Effect.orDie)
   const database = yield* _(
-    Effect.sync(() => planetscaleDrizzle(connect({ url }), { schema })),
+    Effect.sync(() =>
+      drizzle(
+        postgres({
+          ...config,
+          ssl: config.ssl as 'require' | false,
+          password: Secret.value(config.password),
+        }),
+        {
+          schema,
+        },
+      ),
+    ),
   )
 
   const query = <A>(body: (client: typeof database) => Promise<A>) =>

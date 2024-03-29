@@ -15,5 +15,5 @@ export type Authenticator = {
   counter: number
   credentialDeviceType: CredentialDeviceType
   credentialBackedUp: boolean
-  transports?: AuthenticatorTransport[]
+  transports?: AuthenticatorTransport[] | null
 }

@@ -126,7 +126,7 @@ type UserWithAuthenticators = {
     counter: bigint
     credentialDeviceType: string
     credentialBackedUp: boolean
-    transports: string[] | null
+    transports: AuthenticatorTransport[] | null
   }[]
 }
 
@@ -138,7 +138,7 @@ function userFromDbToDomain(user: UserWithAuthenticators): User {
       counter: _.counter as unknown as number,
       credentialBackedUp: _.credentialBackedUp,
       credentialID: _.credentialId,
-      transports: (_.transports as AuthenticatorTransport[]) ?? undefined,
+      transports: _.transports,
       credentialPublicKey: _.credentialPublicKey,
       credentialDeviceType: _.credentialDeviceType as CredentialDeviceType,
     })),
