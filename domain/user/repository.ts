@@ -138,7 +138,7 @@ function userFromDbToDomain(user: UserWithAuthenticators): User {
       counter: _.counter as unknown as number,
       credentialBackedUp: _.credentialBackedUp,
       credentialID: _.credentialId,
-      transports: _.transports,
+      ...(_.transports ? { transports: _.transports } : {}),
       credentialPublicKey: _.credentialPublicKey,
       credentialDeviceType: _.credentialDeviceType as CredentialDeviceType,
     })),
