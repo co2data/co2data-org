@@ -16,10 +16,10 @@
     corepack.enable = true;
   };
 
-  services.mysql = {
+  services.postgres = {
     enable = true;
-    package = pkgs.mysql80;
-    initialDatabases = [{ name = "co2data-org"; }];
+    package = pkgs.postgresql_15;
+    initialDatabases = [{ name = "mydb"; }];
   };
 
   # See full reference at https://devenv.sh/reference/options/

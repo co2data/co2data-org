@@ -3,8 +3,10 @@ import type { Config } from 'drizzle-kit'
 export default {
   schema: './adapter/db/schema.ts',
   dbCredentials: {
-    uri: 'mysql://root:password@127.0.0.1:3306/co2data-org',
+    connectionString:
+      process.env.DATABASE_CONNECTION ??
+      'socket:/tmp/devenv-349ad88/postgres?db=mydb',
   },
-  driver: 'mysql2',
+  driver: 'pg',
   out: './adapter/db/migrations-folder',
 } satisfies Config

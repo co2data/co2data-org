@@ -1,3 +1,4 @@
+import { AuthenticatorTransport } from '@simplewebauthn/types'
 import { Option } from 'effect'
 import { CredentialDeviceType } from 'node_modules/@simplewebauthn/server/esm/deps'
 
