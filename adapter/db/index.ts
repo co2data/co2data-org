@@ -1,8 +1,8 @@
 import { Source } from '@/domain/source'
 import { BaseError } from '@/lib/types'
+import { createPool } from '@vercel/postgres'
 import { SQL, eq } from 'drizzle-orm'
-import { type PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+import { type VercelPgDatabase, drizzle } from 'drizzle-orm/vercel-postgres'
 
 import {
   Config,
@@ -43,7 +43,7 @@ type _DB = {
     }) => Effect.Effect<Option.Option<schema.SelectUsers>, DbError>
   }
   query: <A>(
-    body: (client: PostgresJsDatabase<typeof schema>) => Promise<A>,
+    body: (client: VercelPgDatabase<typeof schema>) => Promise<A>,
   ) => Effect.Effect<A, DbError>
 }
 
@@ -62,10 +62,10 @@ const make = Effect.gen(function* (_) {
   const database = yield* _(
     Effect.sync(() =>
       drizzle(
-        postgres({
-          ...config,
-          ssl: config.ssl as 'require' | false,
-          password: Secret.value(config.password),
+        createPool({
+          connectionString: `postgres://${config.user}:${Secret.value(
+            config.password,
+          )}@${config.host}/${config.database}`,
         }),
         {
           schema,
