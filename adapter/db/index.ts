@@ -53,7 +53,6 @@ const PostgresConfig = Config.nested('POSTGRES')(
     database: Config.string('DATABASE'),
     user: Config.string('USER'),
     password: Config.secret('PASSWORD'),
-    ssl: Config.literal('require', 'false')('SSL'),
   }),
 )
 
