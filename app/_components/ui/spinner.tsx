@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 export default function Spinner({
   className,
   strokeWidth = 4,
@@ -8,7 +10,7 @@ export default function Spinner({
   return (
     <svg
       viewBox="0 0 24 24"
-      className={`spinner ${className}`}
+      className={cn('spinner', className)}
       height="2em"
       width="2em"
     >

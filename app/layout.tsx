@@ -1,6 +1,7 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import { ThemeProvider } from '@/components/theme-provider'
+import { cn } from '@/lib/utils'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata, Viewport } from 'next'
@@ -19,12 +20,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={cn(GeistSans.variable, GeistMono.variable)}
     >
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <div className="flex-1 container pt-4 pb-16">{children}</div>
+          <div className="container flex-1 pt-4 pb-16">{children}</div>
           <Footer />
         </ThemeProvider>
         <AnalyticsWrapper />
