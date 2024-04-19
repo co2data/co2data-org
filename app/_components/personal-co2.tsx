@@ -1,6 +1,6 @@
 'use client'
 
-import { Co2Average } from '@/domain/co2'
+import type { Co2Average } from '@/domain/co2'
 import {
   calcCo2PerConsumption,
   calcCo2PerYear,

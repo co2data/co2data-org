@@ -1,6 +1,6 @@
 import { DB } from '@/adapter/db'
-import * as schema from '@/adapter/db/schema'
-import { Co2Average, Co2Repository } from '@/domain/co2'
+import type * as schema from '@/adapter/db/schema'
+import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, test } from 'vitest'

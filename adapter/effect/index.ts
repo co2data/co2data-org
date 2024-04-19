@@ -1,6 +1,6 @@
 import { Effect, flow, pipe } from 'effect'
 import 'server-only'
-import { MainContext, mainLive } from './main'
+import { type MainContext, mainLive } from './main'
 
 export function run<P, Q, A>(
   effect: (arg1: P, arg2: Q) => Effect.Effect<A, never, MainContext>,

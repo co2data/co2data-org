@@ -1,4 +1,4 @@
-import { Option } from 'effect'
+import type { Option } from 'effect'
 
 export { Co2Repository } from '@/domain/co2/repository'
 export type Unit =

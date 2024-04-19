@@ -1,4 +1,4 @@
-import { Source } from '@/domain/source'
+import type { Source } from '@/domain/source'
 import { Option, ReadonlyArray } from 'effect'
 
 type QueryResult = {

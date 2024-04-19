@@ -1,5 +1,5 @@
 import { DB, DbError } from '@/adapter/db'
-import { Source } from '@/domain/source'
+import type { Source } from '@/domain/source'
 import { makeSource } from '@/domain/source/example-data'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'

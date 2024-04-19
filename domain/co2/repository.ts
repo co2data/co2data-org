@@ -1,6 +1,9 @@
-import { DB, DbError } from '@/adapter/db'
-import { Co2Average as DbCo2Average, co2Average } from '@/adapter/db/schema'
-import { Co2Average } from '@/domain/co2'
+import { DB, type DbError } from '@/adapter/db'
+import {
+  type Co2Average as DbCo2Average,
+  co2Average,
+} from '@/adapter/db/schema'
+import type { Co2Average } from '@/domain/co2'
 import { desc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
 

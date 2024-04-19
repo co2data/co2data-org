@@ -1,7 +1,7 @@
-import { Source } from '@/domain/source'
-import { BaseError } from '@/lib/types'
+import type { Source } from '@/domain/source'
+import type { BaseError } from '@/lib/types'
 import { createPool } from '@vercel/postgres'
-import { SQL, eq } from 'drizzle-orm'
+import { type SQL, eq } from 'drizzle-orm'
 import { type VercelPgDatabase, drizzle } from 'drizzle-orm/vercel-postgres'
 
 import {
@@ -10,7 +10,7 @@ import {
   Data,
   Effect,
   Layer,
-  Option,
+  type Option,
   ReadonlyArray,
   Secret,
 } from 'effect'

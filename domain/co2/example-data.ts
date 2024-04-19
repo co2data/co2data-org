@@ -1,5 +1,5 @@
 import { Option } from 'effect'
-import { Co2Average } from '.'
+import type { Co2Average } from '.'
 
 export function makeCo2Average() {
   return {

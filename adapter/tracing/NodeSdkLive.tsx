@@ -1,7 +1,7 @@
 import { NodeSdk } from '@effect/opentelemetry'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { Config, Duration, Effect, Layer, Option, Secret } from 'effect'
+import { Config, Duration, Effect, Layer, type Option, Secret } from 'effect'
 
 const GrafanaTempoConfig = Config.nested('OTLP')(
   Config.all({

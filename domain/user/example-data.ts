@@ -1,5 +1,5 @@
 import { Option } from 'effect'
-import { User } from '.'
+import type { User } from '.'
 
 export function makeUser(override: Partial<User> = {}) {
   return {

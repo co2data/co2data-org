@@ -1,4 +1,4 @@
-import { Source } from '@/domain/source'
+import type { Source } from '@/domain/source'
 import { format, mapToJSX } from '@/lib/utils'
 import convert from 'convert'
 import { ExternalLink } from 'lucide-react'

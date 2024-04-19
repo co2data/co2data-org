@@ -1,4 +1,4 @@
-import { Co2Average } from '@/domain/co2'
+import type { Co2Average } from '@/domain/co2'
 import { format } from '@/lib/utils'
 import convert from 'convert'
 import Link from 'next/link'

@@ -1,5 +1,5 @@
-import { DB, DbError } from '@/adapter/db'
-import { Source } from '@/domain/source'
+import { DB, type DbError } from '@/adapter/db'
+import type { Source } from '@/domain/source'
 import { Context, Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'

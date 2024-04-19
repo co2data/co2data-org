@@ -17,7 +17,7 @@ export function format(
   const { trialingZeros = true, decimalPlaces = 3 } = options
   return trialingZeros
     ? value.toFixed(decimalPlaces)
-    : parseFloat(value.toFixed(decimalPlaces))
+    : Number.parseFloat(value.toFixed(decimalPlaces))
 }
 
 export function setLogLevelFromSearchParams(props: {

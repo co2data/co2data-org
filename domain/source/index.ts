@@ -1,4 +1,4 @@
-import { Option } from 'effect'
+import type { Option } from 'effect'
 
 export { SourceRepository } from '@/domain/source/repository'
 export type Source = {

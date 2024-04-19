@@ -1,5 +1,5 @@
-import { Authenticator } from '@/domain/user'
-import { BaseError } from '@/lib/types'
+import type { Authenticator } from '@/domain/user'
+import type { BaseError } from '@/lib/types'
 import { base64UrlStringToUInt8Array } from '@/lib/utils'
 import {
   generateAuthenticationOptions,
@@ -7,7 +7,7 @@ import {
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
-import {
+import type {
   AuthenticationResponseJSON,
   PublicKeyCredentialUserEntityJSON,
   RegistrationResponseJSON,

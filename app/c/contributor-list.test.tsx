@@ -1,4 +1,4 @@
-import { Co2Average } from '@/domain/co2'
+import type { Co2Average } from '@/domain/co2'
 import { makeCo2Average } from '@/domain/co2/example-data'
 import { Co2Repository } from '@/domain/co2/repository'
 import { render, screen } from '@testing-library/react'

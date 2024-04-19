@@ -1,5 +1,5 @@
 import { run } from '@/adapter/effect'
-import { Co2Average, Co2Repository } from '@/domain/co2'
+import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { Effect, Metric } from 'effect'
 import { baseUrl } from '../config'
 

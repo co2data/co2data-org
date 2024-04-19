@@ -1,6 +1,6 @@
 import { run } from '@/adapter/effect'
 import Co2AverageCmp from '@/components/co2-average'
-import { Co2Average, Co2Repository } from '@/domain/co2'
+import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 import { Effect } from 'effect'
 import Link from 'next/link'

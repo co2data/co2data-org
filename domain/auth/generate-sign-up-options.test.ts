@@ -1,5 +1,5 @@
 import { DB } from '@/adapter/db'
-import * as schema from '@/adapter/db/schema'
+import type * as schema from '@/adapter/db/schema'
 import { PassKey } from '@/adapter/pass-key'
 import { AlreadyRegistered } from '@/app/(auth)/errors'
 import { Effect, Layer } from 'effect'

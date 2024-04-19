@@ -1,5 +1,5 @@
 import { Option } from 'effect'
-import { Source } from '.'
+import type { Source } from '.'
 
 export function makeSource(override: Partial<Source> = {}) {
   return {

@@ -1,11 +1,11 @@
 import { DB, DbError } from '@/adapter/db'
 import * as schema from '@/adapter/db/schema'
 import { uInt8ArrayToUrlBase64 } from '@/lib/utils'
-import { VerifiedRegistrationResponse } from '@simplewebauthn/server'
-import { CredentialDeviceType } from '@simplewebauthn/types'
+import type { VerifiedRegistrationResponse } from '@simplewebauthn/server'
+import type { CredentialDeviceType } from '@simplewebauthn/types'
 import { eq } from 'drizzle-orm'
 import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
-import { User } from '.'
+import type { User } from '.'
 
 interface _UserRepository {
   createUser: (username: string) => Effect.Effect<User, DbError>

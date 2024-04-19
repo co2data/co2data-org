@@ -1,5 +1,5 @@
-import { AuthenticatorTransport } from '@simplewebauthn/types'
-import { InferSelectModel, relations, sql } from 'drizzle-orm'
+import type { AuthenticatorTransport } from '@simplewebauthn/types'
+import { type InferSelectModel, relations, sql } from 'drizzle-orm'
 import {
   bigint,
   boolean,

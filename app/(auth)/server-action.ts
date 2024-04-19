@@ -6,7 +6,7 @@ import { setSession } from '@/adapter/session'
 import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
 import { generateSignUpOptionsEffect } from '@/domain/auth/generate-sign-up-options'
 import { UserRepository } from '@/domain/user/repository'
-import {
+import type {
   AuthenticatorAssertionResponseJSON,
   RegistrationResponseJSON,
 } from '@simplewebauthn/types'

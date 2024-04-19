@@ -3,9 +3,9 @@
 import filterContributors from '@/app/c/searchAction'
 import { Input } from '@/components/ui/input'
 import Spinner from '@/components/ui/spinner'
-import { Route } from 'next'
+import type { Route } from 'next'
 import { useRouter } from 'next/navigation'
-import { ChangeEvent, useCallback, useTransition } from 'react'
+import { type ChangeEvent, useCallback, useTransition } from 'react'
 
 export default function SearchBox({
   searchParams,

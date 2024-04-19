@@ -55,7 +55,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3-nightly.dca6a7a",
+    "@biomejs/biome": "1.7.0",
     "@playwright/test": "^1.41.2",
     "@simplewebauthn/types": "^9.0.1",
     "@tailwindcss/typography": "^0.5.10",
