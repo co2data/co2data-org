@@ -132,8 +132,8 @@ function then<T, U>(a: (c: T) => U) {
   return (p: Promise<T>) => p.then(a)
 }
 
-function redirectRight<E, T>(to: string, predicate?: (p: T) => boolean) {
-  return (result: Either.Either<E, T>) => {
+function redirectRight<T, E>(to: string, predicate?: (p: T) => boolean) {
+  return (result: Either.Either<T, E>) => {
     if (Either.isRight(result) && predicate ? predicate(result.right) : true) {
       return redirect(to)
     }
