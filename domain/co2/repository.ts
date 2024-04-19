@@ -5,7 +5,7 @@ import {
 } from '@/adapter/db/schema'
 import type { Co2Average } from '@/domain/co2'
 import { desc, eq } from 'drizzle-orm'
-import { Context, Effect, Layer, Option, ReadonlyArray } from 'effect'
+import { Context, Effect, Layer, Option, Array as ReadonlyArray } from 'effect'
 
 export type _Co2Repository = {
   readonly getAllCo2Averages: () => Effect.Effect<Co2Average[], DbError>

@@ -1,6 +1,6 @@
 import { AuthError, PassKey } from '@/adapter/pass-key'
 import { UserRepository } from '@/domain/user/repository'
-import { Effect, Match, Option } from 'effect'
+import { Effect, Option } from 'effect'
 import { AlreadyRegistered } from '../../app/(auth)/errors'
 
 export function generateSignUpOptionsEffect(username: string) {
@@ -32,7 +32,6 @@ export function generateSignUpOptionsEffect(username: string) {
   }).pipe(
     Effect.catchTags({
       DbError: (cause) => new AuthError({ cause }),
-      CouldNotSetChallengeError: (cause) => new AuthError({ cause }),
     }),
   )
 }

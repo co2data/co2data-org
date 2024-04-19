@@ -6,7 +6,7 @@ import {
   Exit,
   HashSet,
   Layer,
-  ReadonlyArray,
+  Array as ReadonlyArray,
 } from 'effect'
 import { describe, expect, it, test } from 'vitest'
 import { DbError } from '../db'
@@ -39,7 +39,7 @@ describe('effect basics', () => {
     expect(
       Effect.runPromise(Config.string('MY_ENV_VAR')),
     ).rejects.toMatchInlineSnapshot(
-      `[(Missing data at MY_ENV_VAR: "Expected MY_ENV_VAR to exist in the process context")]`,
+      `[(FiberFailure) (Missing data at MY_ENV_VAR: "Expected MY_ENV_VAR to exist in the process context")]`,
     )
   })
 

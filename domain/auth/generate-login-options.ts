@@ -23,7 +23,6 @@ export function generateLoginOptionsEffect(username: string) {
   }).pipe(
     Effect.catchTags({
       DbError: (cause) => new AuthError({ cause }),
-      CouldNotSetChallengeError: (cause) => new AuthError({ cause }),
     }),
   )
 }

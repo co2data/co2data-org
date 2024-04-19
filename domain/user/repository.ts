@@ -15,7 +15,7 @@ interface _UserRepository {
   setCurrentChallenge: (
     userId: string,
     currentChallenge: string,
-  ) => Effect.Effect<void, DbError | CouldNotSetChallenge>
+  ) => Effect.Effect<void, DbError>
   addAuthenticator: (
     userId: string,
     registrationInfo: NonNullable<

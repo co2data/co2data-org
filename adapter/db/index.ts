@@ -11,7 +11,7 @@ import {
   Effect,
   Layer,
   type Option,
-  ReadonlyArray,
+  Array as ReadonlyArray,
   Secret,
 } from 'effect'
 import { combineLinks } from './combine-source-links'

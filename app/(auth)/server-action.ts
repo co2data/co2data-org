@@ -1,5 +1,7 @@
 'use server'
 
+import 'server-only'
+
 import { runServerAction } from '@/adapter/effect'
 import { AuthError, PassKey } from '@/adapter/pass-key'
 import { setSession } from '@/adapter/session'
@@ -35,8 +37,12 @@ export async function verifyLogin(body: {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByUsername(body.username),
-      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map((_) => _.value),
+      Effect.flatMap(
+        Option.match({
+          onSome: Effect.succeed,
+          onNone: () => Effect.fail(new NoUserFound()),
+        }),
+      ),
     )
 
     if (Option.isNone(user.currentChallenge)) {
@@ -93,7 +99,7 @@ export async function verifySignUp(
     const user = yield* $(
       userRepo.findByUsername(body.username),
       Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map((_) => _.value),
+      Effect.map(Option.getOrThrow),
     )
 
     if (Option.isNone(user.currentChallenge)) {
@@ -132,8 +138,8 @@ function then<T, U>(a: (c: T) => U) {
   return (p: Promise<T>) => p.then(a)
 }
 
-function redirectRight<T, E>(to: string, predicate?: (p: T) => boolean) {
-  return (result: Either.Either<T, E>) => {
+function redirectRight<R, L>(to: string, predicate?: (p: R) => boolean) {
+  return (result: Either.Either<R, L>) => {
     if (Either.isRight(result) && predicate ? predicate(result.right) : true) {
       return redirect(to)
     }
