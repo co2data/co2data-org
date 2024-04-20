@@ -8,7 +8,7 @@ export function makeSource(override: Partial<Source> = {}) {
     description: 'No description',
     gCo2e: 2000,
     per: 1,
-    year: 2018,
+    year: Option.some(2018),
     userId: 'user1',
     links: Option.some([
       {
@@ -18,7 +18,7 @@ export function makeSource(override: Partial<Source> = {}) {
         url: 'https://some-server.domain/route.xls',
       },
     ]),
-    region: 'World',
+    region: Option.some('World'),
     ...override,
   } satisfies Source
 }

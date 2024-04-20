@@ -1,6 +1,7 @@
 import { cx } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
 import { LogLevel, Logger, Option, identity } from 'effect'
+import { dual } from 'effect/Function'
 
 export function cn(...inputs: ClassValue[]) {
   return cx(inputs)
@@ -34,9 +35,13 @@ export function setLogLevelFromSearchParams(props: {
 
   return Logger.withMinimumLogLevel(LogLevel.fromLiteral(logLevel))
 }
-export function mapToJSX<A>(f: (arg: A) => React.ReactNode) {
-  return (item: Option.Option<A>) => item.pipe(Option.map(f), Option.getOrNull)
-}
+
+export const mapGetOrNull: {
+  <T, R>(onSome: (arg: T) => R): (option: Option.Option<T>) => R | null
+  <T, R>(option: Option.Option<T>, onSome: (arg: T) => R): R | null
+} = dual(2, <T, R>(option: Option.Option<T>, onSome: (arg: T) => R): R | null =>
+  Option.map(option, onSome).pipe(Option.getOrNull),
+)
 
 export function base64UrlStringToUInt8Array(base64String: string) {
   const base64 = base64String.replace(/-/g, '+').replace(/_/g, '/')

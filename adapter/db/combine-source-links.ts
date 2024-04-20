@@ -44,6 +44,8 @@ export function combineLinks(d: QueryResult[]) {
     }
     acc.push({
       ...source,
+      region: Option.fromNullable(source.region),
+      year: Option.fromNullable(source.year),
       links: Option.fromNullable(source.links).pipe(
         Option.map(ReadonlyArray.of),
       ),

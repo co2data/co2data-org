@@ -1,8 +1,10 @@
 import type { Source } from '@/domain/source'
-import { format, mapToJSX } from '@/lib/utils'
+import { format } from '@/lib/utils'
 import convert from 'convert'
+import { Option } from 'effect'
 import { ExternalLink } from 'lucide-react'
 import mime from 'mime'
+import Opt from './opt'
 
 const SourceComponent = ({
   source,
@@ -12,18 +14,22 @@ const SourceComponent = ({
     <li className="max-w-sm list-none overflow-hidden rounded border-4 border-border bg-card">
       <h3 className="bg-border px-4 py-2 text-white">
         {source.name}
-        {source.region && (
-          <>
-            &ensp;&bull;&ensp;
-            <span className="text-right text-sky-200">{source.region}</span>
-          </>
-        )}
-        {source.year && (
-          <>
-            &ensp;&bull;&ensp;
-            <span className="text-right font-bold">{source.year}</span>
-          </>
-        )}
+        <Opt>
+          {Option.map(source.region, (_) => (
+            <>
+              &ensp;&bull;&ensp;
+              <span className="text-right text-sky-200">{_}</span>
+            </>
+          ))}
+        </Opt>
+        <Opt>
+          {Option.map(source.year, (_) => (
+            <>
+              &ensp;&bull;&ensp;
+              <span className="text-right font-bold">{_}</span>
+            </>
+          ))}
+        </Opt>
       </h3>
       <p className="px-4 pt-2">
         CO<sub>2</sub>e for {source.per} {unit}
@@ -44,8 +50,8 @@ const SourceComponent = ({
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: source.description }}
       />
-      {source.links.pipe(
-        mapToJSX((links) => (
+      <Opt>
+        {Option.map(source.links, (links) => (
           <>
             <p className="px-4 pt-2 font-bold text-xs">
               Links{' '}
@@ -83,8 +89,8 @@ const SourceComponent = ({
               })}
             </ul>
           </>
-        )),
-      )}
+        ))}
+      </Opt>
     </li>
   )
 }

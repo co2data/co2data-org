@@ -1,10 +1,11 @@
 import { run } from '@/adapter/effect'
 import { baseUrl } from '@/app/config'
+import Opt from '@/components/opt'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { SourceRepository } from '@/domain/source'
-import { mapToJSX, setLogLevelFromSearchParams } from '@/lib/utils'
+import { setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
 import { Effect, Option, Struct, pipe } from 'effect'
 import Link from 'next/link'
@@ -44,11 +45,11 @@ function ContributorPageEffect({ params, searchParams }: Props) {
                   CO<sub>2</sub> emissions
                 </div>
               </h1>
-              {co2Average.description.pipe(
-                mapToJSX((description) => (
-                  <p key="description">{description}</p>
-                )),
-              )}
+              <Opt>
+                {Option.map(co2Average.description, (_) => (
+                  <p>{_}</p>
+                ))}
+              </Opt>
             </div>
             <p className="text-4xl">
               <span>1 {co2Average.unit}</span>

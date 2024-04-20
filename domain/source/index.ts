@@ -3,8 +3,8 @@ import type { Option } from 'effect'
 export { SourceRepository } from '@/domain/source/repository'
 export type Source = {
   id: string
-  region: string | null
-  year: number | null
+  region: Option.Option<string>
+  year: Option.Option<number>
   gCo2e: number
   per: number
   description: string
