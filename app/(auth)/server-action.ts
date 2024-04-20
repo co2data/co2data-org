@@ -37,12 +37,7 @@ export async function verifyLogin(body: {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByUsername(body.username),
-      Effect.flatMap(
-        Option.match({
-          onSome: Effect.succeed,
-          onNone: () => Effect.fail(new NoUserFound()),
-        }),
-      ),
+      Effect.flatMap(Effect.mapError(() => new NoUserFound())),
     )
 
     if (Option.isNone(user.currentChallenge)) {
@@ -98,8 +93,7 @@ export async function verifySignUp(
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByUsername(body.username),
-      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map(Option.getOrThrow),
+      Effect.flatMap(Effect.mapError(() => new NoUserFound())),
     )
 
     if (Option.isNone(user.currentChallenge)) {

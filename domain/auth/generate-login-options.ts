@@ -1,6 +1,6 @@
 import { AuthError, PassKey } from '@/adapter/pass-key'
 import { UserRepository } from '@/domain/user/repository'
-import { Effect, Option } from 'effect'
+import { Effect } from 'effect'
 import { NoUserFound } from '../../app/(auth)/errors'
 
 export function generateLoginOptionsEffect(username: string) {
@@ -8,8 +8,7 @@ export function generateLoginOptionsEffect(username: string) {
     const userRepo = yield* $(UserRepository)
     const user = yield* $(
       userRepo.findByUsername(username),
-      Effect.filterOrFail(Option.isSome, () => new NoUserFound()),
-      Effect.map((_) => _.value),
+      Effect.flatMap(Effect.mapError(() => new NoUserFound())),
     )
     const passKeyService = yield* $(PassKey)
     const options = yield* $(
