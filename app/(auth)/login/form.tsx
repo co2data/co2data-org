@@ -9,7 +9,9 @@ import { pipe } from 'effect/Function'
 import { valueTags } from 'effect/Match'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { useFormState } from 'react-dom'
+import { toast } from 'sonner'
 import { MissingUserName } from '../errors'
 import { generateLoginOptions, verifyLogin } from '../server-action'
 import Warning from '../warning'
@@ -44,28 +46,33 @@ const onLogin = async (prevState: unknown, formData: FormData) => {
   return verificationJSON
 }
 
+let toastId: number | string
+
 export default function Form(props: {
   children: React.ReactNode
   submit: React.ReactNode
 }) {
   const [state, formAction] = useFormState(onLogin, undefined)
 
-  console.log('state', state)
+  if (state && state._tag === 'Right') {
+    toastId = toast(
+      <>
+        <Check
+          className="inline-block text-green-700"
+          size={30}
+          strokeWidth={3}
+        />{' '}
+        Login successful!
+      </>,
+      { closeButton: true, duration: 5000, id: toastId },
+    )
+    redirect('/')
+  }
 
   return (
     <form action={formAction}>
       <CardContent>
         {props.children}
-        {state && state._tag === 'Right' && (
-          <p className="mt-4 rounded border border-green-500/40 bg-green-500/20 p-4">
-            <Check
-              className="inline-block text-green-700"
-              size={30}
-              strokeWidth={3}
-            />{' '}
-            Login successful!
-          </p>
-        )}
         {state && state._tag === 'Left' && (
           <Warning className="mt-4">
             {pipe(

@@ -52,8 +52,6 @@ export default function Form(props: {
 }) {
   const [state, formAction] = useFormState(onSignUp, undefined)
 
-  console.log('state', state)
-
   return (
     <form action={formAction}>
       <CardContent className="grid gap-4">

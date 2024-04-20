@@ -16,7 +16,6 @@ export const runServerAction =
       Effect.withSpan(span),
       Effect.either,
       Effect.map((_) => _.toJSON() as unknown as typeof _),
-      Effect.tap((_) => console.log('result:', JSON.stringify(_, null, 2))),
       Effect.provide(mainLive),
       Effect.runPromise,
     )

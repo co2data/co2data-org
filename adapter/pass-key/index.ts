@@ -58,10 +58,7 @@ const make = () => {
               ),
             },
           }),
-        catch: (error) => {
-          console.error('Error at verifying authentication response:', error)
-          return new AuthError({ cause: error })
-        },
+        catch: (error) => new AuthError({ cause: error }),
       }).pipe(Effect.withSpan('verifyAuthenticationResponse')),
 
     generateRegistrationOptions: (props: {

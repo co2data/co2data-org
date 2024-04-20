@@ -52,16 +52,16 @@ function formatAvgPerYear(avgPerYear: number) {
     switch (type) {
       case 'unit':
       case 'literal':
-        return <Fragment key={type} />
+        return <Fragment key={type + value} />
       case 'integer':
         return (
-          <span key={type} className="font-extrabold text-4xl">
+          <span key={type + value} className="font-extrabold text-4xl">
             {value}
           </span>
         )
       default:
         return (
-          <span key={type} className="font-extrabold text-sm">
+          <span key={type + value} className="font-extrabold text-sm">
             {value}
           </span>
         )

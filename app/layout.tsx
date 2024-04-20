@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata, Viewport } from 'next'
+import { Toaster } from './_components/ui/sonner'
 import { AnalyticsWrapper } from './analytics'
 import { baseUrl } from './config'
 import './globals.css'
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Footer />
         </ThemeProvider>
         <AnalyticsWrapper />
+        <Toaster />
       </body>
     </html>
   )

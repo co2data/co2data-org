@@ -35,13 +35,11 @@ export async function verifyLogin(body: {
 }) {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
-    console.log('get user')
 
     const user = yield* $(
       userRepo.findByUsername(body.username),
       Effect.flatMap(Effect.mapError(() => new NoUserFound())),
     )
-    console.log('got user')
 
     if (Option.isNone(user.currentChallenge)) {
       return yield* $(new NoChallengeOnUser())
@@ -54,7 +52,6 @@ export async function verifyLogin(body: {
     if (!authenticator) {
       return yield* $(new CouldNotFindAuthenticator())
     }
-    console.log('verify user')
 
     const passKeyService = yield* $(PassKey)
     const verification = yield* $(
@@ -64,11 +61,8 @@ export async function verifyLogin(body: {
         authenticator,
       }),
     )
-    console.log('verified user')
 
     const { verified } = verification
-
-    console.log('verified', verified)
 
     if (verified) {
       const { authenticationInfo } = verification
@@ -84,7 +78,7 @@ export async function verifyLogin(body: {
       NoChallengeOnUserError: (cause) => new AuthError({ cause }),
       NotVerifiedError: (cause) => new AuthError({ cause }),
     }),
-    Effect.tapError((e) => Effect.log('verifyLogin Error', e.cause)),
+    Effect.tapError((e) => Effect.log('Login Error', e.cause)),
     runServerAction('verifyLogin'),
   )
 }
@@ -123,21 +117,18 @@ export async function verifySignUp(
       return { verified }
     }
     return yield* $(new NotVerified())
-  }).pipe(
-    Effect.catchTags({
-      DbError: (cause) => new AuthError({ cause }),
-      NoChallengeOnUserError: (cause) => new AuthError({ cause }),
-      NoUserFoundError: (cause) => new AuthError({ cause }),
-      UnknownException: (cause) => new AuthError({ cause }),
-      NotVerifiedError: (cause) => new AuthError({ cause }),
-    }),
-    runServerAction('verifySignUp'),
-    then(redirectRight('/sign-up-success', (_) => _.verified)),
-  )
-}
-
-function then<T, U>(a: (c: T) => U) {
-  return (p: Promise<T>) => p.then(a)
+  })
+    .pipe(
+      Effect.catchTags({
+        DbError: (cause) => new AuthError({ cause }),
+        NoChallengeOnUserError: (cause) => new AuthError({ cause }),
+        NoUserFoundError: (cause) => new AuthError({ cause }),
+        UnknownException: (cause) => new AuthError({ cause }),
+        NotVerifiedError: (cause) => new AuthError({ cause }),
+      }),
+      runServerAction('verifySignUp'),
+    )
+    .then(redirectRight('/sign-up-success', (_) => _.verified))
 }
 
 function redirectRight<R, L>(to: string, predicate?: (p: R) => boolean) {
