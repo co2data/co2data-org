@@ -51,7 +51,8 @@ export default function Form(props: {
   submit: React.ReactNode
 }) {
   const [state, formAction] = useFormState(onSignUp, undefined)
-  const { pending } = useFormStatus()
+
+  console.log('state', state)
 
   return (
     <form action={formAction}>

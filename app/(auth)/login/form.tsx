@@ -50,6 +50,8 @@ export default function Form(props: {
 }) {
   const [state, formAction] = useFormState(onLogin, undefined)
 
+  console.log('state', state)
+
   return (
     <form action={formAction}>
       <CardContent>

@@ -1,4 +1,4 @@
-import { Effect, Either, flow, pipe } from 'effect'
+import { Effect, Either, flow, identity, pipe } from 'effect'
 import 'server-only'
 import { type MainContext, mainLive } from './main'
 
@@ -15,8 +15,8 @@ export const runServerAction =
       effect,
       Effect.withSpan(span),
       Effect.either,
-      Effect.map(Either.flip),
       Effect.map((_) => _.toJSON() as unknown as typeof _),
+      Effect.tap((_) => console.log('result:', JSON.stringify(_, null, 2))),
       Effect.provide(mainLive),
       Effect.runPromise,
     )

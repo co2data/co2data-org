@@ -35,10 +35,13 @@ export async function verifyLogin(body: {
 }) {
   return Effect.gen(function* ($) {
     const userRepo = yield* $(UserRepository)
+    console.log('get user')
+
     const user = yield* $(
       userRepo.findByUsername(body.username),
       Effect.flatMap(Effect.mapError(() => new NoUserFound())),
     )
+    console.log('got user')
 
     if (Option.isNone(user.currentChallenge)) {
       return yield* $(new NoChallengeOnUser())
@@ -51,6 +54,7 @@ export async function verifyLogin(body: {
     if (!authenticator) {
       return yield* $(new CouldNotFindAuthenticator())
     }
+    console.log('verify user')
 
     const passKeyService = yield* $(PassKey)
     const verification = yield* $(
@@ -60,8 +64,11 @@ export async function verifyLogin(body: {
         authenticator,
       }),
     )
+    console.log('verified user')
 
     const { verified } = verification
+
+    console.log('verified', verified)
 
     if (verified) {
       const { authenticationInfo } = verification
@@ -77,6 +84,7 @@ export async function verifyLogin(body: {
       NoChallengeOnUserError: (cause) => new AuthError({ cause }),
       NotVerifiedError: (cause) => new AuthError({ cause }),
     }),
+    Effect.tapError((e) => Effect.log('verifyLogin Error', e.cause)),
     runServerAction('verifyLogin'),
   )
 }

@@ -1,11 +1,11 @@
 import { DB, DbError } from '@/adapter/db'
 import * as schema from '@/adapter/db/schema'
-import { uInt8ArrayToUrlBase64 } from '@/lib/utils'
 import type { VerifiedRegistrationResponse } from '@simplewebauthn/server'
+import { isoBase64URL } from '@simplewebauthn/server/helpers'
 import type { CredentialDeviceType } from '@simplewebauthn/types'
 import { eq } from 'drizzle-orm'
 import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
-import type { User } from '.'
+import { Base64String, type User } from '.'
 
 interface _UserRepository {
   createUser: (username: string) => Effect.Effect<User, DbError>
@@ -87,10 +87,10 @@ const make = Effect.gen(function* ($) {
             counter: registrationInfo.counter as unknown as bigint,
             credentialBackedUp: registrationInfo.credentialBackedUp,
             credentialDeviceType: registrationInfo.credentialDeviceType,
-            credentialId: uInt8ArrayToUrlBase64(registrationInfo.credentialID),
+            credentialId: registrationInfo.credentialID,
             // saving as varbinary/binary/blob gets me some strange base64 back that I don't know how to convert to Uint8Array back...
             // I'm converting it to base64 myself and handel conversion back myself
-            credentialPublicKey: uInt8ArrayToUrlBase64(
+            credentialPublicKey: isoBase64URL.fromBuffer(
               registrationInfo.credentialPublicKey,
             ),
           } satisfies typeof schema.authenticators.$inferInsert
@@ -137,14 +137,10 @@ function userFromDbToDomain(user: UserWithAuthenticators): User {
     authenticators: user.authenticators.map((_) => ({
       counter: _.counter as unknown as number,
       credentialBackedUp: _.credentialBackedUp,
-      credentialID: _.credentialId,
+      credentialID: Base64String(_.credentialId),
       ...(_.transports ? { transports: _.transports } : {}),
       credentialPublicKey: _.credentialPublicKey,
       credentialDeviceType: _.credentialDeviceType as CredentialDeviceType,
     })),
   }
 }
-
-class CouldNotSetChallenge extends Data.TaggedError(
-  'CouldNotSetChallengeError',
-) {}

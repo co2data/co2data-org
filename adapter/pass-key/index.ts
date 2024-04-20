@@ -1,12 +1,12 @@
 import type { Authenticator } from '@/domain/user'
 import type { BaseError } from '@/lib/types'
-import { base64UrlStringToUInt8Array } from '@/lib/utils'
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
+import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers'
 import type {
   AuthenticationResponseJSON,
   PublicKeyCredentialUserEntityJSON,
@@ -29,7 +29,7 @@ const make = () => {
             rpID,
             // Require users to use a previously-registered authenticator
             allowCredentials: props.userAuthenticators.map((authenticator) => ({
-              id: base64UrlStringToUInt8Array(authenticator.credentialID),
+              id: authenticator.credentialID,
               type: 'public-key',
               transports: authenticator.transports ?? [],
             })),
@@ -52,15 +52,16 @@ const make = () => {
             expectedRPID: rpID,
             authenticator: {
               ...props.authenticator,
-              credentialID: base64UrlStringToUInt8Array(
-                props.authenticator.credentialID,
-              ),
-              credentialPublicKey: base64UrlStringToUInt8Array(
+              credentialID: props.authenticator.credentialID,
+              credentialPublicKey: isoBase64URL.toBuffer(
                 props.authenticator.credentialPublicKey,
               ),
             },
           }),
-        catch: (error) => new AuthError({ cause: error }),
+        catch: (error) => {
+          console.error('Error at verifying authentication response:', error)
+          return new AuthError({ cause: error })
+        },
       }).pipe(Effect.withSpan('verifyAuthenticationResponse')),
 
     generateRegistrationOptions: (props: {
@@ -72,7 +73,7 @@ const make = () => {
           generateRegistrationOptions({
             rpID,
             rpName: rpName,
-            userID: props.userId,
+            userID: isoUint8Array.fromUTF8String(props.userId),
             userName: props.userName,
           }),
         catch: (error) => new AuthError({ cause: error }),
