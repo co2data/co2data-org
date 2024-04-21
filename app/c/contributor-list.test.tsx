@@ -3,7 +3,7 @@ import { makeCo2Average } from '@/domain/co2/example-data'
 import { Co2Repository } from '@/domain/co2/repository'
 import { render, screen } from '@testing-library/react'
 import { Effect, Layer, Option } from 'effect'
-import { expect, test, vi } from 'vitest'
+import { expect, test } from 'vitest'
 import { ContributorListEffect } from './contributor-list'
 
 test('render no contributor found', async () => {
@@ -36,7 +36,7 @@ async function setup(props: {
   const co2RepoTest = Layer.succeed(
     Co2Repository,
     Co2Repository.of({
-      getAllCo2Averages: () => Effect.succeed(props.mockData),
+      getAllCo2Averages: Effect.succeed(props.mockData),
       getCo2AverageBySlug: (slug) => Effect.succeed(Option.none()),
     }),
   )

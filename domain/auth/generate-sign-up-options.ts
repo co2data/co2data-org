@@ -20,9 +20,8 @@ export function generateSignUpOptionsEffect(username: string) {
       ? existingUser.value
       : yield* $(userRepo.createUser(username))
 
-    const passKeyService = yield* $(PassKey)
     const options = yield* $(
-      passKeyService.generateRegistrationOptions({
+      PassKey.generateRegistrationOptions({
         userId: user.id,
         userName: user.username,
       }),

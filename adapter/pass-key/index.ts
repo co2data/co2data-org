@@ -12,7 +12,7 @@ import type {
   PublicKeyCredentialUserEntityJSON,
   RegistrationResponseJSON,
 } from '@simplewebauthn/types'
-import { Context, Data, Effect, Layer } from 'effect'
+import { Data, Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { rpID, rpName, rpOrigin } from './relying-partner'
 
@@ -110,7 +110,7 @@ const makeTest = mock<typeof make>(() => {
   }
 })
 
-export class PassKey extends Context.Tag('@services/PassKey')<
+export class PassKey extends Effect.Tag('@services/PassKey')<
   PassKey,
   ReturnType<typeof make>
 >() {

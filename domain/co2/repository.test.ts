@@ -24,8 +24,7 @@ describe('co2-repository', () => {
         timesPerYearAverage: 500,
       }
 
-      const repo = yield* $(Co2Repository)
-      const actual = yield* $(repo.getAllCo2Averages())
+      const actual = yield* $(Co2Repository.getAllCo2Averages)
 
       expect(actual).toStrictEqual([expected])
     }).pipe(
@@ -35,7 +34,7 @@ describe('co2-repository', () => {
         description: null,
         slug: 'test',
         unit: 'kilogram',
-        avgPerYear: '675000',
+        avgPerYear: 675000,
         avgPerUnit: 27000,
         singleConsumptionFrom: 0,
         singleConsumptionTo: 0.5,
@@ -75,7 +74,7 @@ describe('co2-repository', () => {
         description: null,
         slug: 'test',
         unit: 'kilogram',
-        avgPerYear: '675000',
+        avgPerYear: 675000,
         avgPerUnit: 27000,
         singleConsumptionFrom: 0,
         singleConsumptionTo: 0.5,

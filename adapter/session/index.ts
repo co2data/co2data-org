@@ -1,4 +1,4 @@
-import { Config, Context, Effect, Layer, Secret } from 'effect'
+import { Config, Effect, Layer, Secret } from 'effect'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
@@ -39,12 +39,9 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export class Session extends Context.Tag('@services/Session')<
+export class Session extends Effect.Tag('@services/Session')<
   Session,
   Effect.Effect.Success<typeof make>
 >() {
   static Live = Layer.effect(this, make)
 }
-
-export const { getSession, setSession, deleteSession } =
-  Effect.serviceFunctions(Session)

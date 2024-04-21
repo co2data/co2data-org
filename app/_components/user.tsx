@@ -1,5 +1,5 @@
 import { run, runServerAction } from '@/adapter/effect'
-import { deleteSession, getSession } from '@/adapter/session'
+import { Session } from '@/adapter/session'
 import { Button } from '@/app/_components/ui/button'
 import {
   DropdownMenu,
@@ -15,12 +15,12 @@ import DropdownButton from './ui/dropdown-button'
 
 export const logout = async () => {
   'use server'
-  await deleteSession().pipe(runServerAction('logout'))
+  await Session.deleteSession().pipe(runServerAction('logout'))
 }
 
 const UserEffect = (props: { className?: string }) => {
   return Effect.gen(function* ($) {
-    const username = yield* $(getSession())
+    const username = yield* $(Session.getSession())
 
     return (
       <>

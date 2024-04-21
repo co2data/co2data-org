@@ -98,8 +98,7 @@ function parseSlug(slug: string | undefined) {
 }
 
 function getCo2Average(slug: string) {
-  return Co2Repository.pipe(
-    Effect.flatMap((repo) => repo.getCo2AverageBySlug(slug)),
+  return Co2Repository.getCo2AverageBySlug(slug).pipe(
     Effect.flatMap(Effect.orElseFail(notFound(slug))),
   )
 }

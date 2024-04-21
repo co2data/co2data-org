@@ -1,6 +1,6 @@
 import { DB, type DbError } from '@/adapter/db'
 import type { Source } from '@/domain/source'
-import { Context, Effect, Layer } from 'effect'
+import { Effect, Layer } from 'effect'
 import { remark } from 'remark'
 import html from 'remark-html'
 
@@ -23,7 +23,7 @@ const make = Effect.gen(function* ($) {
   })
 })
 
-export class SourceRepository extends Context.Tag('@services/SourceRepository')<
+export class SourceRepository extends Effect.Tag('@services/SourceRepository')<
   SourceRepository,
   _SourceRepository
 >() {

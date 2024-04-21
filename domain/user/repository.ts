@@ -4,7 +4,7 @@ import type { VerifiedRegistrationResponse } from '@simplewebauthn/server'
 import { isoBase64URL } from '@simplewebauthn/server/helpers'
 import type { CredentialDeviceType } from '@simplewebauthn/types'
 import { eq } from 'drizzle-orm'
-import { Context, Data, Effect, Layer, Option, Predicate } from 'effect'
+import { Effect, Layer, Option, Predicate } from 'effect'
 import { Base64String, type User } from '.'
 
 interface _UserRepository {
@@ -108,7 +108,7 @@ const make = Effect.gen(function* ($) {
   })
 })
 
-export class UserRepository extends Context.Tag('@services/UserRepository')<
+export class UserRepository extends Effect.Tag('@services/UserRepository')<
   UserRepository,
   _UserRepository
 >() {

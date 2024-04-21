@@ -10,8 +10,7 @@ export function ContributorListEffect(props: {
     [key: string]: string | undefined
   }
 }) {
-  return Co2Repository.pipe(
-    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+  return Co2Repository.getAllCo2Averages.pipe(
     Effect.map(filter(props.searchParams.search)),
     Effect.map(render),
     Effect.withSpan('Render /c/'),

@@ -6,7 +6,6 @@ import { type VercelPgDatabase, drizzle } from 'drizzle-orm/vercel-postgres'
 
 import {
   Config,
-  Context,
   Data,
   Effect,
   Layer,
@@ -165,7 +164,7 @@ const make = Effect.gen(function* (_) {
   })
 })
 
-export class DB extends Context.Tag('@services/db')<DB, _DB>() {
+export class DB extends Effect.Tag('@services/db')<DB, _DB>() {
   static Live = Layer.effect(this, make)
 }
 

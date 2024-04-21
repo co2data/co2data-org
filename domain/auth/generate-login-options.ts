@@ -10,9 +10,9 @@ export function generateLoginOptionsEffect(username: string) {
       userRepo.findByUsername(username),
       Effect.flatMap(Effect.mapError(() => new NoUserFound())),
     )
-    const passKeyService = yield* $(PassKey)
+
     const options = yield* $(
-      passKeyService.generateAuthenticationOptions({
+      PassKey.generateAuthenticationOptions({
         userAuthenticators: user.authenticators,
       }),
     )

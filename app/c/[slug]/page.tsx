@@ -23,8 +23,13 @@ type Props = {
 
 function ContributorPageEffect({ params, searchParams }: Props) {
   return Effect.gen(function* (_) {
-    const co2Average = yield* _(getCo2Average(params.slug))
-    const sources = yield* _(getSources(co2Average.id))
+    const co2Average = yield* _(
+      Co2Repository.getCo2AverageBySlug(params.slug),
+      Effect.map(Option.getOrElse(notFound)),
+    )
+    const sources = yield* _(
+      SourceRepository.getAllSourcesByCo2ProducerId(co2Average.id),
+    )
 
     return (
       <main className="overflow-hidden">
@@ -99,20 +104,6 @@ function ContributorPageEffect({ params, searchParams }: Props) {
     }),
     setLogLevelFromSearchParams({ searchParams }),
   ) satisfies Effect.Effect<JSX.Element, never, unknown>
-}
-
-function getCo2Average(slug: string) {
-  return Effect.flatMap(Co2Repository, (co2Repo) =>
-    co2Repo
-      .getCo2AverageBySlug(slug)
-      .pipe(Effect.map(Option.getOrElse(notFound))),
-  )
-}
-
-function getSources(id: string) {
-  return Effect.flatMap(SourceRepository, (sourceRepo) =>
-    sourceRepo.getAllSourcesByCo2ProducerId(id),
-  )
 }
 
 function generateMetadataEffect({ params, searchParams }: Props) {

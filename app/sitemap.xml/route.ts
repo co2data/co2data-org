@@ -10,8 +10,7 @@ const dbErrorCount = Metric.counter('db_error_count').pipe(
 export const GET = run(route)
 
 function route() {
-  return Co2Repository.pipe(
-    Effect.flatMap((repo) => repo.getAllCo2Averages()),
+  return Co2Repository.getAllCo2Averages.pipe(
     Effect.map(renderResponse),
     // Metric.trackErrorWith(dbErrorCount, constant(1)),  // I don't know how Metrics work...
     Effect.catchAll((error) =>

@@ -1,4 +1,4 @@
-import { DB, DbError } from '@/adapter/db'
+import { DB } from '@/adapter/db'
 import type { Source } from '@/domain/source'
 import { makeSource } from '@/domain/source/example-data'
 import { Effect, Layer } from 'effect'
@@ -10,8 +10,9 @@ describe('source repository', () => {
   describe('getAllByProducerId', () => {
     it('takes happy path', () =>
       Effect.gen(function* ($) {
-        const sourceRepo = yield* $(SourceRepository)
-        const actual = yield* $(sourceRepo.getAllSourcesByCo2ProducerId('1'))
+        const actual = yield* $(
+          SourceRepository.getAllSourcesByCo2ProducerId('1'),
+        )
         expect(actual).toMatchInlineSnapshot(`
           [
             {
@@ -51,8 +52,9 @@ describe('source repository', () => {
 
     it('transforms markdown to html in description', () =>
       Effect.gen(function* ($) {
-        const sourceRepo = yield* $(SourceRepository)
-        const actual = yield* $(sourceRepo.getAllSourcesByCo2ProducerId('1'))
+        const actual = yield* $(
+          SourceRepository.getAllSourcesByCo2ProducerId('1'),
+        )
         expect(actual).toMatchInlineSnapshot(`
           [
             {
