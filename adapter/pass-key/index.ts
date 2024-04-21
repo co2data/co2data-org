@@ -18,88 +18,86 @@ import { rpID, rpName, rpOrigin } from './relying-partner'
 
 export class AuthError extends Data.TaggedError('AuthError')<BaseError> {}
 
-const make = () => {
-  return {
-    generateAuthenticationOptions: (props: {
-      userAuthenticators: Authenticator[]
-    }) =>
-      Effect.tryPromise({
-        try: () =>
-          generateAuthenticationOptions({
-            rpID,
-            // Require users to use a previously-registered authenticator
-            allowCredentials: props.userAuthenticators.map((authenticator) => ({
-              id: authenticator.credentialID,
-              type: 'public-key',
-              transports: authenticator.transports ?? [],
-            })),
-            userVerification: 'preferred',
-          }),
-        catch: (error) => new AuthError({ cause: error }),
-      }).pipe(Effect.withSpan('generateAuthenticationOptions')),
+const make = {
+  generateAuthenticationOptions: (props: {
+    userAuthenticators: Authenticator[]
+  }) =>
+    Effect.tryPromise({
+      try: () =>
+        generateAuthenticationOptions({
+          rpID,
+          // Require users to use a previously-registered authenticator
+          allowCredentials: props.userAuthenticators.map((authenticator) => ({
+            id: authenticator.credentialID,
+            type: 'public-key',
+            transports: authenticator.transports ?? [],
+          })),
+          userVerification: 'preferred',
+        }),
+      catch: (error) => new AuthError({ cause: error }),
+    }).pipe(Effect.withSpan('generateAuthenticationOptions')),
 
-    verifyAuthenticationResponse: (props: {
-      body: AuthenticationResponseJSON
-      expectedChallenge: string
-      authenticator: Authenticator
-    }) =>
-      Effect.tryPromise({
-        try: () =>
-          verifyAuthenticationResponse({
-            response: props.body,
-            expectedChallenge: props.expectedChallenge,
-            expectedOrigin: rpOrigin,
-            expectedRPID: rpID,
-            authenticator: {
-              ...props.authenticator,
-              credentialID: props.authenticator.credentialID,
-              credentialPublicKey: isoBase64URL.toBuffer(
-                props.authenticator.credentialPublicKey,
-              ),
-            },
-          }),
-        catch: (error) => new AuthError({ cause: error }),
-      }).pipe(Effect.withSpan('verifyAuthenticationResponse')),
-
-    generateRegistrationOptions: (props: {
-      userId: string
-      userName: string
-    }) =>
-      Effect.tryPromise({
-        try: () =>
-          generateRegistrationOptions({
-            rpID,
-            rpName: rpName,
-            userID: isoUint8Array.fromUTF8String(props.userId),
-            userName: props.userName,
-          }),
-        catch: (error) => new AuthError({ cause: error }),
-      }).pipe(Effect.withSpan('generateRegistrationOptions')),
-
-    verifyRegistrationResponse: (props: {
-      responseBody: RegistrationResponseJSON
-      currentChallenge: string
-    }) =>
-      Effect.tryPromise(() =>
-        verifyRegistrationResponse({
-          response: props.responseBody,
-          expectedChallenge: props.currentChallenge,
+  verifyAuthenticationResponse: (props: {
+    body: AuthenticationResponseJSON
+    expectedChallenge: string
+    authenticator: Authenticator
+  }) =>
+    Effect.tryPromise({
+      try: () =>
+        verifyAuthenticationResponse({
+          response: props.body,
+          expectedChallenge: props.expectedChallenge,
           expectedOrigin: rpOrigin,
           expectedRPID: rpID,
+          authenticator: {
+            ...props.authenticator,
+            credentialID: props.authenticator.credentialID,
+            credentialPublicKey: isoBase64URL.toBuffer(
+              props.authenticator.credentialPublicKey,
+            ),
+          },
         }),
-      ).pipe(Effect.withSpan('verifyRegistrationResponse')),
-  }
+      catch: (error) => new AuthError({ cause: error }),
+    }).pipe(Effect.withSpan('verifyAuthenticationResponse')),
+
+  generateRegistrationOptions: (props: {
+    userId: string
+    userName: string
+  }) =>
+    Effect.tryPromise({
+      try: () =>
+        generateRegistrationOptions({
+          rpID,
+          rpName: rpName,
+          userID: isoUint8Array.fromUTF8String(props.userId),
+          userName: props.userName,
+        }),
+      catch: (error) => new AuthError({ cause: error }),
+    }).pipe(Effect.withSpan('generateRegistrationOptions')),
+
+  verifyRegistrationResponse: (props: {
+    responseBody: RegistrationResponseJSON
+    currentChallenge: string
+  }) =>
+    Effect.tryPromise(() =>
+      verifyRegistrationResponse({
+        response: props.responseBody,
+        expectedChallenge: props.currentChallenge,
+        expectedOrigin: rpOrigin,
+        expectedRPID: rpID,
+      }),
+    ).pipe(Effect.withSpan('verifyRegistrationResponse')),
 }
 
-const makeTest = mock<typeof make>(() => {
-  return {
-    generateAuthenticationOptions: () =>
-      Effect.succeed({ json: 'hi', challenge: 'challenge' }),
-    generateRegistrationOptions: (props: {
-      userId: string
-      userName: string
-    }) =>
-      Effect.succeed({
+const makeTest = mock<typeof make>({
+  generateAuthenticationOptions: () =>
+    Effect.succeed({ json: 'hi', challenge: 'challenge' }),
+  generateRegistrationOptions: (props: {
+    userId: string
+    userName: string
+  }) =>
+    Effect.succeed(
+      mock({
         challenge: 'challenge',
         user: {
           displayName: props.userName,
@@ -107,13 +105,13 @@ const makeTest = mock<typeof make>(() => {
           name: props.userName,
         } satisfies PublicKeyCredentialUserEntityJSON,
       }),
-  }
+    ),
 })
 
 export class PassKey extends Effect.Tag('@services/PassKey')<
   PassKey,
-  ReturnType<typeof make>
+  typeof make
 >() {
-  static Live = Layer.succeed(this, make())
-  static Test = Layer.succeed(this, makeTest())
+  static Live = Layer.succeed(this, make)
+  static Test = Layer.succeed(this, makeTest)
 }
