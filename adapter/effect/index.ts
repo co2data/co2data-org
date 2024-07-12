@@ -5,7 +5,12 @@ import { MainContext, mainLive } from './main'
 export function run<P, Q, A>(
   effect: (arg1: P, arg2: Q) => Effect.Effect<A, never, MainContext>,
 ) {
-  return flow(effect, Effect.provide(mainLive), Effect.runPromise)
+  return flow(
+    effect,
+    Effect.provide(mainLive),
+    Effect.catchAllCause(Effect.logError),
+    Effect.runPromise,
+  )
 }
 
 export const runServerAction =
@@ -16,6 +21,7 @@ export const runServerAction =
       Effect.withSpan(span),
       Effect.either,
       Effect.map((_) => _.toJSON() as unknown as typeof _),
+      Effect.catchAllCause(Effect.logError),
       Effect.provide(mainLive),
       Effect.runPromise,
     )

@@ -2,9 +2,12 @@ import { run } from '@/adapter/effect'
 import Co2AverageCmp from '@/components/co2-average'
 import { Co2Average, Co2Repository } from '@/domain/co2'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
-import { Effect } from 'effect'
+import { Effect, Metric } from 'effect'
 import Link from 'next/link'
-
+const counter = Metric.counter('count', {
+  description: 'An example counter',
+})
+const timer = Metric.timer('timer_effect')
 export function ContributorListEffect(props: {
   searchParams: {
     [key: string]: string | undefined
@@ -15,6 +18,8 @@ export function ContributorListEffect(props: {
     Effect.map(filter(props.searchParams.search)),
     Effect.map(render),
     Effect.withSpan('Render /c/'),
+    Metric.counter('count_visit').pipe(Metric.withConstantInput(1)),
+    Metric.trackDuration(timer),
     Effect.catchTag('DbError', handleDbError),
     setLogLevelFromSearchParams(props),
   ) satisfies Effect.Effect<JSX.Element, never, unknown>
