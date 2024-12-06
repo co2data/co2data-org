@@ -5,7 +5,7 @@ import type { BaseError } from '@/lib/types'
 import convert from 'convert'
 import { Data, Effect } from 'effect'
 import { ImageResponse } from 'next/og'
-import { Fragment } from 'react'
+import { Fragment, type JSX } from 'react'
 
 export function createOgImageResponse(
   request: Request,

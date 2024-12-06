@@ -12,6 +12,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
 
+import type { JSX } from 'react'
+
 type Props = {
   params: {
     slug: string

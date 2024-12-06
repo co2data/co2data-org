@@ -7,7 +7,7 @@ import { pipe } from 'effect/Function'
 import { valueTags } from 'effect/Match'
 import Link from 'next/link'
 import type React from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
 import { AlreadyRegistered, MissingUserName } from '../errors'
 import { generateSignUpOptions, verifySignUp } from '../server-action'
 import Warning from '../warning'
@@ -50,7 +50,7 @@ export default function Form(props: {
   children: React.ReactNode
   submit: React.ReactNode
 }) {
-  const [state, formAction] = useFormState(onSignUp, undefined)
+  const [state, formAction] = useActionState(onSignUp, undefined)
 
   return (
     <form action={formAction}>

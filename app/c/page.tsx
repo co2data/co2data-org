@@ -3,10 +3,8 @@ import SearchBox from '@/app/c/search-box'
 import Spinner from '@/components/ui/spinner'
 import { Suspense } from 'react'
 
-export default async function ContributorPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined }
+export default async function ContributorPage(props: {
+  searchParams: Promise<{ [key: string]: string | undefined }>
 }) {
   return (
     <main className="py-6 md:py-10">
@@ -15,7 +13,7 @@ export default async function ContributorPage({
           <h1 className="font-extrabold text-6xl text-foreground">
             CO<sub>2</sub> Data
           </h1>
-          <SearchBox searchParams={searchParams} />
+          <SearchBox searchParams={await props.searchParams} />
         </div>
         <main>
           <Suspense
@@ -25,7 +23,7 @@ export default async function ContributorPage({
               </div>
             }
           >
-            <ContributorList searchParams={searchParams} />
+            <ContributorList searchParams={props.searchParams} />
           </Suspense>
         </main>
       </div>

@@ -10,7 +10,7 @@ import { valueTags } from 'effect/Match'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 import { toast } from 'sonner'
 import { MissingUserName } from '../errors'
 import { generateLoginOptions, verifyLogin } from '../server-action'
@@ -52,7 +52,7 @@ export default function Form(props: {
   children: React.ReactNode
   submit: React.ReactNode
 }) {
-  const [state, formAction] = useFormState(onLogin, undefined)
+  const [state, formAction] = useActionState(onLogin, undefined)
 
   if (state && state._tag === 'Right') {
     toastId = toast(

@@ -1,14 +1,14 @@
-import { run } from '@/adapter/effect'
+import { type SearchParams, run } from '@/adapter/effect'
 import Co2AverageCmp from '@/components/co2-average'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 import { Effect } from 'effect'
 import Link from 'next/link'
 
+import type { JSX } from 'react'
+
 export function ContributorListEffect(props: {
-  searchParams: {
-    [key: string]: string | undefined
-  }
+  searchParams: SearchParams
 }) {
   return Co2Repository.getAllCo2Averages.pipe(
     Effect.map(filter(props.searchParams.search)),

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "test": "vitest",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@effect/opentelemetry": "^0.33.0",
-    "@next/bundle-analyzer": "^14.2.2",
+    "@next/bundle-analyzer": "15.0.3",
     "@opentelemetry/exporter-trace-otlp-http": "0.50.0",
     "@opentelemetry/sdk-trace-base": "^1.23.0",
     "@opentelemetry/sdk-trace-node": "^1.23.0",
@@ -46,10 +46,10 @@
     "iron-session": "^8.0.1",
     "lucide-react": "^0.372.0",
     "mime": "^4.0.1",
-    "next": "14.2.2",
+    "next": "15.0.3",
     "next-themes": "^0.3.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "server-only": "^0.0.1",
@@ -63,8 +63,8 @@
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
     "@types/node": "20.12.7",
-    "@types/react": "18.2.79",
-    "@types/react-dom": "18.2.25",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "drizzle-kit": "0.20.16",
@@ -82,5 +82,11 @@
     "typescript": "5.4.5",
     "vitest": "^1.5.0"
   },
-  "packageManager": "pnpm@8.10.5"
+  "packageManager": "pnpm@8.10.5",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    }
+  }
 }
