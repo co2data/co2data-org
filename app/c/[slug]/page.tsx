@@ -1,4 +1,4 @@
-import { run } from '@/adapter/effect'
+import runtime from '@/adapter/effect/runtime'
 import { baseUrl } from '@/app/config'
 import Opt from '@/components/opt'
 import PersonalCo2 from '@/components/personal-co2'
@@ -11,19 +11,20 @@ import { Effect, Option, Struct, pipe } from 'effect'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
-
 import type { JSX } from 'react'
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string
-  }
-  searchParams: {
+  }>
+  searchParams: Promise<{
     logLevel?: string
-  }
+  }>
 }
 
-function ContributorPageEffect({ params, searchParams }: Props) {
+export default async function ContributorPage(props: Props) {
+  const params = await props.params
+  const searchParams = await props.searchParams
   return Effect.gen(function* (_) {
     const co2Average = yield* _(
       Co2Repository.getCo2AverageBySlug(params.slug),
@@ -102,23 +103,26 @@ function ContributorPageEffect({ params, searchParams }: Props) {
       attributes: { slug: params.slug },
     }),
     Effect.catchTags({
-      DbError: (cause) => Effect.succeed(<main>Database error</main>),
+      DbError: (_cause) => Effect.succeed(<main>Database error</main>),
     }),
-    setLogLevelFromSearchParams({ searchParams }),
+    setLogLevelFromSearchParams(searchParams),
   ) satisfies Effect.Effect<JSX.Element, never, unknown>
 }
 
-function generateMetadataEffect({ params, searchParams }: Props) {
+export async function generateMetadata(props: Props) {
+  const params = await props.params
+  const searchParams = await props.searchParams
   return Co2Repository.pipe(
     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
     Effect.map(Option.getOrElse(notFound)),
     Effect.map(mapMetadata(params)),
     Effect.orElseSucceed(() => ({})),
-    setLogLevelFromSearchParams({ searchParams }),
+    setLogLevelFromSearchParams(searchParams),
     Effect.withSpan('Generate metadata c/[slug]/page', {
       attributes: { slug: params.slug },
     }),
-  ) satisfies Effect.Effect<Metadata, never, unknown>
+    runtime.runPromise,
+  )
 }
 
 function mapMetadata(params: { slug: string }) {
@@ -150,8 +154,3 @@ function mapMetadata(params: { slug: string }) {
     } satisfies Metadata
   }
 }
-
-const ContributorPage = run(ContributorPageEffect)
-export default ContributorPage
-
-export const generateMetadata = run(generateMetadataEffect)

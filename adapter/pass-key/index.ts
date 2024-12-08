@@ -49,10 +49,10 @@ const make = {
           expectedChallenge: props.expectedChallenge,
           expectedOrigin: rpOrigin,
           expectedRPID: rpID,
-          authenticator: {
+          credential: {
             ...props.authenticator,
-            credentialID: props.authenticator.credentialID,
-            credentialPublicKey: isoBase64URL.toBuffer(
+            id: props.authenticator.credentialID,
+            publicKey: isoBase64URL.toBuffer(
               props.authenticator.credentialPublicKey,
             ),
           },

@@ -1,6 +1,8 @@
-import type { AuthenticatorTransport } from '@simplewebauthn/types'
+import type {
+  AuthenticatorTransport,
+  CredentialDeviceType,
+} from '@simplewebauthn/types'
 import { Brand, type Option } from 'effect'
-import type { CredentialDeviceType } from 'node_modules/@simplewebauthn/server/esm/deps'
 
 export { SourceRepository } from '@/domain/source/repository'
 export type User = {

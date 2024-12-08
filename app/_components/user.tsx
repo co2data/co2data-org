@@ -1,4 +1,5 @@
-import { run, runServerAction } from '@/adapter/effect'
+import { runServerAction } from '@/adapter/effect'
+import runtime from '@/adapter/effect/runtime'
 import { Session } from '@/adapter/session'
 import { Button } from '@/app/_components/ui/button'
 import {
@@ -18,7 +19,7 @@ export const logout = async () => {
   await Session.deleteSession().pipe(runServerAction('logout'))
 }
 
-const UserEffect = (props: { className?: string }) => {
+export default function User(props: { className?: string }) {
   return Effect.gen(function* ($) {
     const username = yield* $(Session.getSession())
 
@@ -58,8 +59,5 @@ const UserEffect = (props: { className?: string }) => {
         </DropdownMenu>
       </>
     )
-  })
+  }).pipe(runtime.runPromise)
 }
-
-const User = run(UserEffect)
-export default User

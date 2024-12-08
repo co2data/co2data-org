@@ -21,10 +21,10 @@ export function format(
     : Number.parseFloat(value.toFixed(decimalPlaces))
 }
 
-export function setLogLevelFromSearchParams(props: {
-  searchParams: { logLevel?: string | undefined }
+export function setLogLevelFromSearchParams(searchParams: {
+  logLevel?: string | undefined
 }) {
-  const logLevel = props.searchParams.logLevel as LogLevel.Literal
+  const logLevel = searchParams.logLevel as LogLevel.Literal
 
   if (
     logLevel === undefined ||

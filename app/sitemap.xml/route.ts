@@ -1,13 +1,13 @@
-import { run } from '@/adapter/effect'
+import { mainEdgeLive } from '@/adapter/effect/edge-main'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
-import { Effect, Metric } from 'effect'
+import { Effect, Metric, flow } from 'effect'
 import { baseUrl } from '../config'
 
 const dbErrorCount = Metric.counter('db_error_count').pipe(
   Metric.withConstantInput(1),
 )
 
-export const GET = run(route)
+export const GET = flow(route, Effect.provide(mainEdgeLive), Effect.runPromise)
 
 function route() {
   return Co2Repository.getAllCo2Averages.pipe(

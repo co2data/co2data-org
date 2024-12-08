@@ -1,12 +1,13 @@
 import { mainEdgeLive } from '@/adapter/effect/edge-main'
-import { mainLive } from '@/adapter/effect/main'
-import { Effect, flow } from 'effect'
+import { Effect } from 'effect'
 import { createOgImageResponse } from './create-og-image-response'
 
-export const runtime = 'edge'
-
-export const GET = flow(
-  createOgImageResponse,
-  Effect.provide(mainEdgeLive),
-  Effect.runPromise,
-)
+export async function GET(
+  request: Request,
+  props: { params: Promise<{ slug: string | undefined }> },
+) {
+  return createOgImageResponse(request, { params: await props.params }).pipe(
+    Effect.provide(mainEdgeLive),
+    Effect.runPromise,
+  )
+}

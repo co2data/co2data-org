@@ -1,21 +1,27 @@
-import { type SearchParams, run } from '@/adapter/effect'
+import runtime from '@/adapter/effect/runtime'
 import Co2AverageCmp from '@/components/co2-average'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 import { Effect } from 'effect'
+import type { SearchParams } from 'next/dist/server/request/search-params'
 import Link from 'next/link'
 
 import type { JSX } from 'react'
 
-export function ContributorListEffect(props: {
-  searchParams: SearchParams
+export default async function ContributorList(props: {
+  searchParams: Promise<SearchParams>
 }) {
+  const searchParams = await props.searchParams
+  return ContributorListEffect({ searchParams }).pipe(runtime.runPromise)
+}
+
+export function ContributorListEffect(props: { searchParams: SearchParams }) {
   return Co2Repository.getAllCo2Averages.pipe(
     Effect.map(filter(props.searchParams.search)),
     Effect.map(render),
     Effect.withSpan('Render /c/'),
     Effect.catchTag('DbError', handleDbError),
-    setLogLevelFromSearchParams(props),
+    setLogLevelFromSearchParams(props.searchParams),
   ) satisfies Effect.Effect<JSX.Element, never, unknown>
 }
 
@@ -44,9 +50,9 @@ function render(co2Averages: Co2Average[]) {
   )
 }
 
-function filter(term: string | null | undefined) {
+function filter(term: string | string[] | null | undefined) {
   return (co2Averges: Co2Average[]) =>
-    term
+    term && typeof term === 'string'
       ? co2Averges.filter((item) =>
           item.title.toLowerCase().includes(term.toLowerCase()),
         )
@@ -56,6 +62,3 @@ function filter(term: string | null | undefined) {
 function handleDbError() {
   return Effect.succeed(<main>The database is not reachable...</main>)
 }
-
-const ContributorList = run(ContributorListEffect)
-export default ContributorList

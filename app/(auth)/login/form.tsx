@@ -29,7 +29,7 @@ const onLogin = async (prevState: unknown, formData: FormData) => {
 
   let asseResp: AuthenticationResponseJSON
   try {
-    asseResp = await startAuthentication(resp.right)
+    asseResp = await startAuthentication({ optionsJSON: resp.right })
   } catch (error) {
     console.error('Error at starting authentication:', error)
     return {

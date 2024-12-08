@@ -50,4 +50,4 @@ devenv.local.nix
 # pre-commit
 .pre-commit-config.yaml
 
-docker/local/tempo-data/
+/data

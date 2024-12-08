@@ -84,14 +84,14 @@ const make = Effect.gen(function* ($) {
         .query((_) => {
           const authenticator = {
             userId: userId,
-            counter: registrationInfo.counter as unknown as bigint,
+            counter: registrationInfo.credential.counter as unknown as bigint,
             credentialBackedUp: registrationInfo.credentialBackedUp,
             credentialDeviceType: registrationInfo.credentialDeviceType,
-            credentialId: registrationInfo.credentialID,
+            credentialId: registrationInfo.credential.id,
             // saving as varbinary/binary/blob gets me some strange base64 back that I don't know how to convert to Uint8Array back...
             // I'm converting it to base64 myself and handel conversion back myself
             credentialPublicKey: isoBase64URL.fromBuffer(
-              registrationInfo.credentialPublicKey,
+              registrationInfo.credential.publicKey,
             ),
           } satisfies typeof schema.authenticators.$inferInsert
           return _.insert(schema.authenticators).values(authenticator)

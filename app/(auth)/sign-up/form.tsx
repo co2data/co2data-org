@@ -26,7 +26,7 @@ const onSignUp = async (prevState: unknown, formData: FormData) => {
 
   let attResp: RegistrationResponseJSON
   try {
-    attResp = await startRegistration(resp.right)
+    attResp = await startRegistration({ optionsJSON: resp.right })
   } catch (error: unknown) {
     console.error('Error:', error)
     if (
