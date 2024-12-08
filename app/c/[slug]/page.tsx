@@ -11,7 +11,6 @@ import { Effect, Option, Struct, pipe } from 'effect'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
-import type { JSX } from 'react'
 
 type Props = {
   params: Promise<{
@@ -106,7 +105,8 @@ export default async function ContributorPage(props: Props) {
       DbError: (_cause) => Effect.succeed(<main>Database error</main>),
     }),
     setLogLevelFromSearchParams(searchParams),
-  ) satisfies Effect.Effect<JSX.Element, never, unknown>
+    runtime.runPromise,
+  )
 }
 
 export async function generateMetadata(props: Props) {
