@@ -46,7 +46,7 @@ const SourceComponent = ({
       </p>
       <p className="px-4 pt-2 font-bold text-xs">Description</p>
       <div
-        className="prose prose-sm dark:prose-invert px-4 pb-2 prose-li:my-0 prose-p:my-1 prose-ul:my-1"
+        className="prose prose-sm dark:prose-invert prose-li:my-0 prose-p:my-1 prose-ul:my-1 px-4 pb-2"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: source.description }}
       />
