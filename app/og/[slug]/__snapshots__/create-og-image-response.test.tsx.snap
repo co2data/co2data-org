@@ -1,49 +1,73 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`og image test > render image > image image 1`] = `
-<OgImageFrame>
+<div>
   <div
-    tw="flex justify-between items-end mt-8"
+    style="height: 100%; width: 100%; display: flex; flex-direction: column; padding: 4em 8em 5em; color: white; background: rgb(57, 130, 194);"
   >
     <div
-      tw="flex flex-col shrink flex-1 -mb-1"
+      tw="flex flex-col grow"
     >
       <div
-        tw="flex flex-col text-4xl"
+        tw="flex grow justify-between"
       >
-        Emissions of 1 
-        kilogram
-      </div>
-      <div
-        tw="flex flex-col text-8xl leading-[0.9] -ml-1"
-      >
-        Pork
-      </div>
-    </div>
-    <div
-      tw="flex shrink-0 text-[42] leading-[0.75] ml-6"
-    >
-      3
-    </div>
-    <div
-      tw="flex flex-col text-4xl justify-end"
-    >
-      <div
-        tw="flex flex-col ml-2 self-end"
-      >
-        kg CO2e
-      </div>
-      <div
-        tw="flex"
-      >
-        <div>
-          4
+        <div
+          tw="flex flex-col text-center justify-center items-center rounded-lg min-w-20 min-h-20 self-start p-3 text-xl leading-4 font-bold bg-white text-sky-600"
+        >
+          CO2
+          <br />
+          Data
         </div>
-        <div>
-          500
+        <div
+          tw="text-4xl"
+        >
+          co2data.org
+        </div>
+      </div>
+      <div
+        tw="flex justify-between items-end mt-8"
+      >
+        <div
+          tw="flex flex-col shrink flex-1 -mb-1"
+        >
+          <div
+            tw="flex flex-col text-4xl"
+          >
+            Emissions of 1 
+            kilogram
+          </div>
+          <div
+            tw="flex flex-col text-8xl leading-[0.9] -ml-1"
+          >
+            Pork
+          </div>
+        </div>
+        <div
+          tw="flex shrink-0 text-[42] leading-[0.75] ml-6"
+        >
+          3
+        </div>
+        <div
+          tw="flex flex-col text-4xl justify-end"
+        >
+          <div
+            tw="flex flex-col ml-2 self-end"
+          >
+            kg CO2e
+          </div>
+          <div
+            tw="flex"
+          >
+            <div>
+              4
+            </div>
+            <div>
+              500
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</OgImageFrame>
+</div>
 `;

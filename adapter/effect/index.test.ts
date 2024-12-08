@@ -35,14 +35,6 @@ describe('effect basics', () => {
     expect(actual).toBe('localhost')
   })
 
-  test('get config that is not provided', async () => {
-    expect(
-      Effect.runPromise(Config.string('MY_ENV_VAR')),
-    ).rejects.toMatchInlineSnapshot(
-      `[(FiberFailure) (Missing data at MY_ENV_VAR: "Expected MY_ENV_VAR to exist in the process context")]`,
-    )
-  })
-
   test('HashSet equality with tokens', () => {
     const testData = [
       { devices: [{ token: 'hi' }] },

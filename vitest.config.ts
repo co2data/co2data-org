@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
@@ -9,7 +9,7 @@ export default defineConfig({
   test: {
     setupFiles: ['./setup.ts'],
     environment: 'jsdom',
-    exclude: ['e2e', 'node_modules', '.devenv'],
+    exclude: ['e2e', 'node_modules', '.direnv'],
     chaiConfig: { truncateThreshold: 0 },
   },
   resolve: {
