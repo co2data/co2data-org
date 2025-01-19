@@ -1,0 +1,6 @@
+{
+  "name": "co2data",
+  "compatibility_date": "2025-01-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": ".vercel/output/static"
+}
