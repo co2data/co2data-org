@@ -4,7 +4,7 @@ import type {
 } from '@simplewebauthn/types'
 import { Brand, type Option } from 'effect'
 
-export { SourceRepository } from '@/domain/source/repository'
+export { UserRepository } from '@/domain/user/repository'
 export type User = {
   id: string
   username: string

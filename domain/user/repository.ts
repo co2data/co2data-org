@@ -7,32 +7,11 @@ import { eq } from 'drizzle-orm'
 import { Effect, Layer, Option, Predicate } from 'effect'
 import { Base64String, type User } from '.'
 
-interface _UserRepository {
-  createUser: (username: string) => Effect.Effect<User, DbError>
-  findByUsername: (
-    username: string,
-  ) => Effect.Effect<Option.Option<User>, DbError>
-  setCurrentChallenge: (
-    userId: string,
-    currentChallenge: string,
-  ) => Effect.Effect<void, DbError>
-  addAuthenticator: (
-    userId: string,
-    registrationInfo: NonNullable<
-      VerifiedRegistrationResponse['registrationInfo']
-    >,
-  ) => Effect.Effect<void, DbError>
-  updateCounter: (
-    userId: string,
-    counter: number,
-  ) => Effect.Effect<void, DbError>
-}
-
 const make = Effect.gen(function* ($) {
   const database = yield* $(DB)
 
-  return UserRepository.of({
-    createUser: (username) =>
+  return {
+    createUser: (username: string) =>
       database
         .query((_) => _.insert(schema.users).values({ username }))
         .pipe(
@@ -56,7 +35,7 @@ const make = Effect.gen(function* ($) {
           Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
           Effect.withSpan('createUser'),
         ),
-    findByUsername: (username) =>
+    findByUsername: (username: string) =>
       database
         .query((_) =>
           _.query.users.findFirst({
@@ -71,7 +50,7 @@ const make = Effect.gen(function* ($) {
           Effect.withSpan('getUserByName'),
         ),
 
-    setCurrentChallenge: (userId, currentChallenge) =>
+    setCurrentChallenge: (userId: string, currentChallenge: string) =>
       database
         .query((_) =>
           _.update(schema.users)
@@ -79,7 +58,12 @@ const make = Effect.gen(function* ($) {
             .where(eq(schema.users.id, userId)),
         )
         .pipe(Effect.withSpan('setCurrentChallenge')),
-    addAuthenticator: (userId, registrationInfo) =>
+    addAuthenticator: (
+      userId: string,
+      registrationInfo: NonNullable<
+        VerifiedRegistrationResponse['registrationInfo']
+      >,
+    ) =>
       database
         .query((_) => {
           const authenticator = {
@@ -97,7 +81,7 @@ const make = Effect.gen(function* ($) {
           return _.insert(schema.authenticators).values(authenticator)
         })
         .pipe(Effect.withSpan('addAuthenticator')),
-    updateCounter: (userId, counter) =>
+    updateCounter: (userId: string, counter: number) =>
       database
         .query((_) =>
           _.update(schema.authenticators)
@@ -105,14 +89,14 @@ const make = Effect.gen(function* ($) {
             .where(eq(schema.authenticators.userId, userId)),
         )
         .pipe(Effect.withSpan('updateCounter')),
-  })
+  }
 })
 
 export class UserRepository extends Effect.Tag('@services/UserRepository')<
   UserRepository,
-  _UserRepository
+  Effect.Effect.Success<typeof make>
 >() {
-  static Live = Layer.effect(this, make)
+  static Live = Layer.effect(this, make).pipe(Layer.provide(DB.Live))
 }
 
 type UserWithAuthenticators = {
