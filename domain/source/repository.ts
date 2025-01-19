@@ -1,8 +1,7 @@
-import { DB, type DbError } from '@/adapter/db'
+import { DB } from '@/adapter/db'
 import type { Source } from '@/domain/source'
 import { Effect, Layer } from 'effect'
-import { remark } from 'remark'
-import html from 'remark-html'
+import { marked } from 'marked'
 
 interface _SourceRepository {
   getAllSourcesByCo2ProducerId: (id: string) => Effect.Effect<Source[], DbError>
@@ -31,13 +30,10 @@ export class SourceRepository extends Effect.Tag('@services/SourceRepository')<
 }
 
 function transformMarkdownToHTML(source: Source) {
-  return Effect.promise(() =>
-    remark().use(html).process(source.description),
-  ).pipe(
-    Effect.map((processed) => processed.toString()),
-    Effect.map((markdown) => ({
+  return Effect.promise(() => marked(source.description, { async: true })).pipe(
+    Effect.map((html) => ({
       ...source,
-      description: markdown,
+      description: html,
     })),
     Effect.withSpan('transformDescriptionToHTML'),
   )
