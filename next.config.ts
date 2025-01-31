@@ -1,6 +1,7 @@
-import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
 import type { NextConfig } from 'next'
 
+initOpenNextCloudflareForDev()
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
@@ -11,7 +12,5 @@ const nextConfig: NextConfig = {
     ]
   },
 }
-if (process.env.NODE_ENV === 'development') {
-  await setupDevPlatform()
-}
+
 export default nextConfig
