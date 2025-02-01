@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@effect/opentelemetry": "^0.42.5",
+    "@microlabs/otel-cf-workers": "1.0.0-rc.49",
     "@next/bundle-analyzer": "15.1.5",
     "@opentelemetry/exporter-trace-otlp-http": "0.57.1",
     "@opentelemetry/sdk-trace-base": "^1.30.1",

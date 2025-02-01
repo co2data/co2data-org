@@ -52,3 +52,4 @@ devenv.local.nix
 
 /data
 .open-next
+.wrangler

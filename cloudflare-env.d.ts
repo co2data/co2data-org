@@ -3,6 +3,7 @@
 interface CloudflareEnv {
   NEXT_CACHE_WORKERS_KV: KVNamespace
   NEXTJS_ENV: string
+  OTLP_URL: string
   DB: D1Database
   ASSETS: Fetcher
 }

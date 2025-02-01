@@ -1,22 +1,21 @@
-import { NodeSdk } from '@effect/opentelemetry'
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { WebSdk } from '@effect/opentelemetry'
+import { OTLPExporter } from '@microlabs/otel-cf-workers'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 import { Config, Duration, Effect, Layer, type Option, Secret } from 'effect'
+import { ConfigLive } from '../config'
 
-const GrafanaTempoConfig = Config.nested('OTLP')(
-  Config.all({
-    url: Config.string('URL'),
-    auth: Config.option(Config.secret('AUTH')),
-  }),
-)
+const GrafanaConfig = Config.all({
+  url: Config.string('OTLP_URL'),
+  auth: Config.option(Config.secret('OTLP_AUTH')),
+})
 
-export const NodeSdkLive = Layer.unwrapEffect(
+export const TracingLive = Layer.unwrapEffect(
   Effect.gen(function* ($) {
-    const { url, auth } = yield* $(GrafanaTempoConfig)
+    const { url, auth } = yield* $(GrafanaConfig)
     const headers = yield* $(makeHeaders(auth))
-    const traceExporter = new OTLPTraceExporter({ url, headers })
+    const traceExporter = new OTLPExporter({ url, headers })
 
-    return NodeSdk.layer(() => ({
+    return WebSdk.layer(() => ({
       resource: {
         serviceName: 'nextjs',
       },
@@ -25,7 +24,7 @@ export const NodeSdkLive = Layer.unwrapEffect(
       }),
     }))
   }),
-)
+).pipe(Layer.provide(ConfigLive))
 
 function makeHeaders(auth: Option.Option<Secret.Secret>) {
   return auth.pipe(
