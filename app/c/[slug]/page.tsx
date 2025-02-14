@@ -108,49 +108,49 @@ export default async function ContributorPage(props: Props) {
     runtime.runPromise,
   )
 }
-
-export async function generateMetadata(props: Props) {
-  const params = await props.params
-  const searchParams = await props.searchParams
-  return Co2Repository.pipe(
-    Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
-    Effect.map(Option.getOrElse(notFound)),
-    Effect.map(mapMetadata(params)),
-    Effect.orElseSucceed(() => ({})),
-    setLogLevelFromSearchParams(searchParams),
-    Effect.withSpan('Generate metadata c/[slug]/page', {
-      attributes: { slug: params.slug },
-    }),
-    runtime.runPromise,
-  )
-}
-
-function mapMetadata(params: { slug: string }) {
-  return (co2Average: Co2Average) => {
-    const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
-      co2Average.title
-    }" are ${convert(co2Average.avgPerUnit, 'grams')
-      .to('kg')
-      .toFixed(3)} kg CO₂e`
-
-    return {
-      metadataBase: new URL(baseUrl),
-      title: co2Average.title,
-      description,
-      openGraph: {
-        description,
-        url: `/c/${params.slug}`,
-        images: [
-          {
-            url: `/og/${co2Average.slug}`,
-            width: 1200,
-            height: 630,
-          },
-        ],
-      },
-      alternates: {
-        canonical: `/c/${params.slug}`,
-      },
-    } satisfies Metadata
-  }
-}
+//
+// export async function generateMetadata(props: Props) {
+//   const params = await props.params
+//   const searchParams = await props.searchParams
+//   return Co2Repository.pipe(
+//     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
+//     Effect.map(Option.getOrElse(notFound)),
+//     Effect.map(mapMetadata(params)),
+//     Effect.orElseSucceed(() => ({})),
+//     setLogLevelFromSearchParams(searchParams),
+//     Effect.withSpan('Generate metadata c/[slug]/page', {
+//       attributes: { slug: params.slug },
+//     }),
+//     runtime.runPromise,
+//   )
+// }
+//
+// function mapMetadata(params: { slug: string }) {
+//   return (co2Average: Co2Average) => {
+//     const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
+//       co2Average.title
+//     }" are ${convert(co2Average.avgPerUnit, 'grams')
+//       .to('kg')
+//       .toFixed(3)} kg CO₂e`
+//
+//     return {
+//       metadataBase: new URL(baseUrl),
+//       title: co2Average.title,
+//       description,
+//       openGraph: {
+//         description,
+//         url: `/c/${params.slug}`,
+//         images: [
+//           {
+//             url: `/og/${co2Average.slug}`,
+//             width: 1200,
+//             height: 630,
+//           },
+//         ],
+//       },
+//       alternates: {
+//         canonical: `/c/${params.slug}`,
+//       },
+//     } satisfies Metadata
+//   }
+// }
