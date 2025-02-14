@@ -1,8 +1,6 @@
 import OgImageFrame from '@/components/og-image-frame'
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
 export function GET(request: Request) {
   try {
     return new ImageResponse(

@@ -8,4 +8,8 @@ const co2RepoLive = Co2Repository.Live.pipe(Layer.provide(DB.Live))
 const sourceRepoLive = SourceRepository.Live.pipe(Layer.provide(DB.Live))
 const userRepoLive = UserRepository.Live.pipe(Layer.provide(DB.Live))
 
-export const reposLive = ergeAll(co2RepoLive, sourceRepoLive, userRepoLive)
+export const reposLive = Layer.mergeAll(
+  co2RepoLive,
+  sourceRepoLive,
+  userRepoLive,
+)
