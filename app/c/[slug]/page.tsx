@@ -8,9 +8,9 @@ import { SourceRepository } from '@/domain/source'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 import convert from 'convert'
 import { Effect, Option, Struct, pipe } from 'effect'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import type { Metadata } from 'next/types'
 
 type Props = {
   params: Promise<{
@@ -102,55 +102,59 @@ export default async function ContributorPage(props: Props) {
       attributes: { slug: params.slug },
     }),
     Effect.catchTags({
-      DbError: (_cause) => Effect.succeed(<main>Database error</main>),
+      DbError: (_cause) =>
+        Effect.succeed(<main>Database error {JSON.stringify(_cause)}</main>),
     }),
     setLogLevelFromSearchParams(searchParams),
     runtime.runPromise,
   )
 }
-//
-// export async function generateMetadata(props: Props) {
-//   const params = await props.params
-//   const searchParams = await props.searchParams
-//   return Co2Repository.pipe(
-//     Effect.flatMap((repo) => repo.getCo2AverageBySlug(params.slug)),
-//     Effect.map(Option.getOrElse(notFound)),
-//     Effect.map(mapMetadata(params)),
-//     Effect.orElseSucceed(() => ({})),
-//     setLogLevelFromSearchParams(searchParams),
-//     Effect.withSpan('Generate metadata c/[slug]/page', {
-//       attributes: { slug: params.slug },
-//     }),
-//     runtime.runPromise,
-//   )
-// }
-//
-// function mapMetadata(params: { slug: string }) {
-//   return (co2Average: Co2Average) => {
-//     const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
-//       co2Average.title
-//     }" are ${convert(co2Average.avgPerUnit, 'grams')
-//       .to('kg')
-//       .toFixed(3)} kg CO₂e`
-//
-//     return {
-//       metadataBase: new URL(baseUrl),
-//       title: co2Average.title,
-//       description,
-//       openGraph: {
-//         description,
-//         url: `/c/${params.slug}`,
-//         images: [
-//           {
-//             url: `/og/${co2Average.slug}`,
-//             width: 1200,
-//             height: 630,
-//           },
-//         ],
-//       },
-//       alternates: {
-//         canonical: `/c/${params.slug}`,
-//       },
-//     } satisfies Metadata
-//   }
-// }
+
+export async function generateMetadata(props: Props) {
+  const params = await props.params
+  const searchParams = await props.searchParams
+  return Effect.gen(function* () {
+    const co2AverageRepo = yield* Co2Repository
+    const co2Average = yield* co2AverageRepo.getCo2AverageBySlug(params.slug)
+    if (Option.isNone(co2Average)) {
+      notFound()
+    }
+    return mapMetadata(params)(co2Average.value)
+  }).pipe(
+    setLogLevelFromSearchParams(searchParams),
+    Effect.withSpan('Generate metadata c/[slug]/page', {
+      attributes: { slug: params.slug },
+    }),
+    runtime.runPromise,
+  )
+}
+
+function mapMetadata(params: { slug: string }) {
+  return (co2Average: Co2Average) => {
+    const description = `The CO₂ emissions of 1 ${co2Average.unit} of "${
+      co2Average.title
+    }" are ${convert(co2Average.avgPerUnit, 'grams')
+      .to('kg')
+      .toFixed(3)} kg CO₂e`
+
+    return {
+      metadataBase: new URL(baseUrl),
+      title: co2Average.title,
+      description,
+      openGraph: {
+        description,
+        url: `/c/${params.slug}`,
+        images: [
+          {
+            url: `/og/${co2Average.slug}`,
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+      alternates: {
+        canonical: `/c/${params.slug}`,
+      },
+    } satisfies Metadata
+  }
+}

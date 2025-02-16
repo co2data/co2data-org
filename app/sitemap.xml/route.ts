@@ -1,23 +1,25 @@
-import { mainEdgeLive } from '@/adapter/effect/edge-main'
+import runtime from '@/adapter/effect/runtime'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
-import { Effect, Metric, flow } from 'effect'
+import { Effect, Metric } from 'effect'
 import { baseUrl } from '../config'
+
+export const dynamic = 'force-dynamic'
 
 const dbErrorCount = Metric.counter('db_error_count').pipe(
   Metric.withConstantInput(1),
 )
 
-export const GET = flow(route, Effect.provide(mainEdgeLive), Effect.runPromise)
-
-function route() {
+export async function GET() {
   return Co2Repository.getAllCo2Averages.pipe(
     Effect.map(renderResponse),
     // Metric.trackErrorWith(dbErrorCount, constant(1)),  // I don't know how Metrics work...
     Effect.catchAll((error) =>
       Effect.succeed(new Response(error._tag, { status: 500 })),
     ),
+    runtime.runPromise,
   )
 }
+
 function renderResponse(co2Averages: Co2Average[]) {
   return new Response(`
 <?xml version="1.0" encoding="UTF-8"?>
