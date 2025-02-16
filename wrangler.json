@@ -17,7 +17,8 @@
     {
       "binding": "DB",
       "database_name": "prod-d1-co2data",
-      "database_id": "da5023f3-74fd-40b7-8329-e6c3071341e0"
+      "database_id": "da5023f3-74fd-40b7-8329-e6c3071341e0",
+      "migrations_dir": "drizzle"
     }
   ]
 }

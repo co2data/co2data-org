@@ -1,19 +1,18 @@
 import type { Source } from '@/domain/source'
 import type { BaseError } from '@/lib/types'
-import { createPool } from '@vercel/postgres'
 import { type SQL, eq } from 'drizzle-orm'
-import { type VercelPgDatabase, drizzle } from 'drizzle-orm/vercel-postgres'
-
+import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import {
-  Config,
+  Context,
   Data,
   Effect,
   Layer,
   type Option,
   Array as ReadonlyArray,
-  Secret,
 } from 'effect'
 import { combineLinks } from './combine-source-links'
+import { DatabaseClient } from './db-client'
+import { OrmClient } from './orm-client'
 import * as schema from './schema'
 
 type _DB = {
@@ -42,35 +41,15 @@ type _DB = {
     }) => Effect.Effect<Option.Option<schema.SelectUsers>, DbError>
   }
   query: <A>(
-    body: (client: VercelPgDatabase<typeof schema>) => Promise<A>,
+    body: (client: DrizzleD1Database<typeof schema>) => Promise<A>,
   ) => Effect.Effect<A, DbError>
 }
 
-const PostgresConfig = Config.nested('POSTGRES')(
-  Config.all({
-    host: Config.string('HOST'),
-    database: Config.string('DATABASE'),
-    user: Config.string('USER'),
-    password: Config.secret('PASSWORD'),
-  }),
-)
-
 const make = Effect.gen(function* (_) {
-  const config = yield* _(PostgresConfig, Effect.orDie)
-  const database = yield* _(
-    Effect.sync(() =>
-      drizzle(
-        createPool({
-          connectionString: `postgres://${config.user}:${Secret.value(
-            config.password,
-          )}@${config.host}/${config.database}`,
-        }),
-        {
-          schema,
-        },
-      ),
-    ),
-  )
+  const dbClient = yield* DatabaseClient
+  const ormClient = yield* OrmClient
+
+  const database = ormClient(dbClient)
 
   const query = <A>(body: (client: typeof database) => Promise<A>) =>
     Effect.tryPromise<A, DbError>({
@@ -164,8 +143,16 @@ const make = Effect.gen(function* (_) {
   })
 })
 
-export class DB extends Effect.Tag('@services/db')<DB, _DB>() {
-  static Live = Layer.effect(this, make)
+export class DB extends Context.Tag('@adapter/db')<DB, _DB>() {
+  // Would be needed with Effect.Tag
+  // static readonly query = <A>(
+  // 	body: (client: DrizzleD1Database<Record<string, never>>) => Promise<A>,
+  // ) => this.use((_) => _.query(body))
+  static Live = Layer.effect(this, make).pipe(
+    Layer.provide(DatabaseClient.D1),
+    Layer.provide(OrmClient.D1Drizzle),
+  )
+  static Layer = Layer.effect(this, make)
 }
 
 export class DbError extends Data.TaggedError('DbError')<BaseError> {}

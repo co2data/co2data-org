@@ -1,178 +1,155 @@
 import type { AuthenticatorTransport } from '@simplewebauthn/types'
 import { type InferSelectModel, relations, sql } from 'drizzle-orm'
 import {
-  bigint,
-  boolean,
-  doublePrecision,
+  blob,
   index,
-  integer,
-  json,
-  pgEnum,
-  pgTable,
-  pgView,
+  int,
+  real,
+  sqliteTable,
+  sqliteView,
   text,
   unique,
-  uuid,
-  varchar,
-} from 'drizzle-orm/pg-core'
+} from 'drizzle-orm/sqlite-core'
+import { nanoid } from 'nanoid'
 
-export const units = pgEnum('units', [
-  'minute',
-  'liter',
-  'kilogram',
-  'meter',
-  'gram',
-  'hour',
-  'kilometer',
-])
+export const units = text({
+  enum: ['minute', 'liter', 'kilogram', 'meter', 'gram', 'hour', 'kilometer'],
+})
 
-export const categories = pgTable(
-  'categories',
-  {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    title: text('title').notNull(),
-    slug: varchar('slug', { length: 255 }).notNull(),
-  },
-  (table) => {
-    return {
-      categoriesSlugKey: unique('categories_slug_key').on(table.slug),
-    }
-  },
-)
+const id = text('id')
+  .primaryKey()
+  .notNull()
+  .$defaultFn(() => nanoid())
+export const categories = sqliteTable('categories', {
+  id: id,
+  title: text().notNull(),
+  slug: text({ length: 255 }).unique().notNull(),
+})
 
-export const users = pgTable('users', {
-  id: uuid('id').defaultRandom().primaryKey().notNull(),
-  username: varchar('username', { length: 255 }).notNull(),
-  currentChallenge: varchar('current_challenge', { length: 255 }),
+export const users = sqliteTable('users', {
+  id: id,
+  username: text({ length: 255 }).notNull(),
+  currentChallenge: text({ length: 255 }),
 })
 export type SelectUsers = InferSelectModel<typeof users>
 
-export const authenticators = pgTable(
+export const authenticators = sqliteTable(
   'authenticators',
   {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    credentialId: text('credential_id').notNull(),
-    credentialPublicKey: text('credential_public_key').notNull(),
-    counter: bigint('counter', { mode: 'bigint' }).notNull(),
-    credentialDeviceType: varchar('credential_device_type', {
-      length: 32,
-    }).notNull(),
-    credentialBackedUp: boolean('credential_backed_up').notNull(),
-    userId: uuid('user_id').notNull(),
-    transports: json('transports').$type<AuthenticatorTransport[]>(),
+    id: id,
+    credentialId: text().notNull(),
+    credentialPublicKey: text().notNull(),
+    counter: blob({ mode: 'bigint' }).notNull(),
+    credentialDeviceType: text().notNull(),
+    credentialBackedUp: int({ mode: 'boolean' }).notNull(),
+    userId: text().notNull(),
+    transports: text({ mode: 'json' }).$type<AuthenticatorTransport[]>(),
   },
-  (table) => {
-    return {
-      indexAuthenticatorsOnUserId: index('index_authenticators_on_user_id').on(
-        table.userId,
-      ),
-    }
-  },
+  (table) => [index('index_authenticators_on_user_id').on(table.userId)],
 )
 
-export const co2Producers = pgTable(
+export const co2Producers = sqliteTable(
   'co2_producers',
   {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    title: varchar('title', { length: 255 }).notNull(),
-    description: text('description'),
-    categoryId: uuid('category_id').notNull(),
-    image: varchar('image', { length: 255 }),
-    userId: uuid('user_id').notNull(),
-    unit: units('unit').notNull(),
-    singleConsumptionFrom: doublePrecision('single_consumption_from').notNull(),
-    singleConsumptionTo: doublePrecision('single_consumption_to').notNull(),
-    singleConsumptionAverage: doublePrecision(
-      'single_consumption_average',
-    ).notNull(),
-    timesPerYearFrom: doublePrecision('times_per_year_from').notNull(),
-    timesPerYearTo: doublePrecision('times_per_year_to').notNull(),
-    timesPerYearAverage: doublePrecision('times_per_year_average').notNull(),
-    slug: varchar('slug', { length: 255 }).notNull(),
+    id: id,
+    title: text({ length: 255 }).notNull(),
+    description: text(),
+    categoryId: text().notNull(),
+    image: text({ length: 255 }),
+    userId: text().notNull(),
+    unit: units.notNull(),
+    singleConsumptionFrom: real().notNull(),
+    singleConsumptionTo: real().notNull(),
+    singleConsumptionAverage: real().notNull(),
+    timesPerYearFrom: real().notNull(),
+    timesPerYearTo: real().notNull(),
+    timesPerYearAverage: real().notNull(),
+    slug: text('slug', { length: 255 }).unique().notNull(),
   },
-  (table) => {
-    return {
-      categoryId: index('category_id').on(table.categoryId),
-      co2ProducersSlugKey: unique('co2_producers_slug_key').on(table.slug),
-    }
-  },
+  (table) => [index('category_id').on(table.categoryId)],
 )
 
-export const links = pgTable(
+export const links = sqliteTable(
   'links',
   {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    sourcesId: uuid('sources_id').notNull(),
-    name: varchar('name', { length: 191 }).notNull(),
-    mediaType: varchar('media_type', { length: 191 }).notNull(),
-    url: varchar('url', { length: 2000 }).notNull(),
+    id: id,
+    sourcesId: text().notNull(),
+    name: text({ length: 191 }).notNull(),
+    mediaType: text({ length: 191 }).notNull(),
+    url: text({ length: 2000 }).notNull(),
   },
-  (table) => {
-    return {
-      sourcesIdIdx: index('links_sources_id_idx').on(table.sourcesId),
-    }
-  },
+  (table) => [index('links_sources_id_idx').on(table.sourcesId)],
 )
 
-export const sourcedCo2Amounts = pgTable(
+export const sourcedCo2Amounts = sqliteTable(
   'sourced_co2_amounts',
   {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    co2ProducerId: uuid('co2_producer_id').notNull(),
-    sourceId: uuid('source_id').notNull(),
-    gCo2E: doublePrecision('g_co2e').notNull(),
-    per: doublePrecision('per').notNull(),
-    quote: text('quote'),
-    description: text('description').notNull(),
-    userId: uuid('user_id').notNull(),
-    sourceCo2EAmount: doublePrecision('source_co2e_amount'),
-    sourceCo2EUnit: varchar('source_co2e_unit', { length: 255 }),
+    id: id,
+    co2ProducerId: text().notNull(),
+    sourceId: text().notNull(),
+    gCo2E: real('g_co2e').notNull(),
+    per: real().notNull(),
+    quote: text(),
+    description: text().notNull(),
+    userId: text().notNull(),
+    sourceCo2EAmount: real('source_co2e_amount'),
+    sourceCo2EUnit: text('source_co2e_unit', { length: 255 }),
   },
-  (table) => {
-    return {
-      sourceIdCo2ProducerIdIdx: index(
-        'sourced_co2_amounts_source_id_co2_producer_id_idx',
-      ).on(table.co2ProducerId, table.sourceId),
-    }
-  },
+  (table) => [
+    index('sourced_co2_amounts_source_id_co2_producer_id_idx').on(
+      table.co2ProducerId,
+      table.sourceId,
+    ),
+  ],
 )
 export type SelectSourcedCo2Amounts = InferSelectModel<typeof sourcedCo2Amounts>
 
-export const sources = pgTable(
+export const sources = sqliteTable(
   'sources',
   {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    co2ProducerId: uuid('co2_producer_id').notNull(),
-    region: varchar('region', { length: 255 }),
-    year: integer('year'),
-    userId: uuid('user_id').notNull(),
-    name: varchar('name', { length: 255 }).notNull(),
+    id: id,
+    co2ProducerId: text().notNull(),
+    region: text({ length: 255 }),
+    year: int(),
+    userId: text().notNull(),
+    name: text({ length: 255 }).notNull(),
   },
-  (table) => {
-    return {
-      co2ProducerIdIdx: index().on(table.co2ProducerId),
-      userIdIdx: index().on(table.userId),
-    }
-  },
+  (table) => [
+    index('index_co2_producer_id').on(table.co2ProducerId),
+    index('index_user_id').on(table.userId),
+  ],
 )
 
-export const co2Average = pgView('co2_average', {
-  id: uuid('id').defaultRandom().primaryKey().notNull(),
-  title: varchar('title', { length: 255 }).notNull(),
+export const co2Average = sqliteView('co2_average', {
+  id: id,
+  title: text('title', { length: 255 }).notNull(),
   description: text('description'),
-  slug: varchar('slug', { length: 255 }).notNull(),
-  unit: units('unit').notNull(),
-  avgPerYear: doublePrecision('avg_per_year'),
-  avgPerUnit: doublePrecision('avg_per_unit'),
-  singleConsumptionFrom: doublePrecision('single_consumption_from').notNull(),
-  singleConsumptionTo: doublePrecision('single_consumption_to').notNull(),
-  singleConsumptionAverage: doublePrecision(
-    'single_consumption_average',
-  ).notNull(),
-  timesPerYearFrom: doublePrecision('times_per_year_from').notNull(),
-  timesPerYearTo: doublePrecision('times_per_year_to').notNull(),
-  timesPerYearAverage: doublePrecision('times_per_year_average').notNull(),
-}).existing()
+  slug: text('slug', { length: 255 }).notNull(),
+  unit: units.notNull(),
+  avgPerYear: real('avg_per_year'),
+  avgPerUnit: real('avg_per_unit'),
+  singleConsumptionFrom: real('single_consumption_from').notNull(),
+  singleConsumptionTo: real('single_consumption_to').notNull(),
+  singleConsumptionAverage: real('single_consumption_average').notNull(),
+  timesPerYearFrom: real('times_per_year_from').notNull(),
+  timesPerYearTo: real('times_per_year_to').notNull(),
+  timesPerYearAverage: real('times_per_year_average').notNull(),
+}).as(sql`SELECT co2.id,
+    co2.title,
+    co2.description,
+    co2.slug,
+    co2.unit,
+    (co2.single_consumption_average * co2.times_per_year_average * avg(sourced_co2_amounts.g_co2e)) AS avg_per_year,
+    avg(sourced_co2_amounts.g_co2e) AS avg_per_unit,
+    co2.single_consumption_from,
+    co2.single_consumption_to,
+    co2.single_consumption_average,
+    co2.times_per_year_from,
+    co2.times_per_year_to,
+    co2.times_per_year_average
+   FROM co2_producers co2
+     JOIN sourced_co2_amounts ON co2.id = sourced_co2_amounts.co2_producer_id
+  GROUP BY sourced_co2_amounts.co2_producer_id, co2.id, co2.title, co2.description, co2.slug, co2.unit, co2.single_consumption_to, co2.single_consumption_from, co2.single_consumption_average, co2.times_per_year_from, co2.times_per_year_to, co2.times_per_year_average;`)
 
 type Co2AverageFields = typeof co2Average._.selectedFields
 

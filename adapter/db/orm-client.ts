@@ -6,5 +6,7 @@ export class OrmClient extends Context.Tag('@adapter/db/orm-client')<
   OrmClient,
   (db: CloudflareContext['env']['DB']) => DrizzleD1Database<typeof schema>
 >() {
-  static D1Drizzle = Layer.succeed(this, (db) => d1Drizzle(db, { schema }))
+  static D1Drizzle = Layer.succeed(this, (db) =>
+    d1Drizzle(db, { schema, casing: 'snake_case' }),
+  )
 }
