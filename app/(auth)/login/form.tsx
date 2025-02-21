@@ -84,7 +84,7 @@ export default function Form(props: {
                   <>
                     User not found. Please sign up first.{' '}
                     <Button asChild className="ml-2">
-                      <Link href={'/sign-up'} className="!no-underline">
+                      <Link href={'/sign-up'} className="no-underline!">
                         Sign up
                       </Link>
                     </Button>

@@ -11,7 +11,7 @@ export default function SignUpSuccess() {
       </p>
       <div className="h-4" />
       <Button asChild>
-        <Link href={'/login'} className="!no-underline">
+        <Link href={'/login'} className="no-underline!">
           Go to Login
         </Link>
       </Button>
