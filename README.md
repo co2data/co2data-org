@@ -4,7 +4,7 @@ This is a repository for [co2data.org](https://co2data.org), a website that prov
 
 The website aims to inform and empower individuals, organizations, and policymakers to take action on climate change by providing reliable and accessible data on CO2 sources.
 
-The website is built with Next.js and hosted by Vercel. The data is sourced from various public databases such as the Global Carbon Project (GCP), the Carbon Dioxide Information Analysis Center (CDIAC), the Emissions Database for Global Atmospheric Research (EDGAR), and the World Bank.
+The website is built with Next.js and hosted on Cloudflare. The data is sourced from various public databases such as the Global Carbon Project (GCP), the Carbon Dioxide Information Analysis Center (CDIAC), the Emissions Database for Global Atmospheric Research (EDGAR), and the World Bank.
 
 The website is open source under the MIT license. Contributions are welcome. Please see the contributing guidelines for more details.
 
