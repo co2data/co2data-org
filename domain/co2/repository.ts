@@ -32,6 +32,8 @@ export class Co2Repository extends Effect.Tag('@services/Co2Repository')<
   Effect.Effect.Success<typeof make>
 >() {
   static Live = Layer.effect(this, make).pipe(Layer.provide(DB.Live))
+  static Test = (DbTest: Layer.Layer<DB>) =>
+    Layer.effect(this, make).pipe(Layer.provide(DbTest))
 }
 
 function co2AverageFromDbToDomain(co2Average: DbCo2Average) {

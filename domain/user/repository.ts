@@ -97,6 +97,8 @@ export class UserRepository extends Effect.Tag('@services/UserRepository')<
   Effect.Effect.Success<typeof make>
 >() {
   static Live = Layer.effect(this, make).pipe(Layer.provide(DB.Live))
+  static Test = (DbTest: Layer.Layer<DB>) =>
+    Layer.effect(this, make).pipe(Layer.provide(DbTest))
 }
 
 type UserWithAuthenticators = {

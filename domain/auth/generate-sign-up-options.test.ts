@@ -89,7 +89,7 @@ const runTest =
       ),
     )
 
-    const UserRepositoryTest = UserRepository.Live.pipe(Layer.provide(DbTest))
+    const UserRepositoryTest = UserRepository.Test(DbTest)
 
     const mainTest = Layer.mergeAll(UserRepositoryTest, PassKey.Test)
 

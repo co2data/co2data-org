@@ -100,7 +100,7 @@ function runTest(mockData: schema.Co2Average) {
       ),
     )
 
-    const Co2RepositoryTest = Co2Repository.Live.pipe(Layer.provide(DbTest))
+    const Co2RepositoryTest = Co2Repository.Test(DbTest)
 
     return effect.pipe(Effect.provide(Co2RepositoryTest), Effect.runPromise)
   }
