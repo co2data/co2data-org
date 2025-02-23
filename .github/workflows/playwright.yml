@@ -37,7 +37,7 @@ jobs:
           SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
       - name: Wait for server
-        run: pnpx wait-on http://localhost:3000
+        run: pnpx wait-on http://localhost:8771
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
