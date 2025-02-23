@@ -1,9 +1,10 @@
 name: Playwright Tests
-on: [deployment_status]
+on: push
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   e2e:
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

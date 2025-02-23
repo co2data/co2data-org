@@ -1,4 +1,4 @@
-name: Publish
+name: Unit tests
 on: push
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
