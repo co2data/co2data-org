@@ -25,6 +25,7 @@ jobs:
         run: pnpm build:worker
         env:
           BASE_URL: http://localhost:8771
+          SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
