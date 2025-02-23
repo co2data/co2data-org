@@ -31,6 +31,7 @@ jobs:
         run: pnpm exec playwright test
         env:
           BASE_URL: http://localhost:8771
+          SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
