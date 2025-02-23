@@ -21,7 +21,7 @@ test('checks robots.txt', async ({ page }) => {
 
   expect(actual).toContain('User-agent: *')
   expect(actual).toContain('Allow: ')
-  expect(actual).toContain('Sitemap: https://co2data.org/sitemap.xml')
+  expect(actual).toContain(`Sitemap: ${process.env.BASE_URL}/sitemap.xml`)
 })
 
 test('head has canonical on root', async ({ page }) => {
