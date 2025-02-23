@@ -21,6 +21,11 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
+      - name: Show secret
+        run: echo $SESSION_PASSWORD
+        env:
+          SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
+
       - name: Build app
         run: pnpm build:worker
         env:
