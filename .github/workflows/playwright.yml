@@ -25,22 +25,24 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Show secret
-        run: echo $SESSION_PASSWORD
-        env:
-          SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
-
       - name: Build app
         run: pnpm build:worker
         env:
           BASE_URL: http://localhost:8771
           SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
+      - name: Start server
+        run: pnpm dev:worker &  # Run server in background
+        env:
+          SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
+
+      - name: Wait for server
+        run: pnpx wait-on http://localhost:3000
+
       - name: Run Playwright tests
         run: pnpm exec playwright test
         env:
           BASE_URL: http://localhost:8771
-          SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
