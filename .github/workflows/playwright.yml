@@ -15,15 +15,20 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: pnpm install --dev
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
+      - name: Build app
+        run: pnpm build:worker
+        env:
+          BASE_URL: http://localhost:8771
+
       - name: Run Playwright tests
         run: pnpm exec playwright test
         env:
-          BASE_URL: ${{ github.event.deployment_status.target_url }}
+          BASE_URL: http://localhost:8771
 
       - uses: actions/upload-artifact@v3
         if: failure()

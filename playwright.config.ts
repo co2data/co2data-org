@@ -87,4 +87,11 @@ export default defineConfig({
   //   command: 'npm run start',
   //   port: 3000,
   // },
+  webServer: {
+    command: 'npm run dev:worker',
+    url: 'http://localhost:8771',
+    reuseExistingServer: !process.env.CI,
+    stdout: 'ignore',
+    stderr: 'pipe',
+  },
 })
