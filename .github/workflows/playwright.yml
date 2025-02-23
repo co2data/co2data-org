@@ -28,7 +28,7 @@ jobs:
           SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
       - name: Start server
-        run: pnpm dev:worker &  # Run server in background
+        run: pnpm dev:worker & pnpx wait-on http://localhost:8771
         env:
           SESSION_PASSWORD: ${{ secrets.SESSION_PASSWORD }}
 
