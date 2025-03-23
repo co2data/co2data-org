@@ -1,4 +1,4 @@
-CREATE TABLE `authenticators` (
+CREATE TABLE IF NOT EXISTS `authenticators` (
 	`id` text PRIMARY KEY NOT NULL,
 	`credential_id` text NOT NULL,
 	`credential_public_key` text NOT NULL,
@@ -9,15 +9,15 @@ CREATE TABLE `authenticators` (
 	`transports` text
 );
 --> statement-breakpoint
-CREATE INDEX `index_authenticators_on_user_id` ON `authenticators` (`user_id`);--> statement-breakpoint
-CREATE TABLE `categories` (
+CREATE INDEX IF NOT EXISTS `index_authenticators_on_user_id` ON `authenticators` (`user_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `categories` (
 	`id` text PRIMARY KEY NOT NULL,
 	`title` text NOT NULL,
 	`slug` text(255) NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `categories_slug_unique` ON `categories` (`slug`);--> statement-breakpoint
-CREATE TABLE `co2_producers` (
+CREATE UNIQUE INDEX IF NOT EXISTS `categories_slug_unique` ON `categories` (`slug`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `co2_producers` (
 	`id` text PRIMARY KEY NOT NULL,
 	`title` text(255) NOT NULL,
 	`description` text,
@@ -34,9 +34,9 @@ CREATE TABLE `co2_producers` (
 	`slug` text(255) NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `co2_producers_slug_unique` ON `co2_producers` (`slug`);--> statement-breakpoint
-CREATE INDEX `category_id` ON `co2_producers` (`category_id`);--> statement-breakpoint
-CREATE TABLE `links` (
+CREATE UNIQUE INDEX IF NOT EXISTS `co2_producers_slug_unique` ON `co2_producers` (`slug`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `category_id` ON `co2_producers` (`category_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `links` (
 	`id` text PRIMARY KEY NOT NULL,
 	`sources_id` text NOT NULL,
 	`name` text(191) NOT NULL,
@@ -44,8 +44,8 @@ CREATE TABLE `links` (
 	`url` text(2000) NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `links_sources_id_idx` ON `links` (`sources_id`);--> statement-breakpoint
-CREATE TABLE `sourced_co2_amounts` (
+CREATE INDEX IF NOT EXISTS `links_sources_id_idx` ON `links` (`sources_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `sourced_co2_amounts` (
 	`id` text PRIMARY KEY NOT NULL,
 	`co2_producer_id` text NOT NULL,
 	`source_id` text NOT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE `sourced_co2_amounts` (
 	`source_co2e_unit` text(255)
 );
 --> statement-breakpoint
-CREATE INDEX `sourced_co2_amounts_source_id_co2_producer_id_idx` ON `sourced_co2_amounts` (`co2_producer_id`,`source_id`);--> statement-breakpoint
-CREATE TABLE `sources` (
+CREATE INDEX IF NOT EXISTS `sourced_co2_amounts_source_id_co2_producer_id_idx` ON `sourced_co2_amounts` (`co2_producer_id`,`source_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `sources` (
 	`id` text PRIMARY KEY NOT NULL,
 	`co2_producer_id` text NOT NULL,
 	`region` text(255),
@@ -68,15 +68,15 @@ CREATE TABLE `sources` (
 	`name` text(255) NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `index_co2_producer_id` ON `sources` (`co2_producer_id`);--> statement-breakpoint
-CREATE INDEX `index_user_id` ON `sources` (`user_id`);--> statement-breakpoint
-CREATE TABLE `users` (
+CREATE INDEX IF NOT EXISTS `index_co2_producer_id` ON `sources` (`co2_producer_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `index_user_id` ON `sources` (`user_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`username` text(255) NOT NULL,
 	`current_challenge` text(255)
 );
 --> statement-breakpoint
-CREATE VIEW `co2_average` AS SELECT co2.id,
+CREATE VIEW IF NOT EXISTS `co2_average` AS SELECT co2.id,
     co2.title,
     co2.description,
     co2.slug,

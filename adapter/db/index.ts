@@ -11,7 +11,6 @@ import {
   Array as ReadonlyArray,
 } from 'effect'
 import { combineLinks } from './combine-source-links'
-import { DatabaseClient } from './db-client'
 import { OrmClient } from './orm-client'
 import * as schema from './schema'
 
@@ -46,10 +45,9 @@ type _DB = {
 }
 
 const make = Effect.gen(function* (_) {
-  const dbClient = yield* DatabaseClient
   const ormClient = yield* OrmClient
 
-  const database = ormClient(dbClient)
+  const database = ormClient
 
   const query = <A>(body: (client: typeof database) => Promise<A>) =>
     Effect.tryPromise<A, DbError>({
@@ -149,8 +147,7 @@ export class DB extends Context.Tag('@adapter/db')<DB, _DB>() {
   // 	body: (client: DrizzleD1Database<Record<string, never>>) => Promise<A>,
   // ) => this.use((_) => _.query(body))
   static Live = Layer.effect(this, make).pipe(
-    Layer.provide(DatabaseClient.D1),
-    Layer.provide(OrmClient.D1Drizzle),
+    Layer.provide(OrmClient.LibSqlDrizzle),
   )
   static Layer = Layer.effect(this, make)
 }

@@ -1,12 +1,23 @@
-import type { CloudflareContext } from '@opennextjs/cloudflare'
-import { type DrizzleD1Database, drizzle as d1Drizzle } from 'drizzle-orm/d1'
+import {
+  type LibSQLDatabase,
+  drizzle as libSqlDrizzle,
+} from 'drizzle-orm/libsql'
+import { migrate } from 'drizzle-orm/libsql/migrator'
 import { Context, Layer } from 'effect'
 import * as schema from './schema'
+
+const makeOrmClient = () => {
+  const ormClient = libSqlDrizzle('file:data.sqlite', {
+    schema,
+    casing: 'snake_case',
+  })
+  migrate(ormClient, { migrationsFolder: 'drizzle' })
+  return ormClient
+}
+
 export class OrmClient extends Context.Tag('@adapter/db/orm-client')<
   OrmClient,
-  (db: CloudflareContext['env']['DB']) => DrizzleD1Database<typeof schema>
+  LibSQLDatabase<typeof schema>
 >() {
-  static D1Drizzle = Layer.succeed(this, (db) =>
-    d1Drizzle(db, { schema, casing: 'snake_case' }),
-  )
+  static LibSqlDrizzle = Layer.succeed(this, makeOrmClient())
 }
