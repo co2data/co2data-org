@@ -12,8 +12,7 @@
     "ci": "vitest run && next build",
     "analyze-bundle-size": "ANALYZE=true next build",
     "db-migrate": "drizzle-kit generate",
-    "preinstall": "npx only-allow pnpm",
-    "postinstall": "lefthook install"
+    "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "@effect/opentelemetry": "^0.44.2",
