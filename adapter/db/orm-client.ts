@@ -7,7 +7,7 @@ import { Context, Layer } from 'effect'
 import * as schema from './schema'
 
 const makeOrmClient = () => {
-  const ormClient = libSqlDrizzle('file:data.sqlite', {
+  const ormClient = libSqlDrizzle(process.env.DB_URL ?? '', {
     schema,
     casing: 'snake_case',
   })
