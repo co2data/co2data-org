@@ -8,7 +8,7 @@ import * as schema from './schema'
 
 const makeOrmClient = () => {
   const url =
-    process.env.CI === 'true' ? ':memory:' : (process.env.DB_URL ?? '')
+    process.env.BUILDING === 'true' ? ':memory:' : (process.env.DB_URL ?? '')
   console.log('url', url)
   const ormClient = libSqlDrizzle(url, {
     schema,
