@@ -7,7 +7,6 @@ export async function GET(
   request: Request,
   props: { params: Promise<{ slug: string | undefined }> },
 ) {
-  return createOgImageResponse(request, { params: await props.params }).pipe(
-    runtime.runPromise,
-  )
+  const params = await props.params
+  return createOgImageResponse(request, { params }).pipe(runtime.runPromise)
 }
