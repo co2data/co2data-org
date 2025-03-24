@@ -7,13 +7,13 @@ import { Context, Layer } from 'effect'
 import * as schema from './schema'
 
 const makeOrmClient = () => {
-  const ormClient = libSqlDrizzle(
-    process.env.CI ? ':memory:' : (process.env.DB_URL ?? ''),
-    {
-      schema,
-      casing: 'snake_case',
-    },
-  )
+  const url =
+    process.env.CI === 'true' ? ':memory:' : (process.env.DB_URL ?? '')
+  console.log('url', url)
+  const ormClient = libSqlDrizzle(url, {
+    schema,
+    casing: 'snake_case',
+  })
   migrate(ormClient, { migrationsFolder: 'drizzle' })
   return ormClient
 }
