@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "DB_URL=file:db/data.sqlite next start",
+    "build": "DB_URL=:memory: next build",
+    "start": "next start",
     "test": "vitest",
     "lint": "biome check app domain adapter lib",
     "ci": "vitest run && next build",

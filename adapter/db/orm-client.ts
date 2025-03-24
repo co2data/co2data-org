@@ -7,8 +7,7 @@ import { Context, Layer } from 'effect'
 import * as schema from './schema'
 
 const makeOrmClient = () => {
-  const url =
-    process.env.BUILDING === 'true' ? ':memory:' : (process.env.DB_URL ?? '')
+  const url = process.env.DB_URL ?? ''
   console.log('url', url)
   const ormClient = libSqlDrizzle(url, {
     schema,
