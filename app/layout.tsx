@@ -8,6 +8,7 @@ import type { Metadata, Viewport } from 'next'
 import { Toaster } from './_components/ui/sonner'
 import { baseUrl } from './config'
 import './globals.css'
+import Script from 'next/script'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,6 +23,12 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(GeistSans.variable, GeistMono.variable)}
     >
+      <Script
+        defer
+        src="/stats/script.js"
+        data-website-id="1f8d1be0-def5-4441-8660-56e53edbcfcb"
+        data-host-url="https://co2data.org"
+      />
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />

@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         source: '/',
         destination: '/c',
       },
+      {
+        source: '/stats/:match*',
+        destination: 'https://umami.schoenholzer.com/:match*',
+      },
+      {
+        source: '/api/send',
+        destination: 'https://umami.schoenholzer.com/api/send',
+      },
     ]
   },
 }
