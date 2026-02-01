@@ -35,13 +35,9 @@ echo "🔍 Checking for existing Next.js processes..."
 kill_next_processes
 sleep 2
 
-# Install Playwright browsers (only Chromium to save resources)
-if ! pnpm exec playwright install --dry-run chromium &>/dev/null || ! command -v chromium &>/dev/null; then
-  echo "🎭 Installing Playwright browsers..."
-  pnpm exec playwright install --with-deps chromium
-else
-  echo "✓ Playwright browsers already installed, skipping..."
-fi
+# Linting code
+echo "Linting code"
+biome ci app domain adapter lib
 
 # Run unit tests
 echo "🧪 Running unit tests..."
@@ -60,6 +56,14 @@ fi
 # Seed E2E test database
 echo "🌱 Seeding E2E test database..."
 DB_URL="file:./e2e-test.db" pnpm seed:e2e
+
+# Install Playwright browsers (only Chromium to save resources)
+if ! pnpm exec playwright install --dry-run chromium &>/dev/null || ! command -v chromium &>/dev/null; then
+  echo "🎭 Installing Playwright browsers..."
+  pnpm exec playwright install --with-deps chromium
+else
+  echo "✓ Playwright browsers already installed, skipping..."
+fi
 
 # Kill any processes that might have started during seeding
 echo "🔍 Ensuring port 3000 is free before starting server..."
