@@ -27,6 +27,12 @@ export CI=true
 
 # Set dummy session password for E2E tests (not used in production)
 export SESSION_PASSWORD=${SESSION_PASSWORD:-"test-session-password-for-e2e-only-min-32-chars-long"}
+# Set base url
+export BASE_URL="https://co2data.org"
+
+# Cache Playwright browsers in a persistent directory
+export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/var/cache/playwright}"
+mkdir -p "$PLAYWRIGHT_BROWSERS_PATH"
 
 echo "🚀 Starting Coolify build process..."
 
@@ -36,7 +42,7 @@ kill_next_processes
 sleep 2
 
 # Linting code
-echo "Linting code"
+echo "📏 Linting code..."
 biome ci app domain adapter lib
 
 # Run unit tests
@@ -58,11 +64,12 @@ echo "🌱 Seeding E2E test database..."
 DB_URL="file:./e2e-test.db" pnpm seed:e2e
 
 # Install Playwright browsers (only Chromium to save resources)
-if ! pnpm exec playwright install --dry-run chromium &>/dev/null || ! command -v chromium &>/dev/null; then
-  echo "🎭 Installing Playwright browsers..."
-  pnpm exec playwright install --with-deps chromium
+echo "🎭 Checking Playwright browsers cache..."
+if pnpm exec playwright install chromium --dry-run 2>&1 | grep -q "is already installed"; then
+  echo "✓ Playwright Chromium already cached at $PLAYWRIGHT_BROWSERS_PATH, skipping..."
 else
-  echo "✓ Playwright browsers already installed, skipping..."
+  echo "📦 Installing Playwright Chromium to cache..."
+  pnpm exec playwright install --with-deps chromium
 fi
 
 # Kill any processes that might have started during seeding
@@ -72,7 +79,7 @@ sleep 2
 
 # Start the app in the background for E2E tests
 echo "🌐 Starting production server for E2E tests..."
-BASE_URL="https://co2data.org" DB_URL="file:./e2e-test.db" pnpm start >/tmp/next-server.log 2>&1 &
+DB_URL="file:./e2e-test.db" pnpm start >/tmp/next-server.log 2>&1 &
 SERVER_PID=$!
 
 # Give server a moment to start or fail
@@ -94,6 +101,6 @@ npx wait-on http://localhost:3000 -t 60000 || {
 
 # Run E2E tests
 echo "🧪 Running E2E tests..."
-BASE_URL="https://co2data.org" pnpm test:e2e --project=chromium
+pnpm test:e2e --project=chromium
 
 echo "✅ Build completed successfully!"
