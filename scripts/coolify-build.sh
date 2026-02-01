@@ -35,10 +35,6 @@ echo "🔍 Checking for existing Next.js processes..."
 kill_next_processes
 sleep 2
 
-# Install dependencies
-echo "📦 Installing dependencies..."
-pnpm install --frozen-lockfile
-
 # Install Playwright browsers (only Chromium to save resources)
 if ! pnpm exec playwright install --dry-run chromium &>/dev/null || ! command -v chromium &>/dev/null; then
   echo "🎭 Installing Playwright browsers..."

@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "DB_URL=:memory: next build",
-    "build:with-tests": "pnpm install && pnpm test:ci && pnpm test:e2e && pnpm build",
+    "build:with-tests": "./scripts/coolify-build.sh",
     "start": "next start",
     "test": "vitest",
     "test:ci": "vitest run",
