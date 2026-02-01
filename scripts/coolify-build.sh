@@ -94,6 +94,6 @@ npx wait-on http://localhost:3000 -t 60000 || {
 
 # Run E2E tests
 echo "🧪 Running E2E tests..."
-BASE_URL=http://localhost:3000 pnpm test:e2e --project=chromium
+BASE_URL="https://co2data.org" pnpm test:e2e --project=chromium
 
 echo "✅ Build completed successfully!"
