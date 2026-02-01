@@ -30,13 +30,6 @@ export SESSION_PASSWORD=${SESSION_PASSWORD:-"test-session-password-for-e2e-only-
 # Set base url
 export BASE_URL="https://co2data.org"
 
-# Cache Playwright browsers in a persistent directory
-# Only override if not already set (e.g., by Nix dev shell)
-if [ -z "$PLAYWRIGHT_BROWSERS_PATH" ]; then
-  export PLAYWRIGHT_BROWSERS_PATH="/var/cache/playwright"
-  mkdir -p "$PLAYWRIGHT_BROWSERS_PATH"
-fi
-
 echo "🚀 Starting Coolify build process..."
 
 # Kill any existing Next.js server processes
@@ -70,10 +63,8 @@ DB_URL="file:./e2e-test.db" pnpm seed:e2e
 # Skip if using Nix-provided browsers
 if [[ "$PLAYWRIGHT_BROWSERS_PATH" == /nix/store/* ]]; then
   echo "✓ Using Nix-provided Playwright browsers, skipping installation..."
-elif pnpm exec playwright install chromium --dry-run 2>&1 | grep -q "is already installed"; then
-  echo "✓ Playwright Chromium already cached at $PLAYWRIGHT_BROWSERS_PATH, skipping..."
 else
-  echo "📦 Installing Playwright Chromium to cache..."
+  echo "🎭 Installing Playwright browsers..."
   pnpm exec playwright install --with-deps chromium
 fi
 
