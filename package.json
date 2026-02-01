@@ -12,7 +12,7 @@
     "build:with-tests": "./scripts/coolify-build.sh",
     "start": "next start",
     "test": "vitest",
-    "test:ci": "DB_URL=:memory: vitest run",
+    "test:ci": "NODE_ENV=test DB_URL=:memory: vitest run",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium",
     "seed:e2e": "tsx scripts/seed-e2e-db.ts",
