@@ -9,8 +9,13 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "DB_URL=:memory: next build",
+    "build:with-tests": "pnpm install && pnpm test:ci && pnpm test:e2e && pnpm build",
     "start": "next start",
     "test": "vitest",
+    "test:ci": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install --with-deps chromium",
+    "seed:e2e": "tsx scripts/seed-e2e-db.ts",
     "lint": "biome check app domain adapter lib",
     "ci": "vitest run && next build",
     "analyze-bundle-size": "ANALYZE=true next build",
