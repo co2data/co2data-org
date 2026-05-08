@@ -23,6 +23,7 @@ No environment variables are required for the build process!
 **Note**: 
 - `CI=true` is automatically set by the build script
 - `SESSION_PASSWORD` is set to a dummy value for E2E tests in the build script
+- `BASE_URL` is set to "https://co2data.org" by the build script
 - `DB_URL` is set to a test SQLite database for E2E tests
 - For production deployment, make sure to set your actual `SESSION_PASSWORD` and `DB_URL` environment variables in Coolify
 
@@ -30,11 +31,11 @@ No environment variables are required for the build process!
 
 The build script will automatically:
 1. Kill any existing Next.js processes on port 3000
-2. Install pnpm dependencies
-3. Install Playwright browsers (Chromium only for efficiency)
-4. Run unit tests (vitest)
-5. Build the Next.js application
-6. Seed a test SQLite database with sample data for E2E tests
+2. Lint the code using Biome (`biome ci`)
+3. Run unit tests (vitest)
+4. Build the Next.js application
+5. Seed a test SQLite database with sample data for E2E tests
+6. Install Playwright browsers (Chromium only, unless using Nix-provided browsers)
 7. Start the production server with the test database
 8. Run E2E tests against the production build
 9. Clean up (kill server, remove test database)
@@ -52,6 +53,8 @@ If you want to run E2E tests separately (e.g., post-deploy), you can:
 ### 5. Browser Selection
 
 By default, the build script only runs tests on Chromium to save resources and time.
+
+The script automatically detects if you're using Nix-provided Playwright browsers and skips installation in that case.
 
 If you want to test all browsers, modify `scripts/coolify-build.sh` and remove `--project=chromium`
 
@@ -77,9 +80,12 @@ You can modify the seed data in `scripts/seed-e2e-db.ts` to add more test data.
 ## Notes
 
 - GitHub Actions Playwright workflow has been disabled (`.github/workflows/playwright.yml.disabled`)
+- Code is linted with Biome before running tests
+- Unit tests run before the build to catch errors early
 - E2E tests run on Chromium only by default (faster, less resource-intensive)
+- The script automatically detects and uses Nix-provided Playwright browsers when available
 - The reporter is set to 'list' in CI mode for cleaner output
-- Build will fail if any test fails, preventing bad deployments
+- Build will fail if linting, unit tests, or E2E tests fail, preventing bad deployments
 - The script automatically kills any lingering Next.js processes before starting
 - Test database is automatically cleaned up after tests complete
 - Unit tests use in-memory databases to avoid conflicts with E2E test database
