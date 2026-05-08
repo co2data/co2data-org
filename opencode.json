@@ -6,5 +6,12 @@
       "git push *": "deny",
       "npm *": "deny"
     }
+  },
+  "mcp": {
+    "local-nextjs-server": {
+      "type": "local",
+      "command": ["npx", "-y", "next-devtools-mcp@latest"],
+      "enabled": true
+    }
   }
 }
