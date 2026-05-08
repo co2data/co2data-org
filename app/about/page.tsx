@@ -3,12 +3,12 @@ import { Cloud, Globe2, Leaf, PersonStanding, Sun, Trees } from 'lucide-react'
 const About = () => {
   return (
     <main className="flex flex-wrap items-start justify-between gap-x-32 gap-y-8 py-6 md:py-10">
-      <article className="grow basis-[32rem] space-y-6">
+      <article className="grow basis-lg space-y-6">
         <section>
           <h1 className="font-extrabold text-4xl">
             About CO<sub>2</sub> Data
           </h1>
-          <blockquote className="my-4 border-l-4 bg-card px-4 py-3 text-border text-lg italic [text-wrap:balance] dark:text-white/70">
+          <blockquote className="my-4 border-l-4 bg-card px-4 py-3 text-border text-lg italic text-balance dark:text-white/70">
             What are the CO2 emissions of things?
           </blockquote>
           <p>
