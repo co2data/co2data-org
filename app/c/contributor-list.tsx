@@ -1,12 +1,11 @@
+import { Effect } from 'effect'
+import type { SearchParams } from 'next/dist/server/request/search-params'
+import Link from 'next/link'
+import type { JSX } from 'react'
 import runtime from '@/adapter/effect/runtime'
 import Co2AverageCmp from '@/components/co2-average'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
-import { Effect } from 'effect'
-import type { SearchParams } from 'next/dist/server/request/search-params'
-import Link from 'next/link'
-
-import type { JSX } from 'react'
 
 export default async function ContributorList(props: {
   searchParams: Promise<SearchParams>

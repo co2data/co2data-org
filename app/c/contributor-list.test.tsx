@@ -1,9 +1,9 @@
-import type { Co2Average } from '@/domain/co2'
-import { makeCo2Average } from '@/domain/co2/example-data'
-import { Co2Repository } from '@/domain/co2/repository'
 import { render, screen } from '@testing-library/react'
 import { Effect, Layer, Option } from 'effect'
 import { expect, test } from 'vitest'
+import type { Co2Average } from '@/domain/co2'
+import { makeCo2Average } from '@/domain/co2/example-data'
+import { Co2Repository } from '@/domain/co2/repository'
 import { ContributorListEffect } from './contributor-list'
 
 test('render no contributor found', async () => {
@@ -37,7 +37,7 @@ async function setup(props: {
     Co2Repository,
     Co2Repository.of({
       getAllCo2Averages: Effect.succeed(props.mockData),
-      getCo2AverageBySlug: (slug) => Effect.succeed(Option.none()),
+      getCo2AverageBySlug: (_slug) => Effect.succeed(Option.none()),
     }),
   )
   const result = await ContributorListEffect(props).pipe(

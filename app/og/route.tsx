@@ -1,7 +1,7 @@
-import OgImageFrame from '@/components/og-image-frame'
 import { ImageResponse } from 'next/og'
+import OgImageFrame from '@/components/og-image-frame'
 
-export function GET(request: Request) {
+export function GET(_request: Request) {
   try {
     return new ImageResponse(
       <OgImageFrame>

@@ -1,7 +1,7 @@
-import { DB } from '@/adapter/db'
 import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it } from 'vitest'
+import { DB } from '@/adapter/db'
 import { makeUser } from './example-data'
 import { UserRepository } from './repository'
 

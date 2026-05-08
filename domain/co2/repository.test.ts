@@ -1,9 +1,9 @@
-import { DB } from '@/adapter/db'
-import type * as schema from '@/adapter/db/schema'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { Effect, Layer, Option } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, test } from 'vitest'
+import { DB } from '@/adapter/db'
+import type * as schema from '@/adapter/db/schema'
+import { type Co2Average, Co2Repository } from '@/domain/co2'
 
 describe('co2-repository', () => {
   test('getAllCo2Averages (mock DB)', () =>

@@ -1,10 +1,7 @@
 'use client'
 
-import { AuthError } from '@/adapter/pass-key'
-import { Button } from '@/components/ui/button'
-import { CardContent } from '@/components/ui/card'
 import { startAuthentication } from '@simplewebauthn/browser'
-import type { AuthenticationResponseJSON } from '@simplewebauthn/types'
+import type { AuthenticationResponseJSON } from '@simplewebauthn/server'
 import { pipe } from 'effect/Function'
 import { valueTags } from 'effect/Match'
 import { Check } from 'lucide-react'
@@ -12,11 +9,14 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { useActionState } from 'react'
 import { toast } from 'sonner'
+import { AuthError } from '@/adapter/pass-key'
+import { Button } from '@/components/ui/button'
+import { CardContent } from '@/components/ui/card'
 import { MissingUserName } from '../errors'
 import { generateLoginOptions, verifyLogin } from '../server-action'
 import Warning from '../warning'
 
-const onLogin = async (prevState: unknown, formData: FormData) => {
+const onLogin = async (_prevState: unknown, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
     return { _tag: 'Left', left: new MissingUserName() } as const
@@ -78,9 +78,9 @@ export default function Form(props: {
             {pipe(
               state.left,
               valueTags({
-                MissingUserNameError: (cause) =>
+                MissingUserNameError: (_cause) =>
                   'User name is empty. Please insert your user name.',
-                NoUserFoundError: (cause) => (
+                NoUserFoundError: (_cause) => (
                   <>
                     User not found. Please sign up first.{' '}
                     <Button asChild className="ml-2">

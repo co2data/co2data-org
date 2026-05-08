@@ -1,11 +1,11 @@
+import { Effect, Metric } from 'effect'
 import runtime from '@/adapter/effect/runtime'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
-import { Effect, Metric } from 'effect'
 import { baseUrl } from '../config'
 
 export const dynamic = 'force-dynamic'
 
-const dbErrorCount = Metric.counter('db_error_count').pipe(
+const _dbErrorCount = Metric.counter('db_error_count').pipe(
   Metric.withConstantInput(1),
 )
 

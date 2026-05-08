@@ -1,6 +1,6 @@
 import { cx } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
-import { LogLevel, Logger, Option, identity } from 'effect'
+import { identity, Logger, LogLevel, Option } from 'effect'
 import { dual } from 'effect/Function'
 
 export function cn(...inputs: ClassValue[]) {

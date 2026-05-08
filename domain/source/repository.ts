@@ -1,7 +1,7 @@
-import { DB, type DbError } from '@/adapter/db'
-import type { Source } from '@/domain/source'
 import { Effect, Layer } from 'effect'
 import { marked } from 'marked'
+import { DB, type DbError } from '@/adapter/db'
+import type { Source } from '@/domain/source'
 
 interface _SourceRepository {
   getAllSourcesByCo2ProducerId: (id: string) => Effect.Effect<Source[], DbError>

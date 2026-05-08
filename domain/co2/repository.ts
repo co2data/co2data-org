@@ -1,10 +1,10 @@
-import { DB } from '@/adapter/db'
-import {
-  type Co2Average as DbCo2Average,
-  co2Average,
-} from '@/adapter/db/schema'
 import { desc, eq } from 'drizzle-orm'
 import { Effect, Layer, Option, Array as ReadonlyArray } from 'effect'
+import { DB } from '@/adapter/db'
+import {
+  co2Average,
+  type Co2Average as DbCo2Average,
+} from '@/adapter/db/schema'
 
 const make = Effect.gen(function* ($) {
   const db = yield* $(DB)

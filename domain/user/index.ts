@@ -1,7 +1,7 @@
 import type {
   AuthenticatorTransport,
   CredentialDeviceType,
-} from '@simplewebauthn/types'
+} from '@simplewebauthn/server'
 import { Brand, type Option } from 'effect'
 
 export { UserRepository } from '@/domain/user/repository'

@@ -1,10 +1,10 @@
+import { Effect, Layer } from 'effect'
+import { mock } from 'testtriple'
+import { describe, expect, it, vi } from 'vitest'
 import { DB } from '@/adapter/db'
 import type * as schema from '@/adapter/db/schema'
 import { PassKey } from '@/adapter/pass-key'
 import { AlreadyRegistered } from '@/app/(auth)/errors'
-import { Effect, Layer } from 'effect'
-import { mock } from 'testtriple'
-import { describe, expect, it, vi } from 'vitest'
 import { UserRepository } from '../user/repository'
 import { generateSignUpOptionsEffect } from './generate-sign-up-options'
 
@@ -71,7 +71,7 @@ type DbUser =
 
 const runTest =
   (queryData: { existingUser: DbUser; newUser: DbUser }) =>
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: Is a test
   (effect: Effect.Effect<any, any, UserRepository | PassKey>) => {
     const queryMock = vi.fn()
     queryMock.mockImplementationOnce(() =>

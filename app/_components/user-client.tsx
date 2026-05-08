@@ -1,5 +1,7 @@
 'use client'
 
+import { User as UserIcon } from 'lucide-react'
+import Link from 'next/link'
 import { Button } from '@/app/_components/ui/button'
 import {
   DropdownMenu,
@@ -7,8 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/app/_components/ui/dropdown-menu'
-import { User as UserIcon } from 'lucide-react'
-import Link from 'next/link'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import DropdownButton from './ui/dropdown-button'
 import { logout } from './user-actions'

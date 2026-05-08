@@ -19,7 +19,7 @@ export interface Random {
 
 export const Random = Context.GenericTag<Random>('@services/Random')
 
-const RandomLive = Layer.succeed(
+const _RandomLive = Layer.succeed(
   Random,
   Random.of({
     next: Effect.succeed(1),

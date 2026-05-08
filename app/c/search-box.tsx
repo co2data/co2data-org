@@ -1,11 +1,11 @@
 'use client'
 
-import filterContributors from '@/app/c/searchAction'
-import { Input } from '@/components/ui/input'
-import Spinner from '@/components/ui/spinner'
 import type { Route } from 'next'
 import { useRouter } from 'next/navigation'
 import { type ChangeEvent, useCallback, useTransition } from 'react'
+import filterContributors from '@/app/c/searchAction'
+import { Input } from '@/components/ui/input'
+import Spinner from '@/components/ui/spinner'
 
 export default function SearchBox({
   searchParams,

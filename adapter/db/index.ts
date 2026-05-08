@@ -1,6 +1,4 @@
-import type { Source } from '@/domain/source'
-import type { BaseError } from '@/lib/types'
-import { type SQL, eq } from 'drizzle-orm'
+import { eq, type SQL } from 'drizzle-orm'
 import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import {
   Context,
@@ -10,6 +8,8 @@ import {
   type Option,
   Array as ReadonlyArray,
 } from 'effect'
+import type { Source } from '@/domain/source'
+import type { BaseError } from '@/lib/types'
 import { combineLinks } from './combine-source-links'
 import { OrmClient } from './orm-client'
 import * as schema from './schema'

@@ -1,5 +1,7 @@
 'use client'
 
+import convert from 'convert'
+import { useState } from 'react'
 import type { Co2Average } from '@/domain/co2'
 import {
   calcCo2PerConsumption,
@@ -7,8 +9,6 @@ import {
   calcFactorOfPersonYearFootprint,
 } from '@/domain/co2/personal-co2'
 import { format } from '@/lib/utils'
-import convert from 'convert'
-import { useState } from 'react'
 import { Button } from './ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Slider } from './ui/slider'

@@ -1,5 +1,5 @@
-import type { Source } from '@/domain/source'
 import { Option, Array as ReadonlyArray } from 'effect'
+import type { Source } from '@/domain/source'
 
 type QueryResult = {
   id: string

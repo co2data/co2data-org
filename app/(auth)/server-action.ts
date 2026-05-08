@@ -2,23 +2,23 @@
 
 import 'server-only'
 
+import type {
+  AuthenticatorAssertionResponseJSON,
+  RegistrationResponseJSON,
+} from '@simplewebauthn/server'
+import { Effect, Either, flow, Option } from 'effect'
+import { redirect } from 'next/navigation'
 import { runServerAction } from '@/adapter/effect'
 import { AuthError, PassKey } from '@/adapter/pass-key'
 import { Session } from '@/adapter/session'
 import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
 import { generateSignUpOptionsEffect } from '@/domain/auth/generate-sign-up-options'
 import { UserRepository } from '@/domain/user/repository'
-import type {
-  AuthenticatorAssertionResponseJSON,
-  RegistrationResponseJSON,
-} from '@simplewebauthn/types'
-import { Effect, Either, Option, flow } from 'effect'
-import { redirect } from 'next/navigation'
 import {
   CouldNotFindAuthenticator,
   NoChallengeOnUser,
-  NoUserFound,
   NotVerified,
+  NoUserFound,
 } from './errors'
 
 export const generateLoginOptions = flow(

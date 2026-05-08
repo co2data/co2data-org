@@ -1,5 +1,5 @@
-import { UserRepository } from '@/domain/user/repository'
 import { Layer } from 'effect'
+import { UserRepository } from '@/domain/user/repository'
 import { Co2Repository } from '../../domain/co2/repository'
 import { SourceRepository } from '../../domain/source/repository'
 import { DB } from '../db'

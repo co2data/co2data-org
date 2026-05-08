@@ -1,6 +1,6 @@
-import { makeCo2Average } from '@/domain/co2/example-data'
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { makeCo2Average } from '@/domain/co2/example-data'
 import { renderImage } from './create-og-image-response'
 
 describe('og image test', () => {

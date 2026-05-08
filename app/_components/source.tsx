@@ -1,15 +1,18 @@
-import type { Source } from '@/domain/source'
-import { format } from '@/lib/utils'
 import convert from 'convert'
 import { Option } from 'effect'
 import { ExternalLink } from 'lucide-react'
 import mime from 'mime'
+import type { Source } from '@/domain/source'
+import { format } from '@/lib/utils'
 import Opt from './opt'
 
 const SourceComponent = ({
   source,
   unit,
-}: { source: Source; unit: string }) => {
+}: {
+  source: Source
+  unit: string
+}) => {
   return (
     <li className="max-w-sm list-none overflow-hidden rounded border-4 border-border bg-card">
       <h3 className="bg-border px-4 py-2 text-white">
@@ -47,7 +50,7 @@ const SourceComponent = ({
       <p className="px-4 pt-2 font-bold text-xs">Description</p>
       <div
         className="prose prose-sm dark:prose-invert prose-li:my-0 prose-p:my-1 prose-ul:my-1 px-4 pb-2"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: description is sanitised
         dangerouslySetInnerHTML={{ __html: source.description }}
       />
       <Opt>

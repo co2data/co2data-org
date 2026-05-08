@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 
 const getSessionEffect = (password: Secret.Secret) =>
   Effect.tryPromise(async () =>
-    // @ts-ignore
+    // @ts-expect-error
     getIronSession<{ username?: string }>(await cookies(), {
       password: Secret.value(password),
       cookieName: 'user-session',

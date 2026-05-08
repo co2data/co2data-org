@@ -1,10 +1,12 @@
-import { DB, DbError } from '@/adapter/db'
-import * as schema from '@/adapter/db/schema'
-import type { VerifiedRegistrationResponse } from '@simplewebauthn/server'
+import type {
+  CredentialDeviceType,
+  VerifiedRegistrationResponse,
+} from '@simplewebauthn/server'
 import { isoBase64URL } from '@simplewebauthn/server/helpers'
-import type { CredentialDeviceType } from '@simplewebauthn/types'
 import { eq } from 'drizzle-orm'
 import { Effect, Layer, Option, Predicate } from 'effect'
+import { DB, DbError } from '@/adapter/db'
+import * as schema from '@/adapter/db/schema'
 import { Base64String, type User } from '.'
 
 const make = Effect.gen(function* ($) {

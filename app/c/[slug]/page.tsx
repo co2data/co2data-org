@@ -1,3 +1,8 @@
+import convert from 'convert'
+import { Effect, Option, pipe, Struct } from 'effect'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import runtime from '@/adapter/effect/runtime'
 import { baseUrl } from '@/app/config'
 import Opt from '@/components/opt'
@@ -6,11 +11,6 @@ import Source from '@/components/source'
 import { type Co2Average, Co2Repository } from '@/domain/co2'
 import { SourceRepository } from '@/domain/source'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
-import convert from 'convert'
-import { Effect, Option, Struct, pipe } from 'effect'
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
 
 type Props = {
   params: Promise<{

@@ -1,7 +1,7 @@
+import { Suspense } from 'react'
 import ContributorList from '@/app/c/contributor-list'
 import SearchBox from '@/app/c/search-box'
 import Spinner from '@/components/ui/spinner'
-import { Suspense } from 'react'
 
 export default async function ContributorPage(props: {
   searchParams: Promise<{ [key: string]: string | undefined }>

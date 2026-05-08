@@ -1,18 +1,18 @@
 'use client'
-import { AuthError } from '@/adapter/pass-key'
-import { CardContent } from '@/components/ui/card'
 import { startRegistration } from '@simplewebauthn/browser'
-import type { RegistrationResponseJSON } from '@simplewebauthn/types'
+import type { RegistrationResponseJSON } from '@simplewebauthn/server'
 import { pipe } from 'effect/Function'
 import { valueTags } from 'effect/Match'
 import Link from 'next/link'
 import type React from 'react'
 import { useActionState } from 'react'
+import { AuthError } from '@/adapter/pass-key'
+import { CardContent } from '@/components/ui/card'
 import { AlreadyRegistered, MissingUserName } from '../errors'
 import { generateSignUpOptions, verifySignUp } from '../server-action'
 import Warning from '../warning'
 
-const onSignUp = async (prevState: unknown, formData: FormData) => {
+const onSignUp = async (_prevState: unknown, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
     return { _tag: 'Left', left: new MissingUserName() } as const

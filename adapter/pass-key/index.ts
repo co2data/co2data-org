@@ -1,5 +1,8 @@
-import type { Authenticator } from '@/domain/user'
-import type { BaseError } from '@/lib/types'
+import type {
+  AuthenticationResponseJSON,
+  PublicKeyCredentialUserEntityJSON,
+  RegistrationResponseJSON,
+} from '@simplewebauthn/server'
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
@@ -7,13 +10,10 @@ import {
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers'
-import type {
-  AuthenticationResponseJSON,
-  PublicKeyCredentialUserEntityJSON,
-  RegistrationResponseJSON,
-} from '@simplewebauthn/types'
 import { Data, Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
+import type { Authenticator } from '@/domain/user'
+import type { BaseError } from '@/lib/types'
 import { rpID, rpName, rpOrigin } from './relying-partner'
 
 export class AuthError extends Data.TaggedError('AuthError')<BaseError> {}
@@ -60,10 +60,7 @@ const make = {
       catch: (error) => new AuthError({ cause: error }),
     }).pipe(Effect.withSpan('verifyAuthenticationResponse')),
 
-  generateRegistrationOptions: (props: {
-    userId: string
-    userName: string
-  }) =>
+  generateRegistrationOptions: (props: { userId: string; userName: string }) =>
     Effect.tryPromise({
       try: () =>
         generateRegistrationOptions({
@@ -92,10 +89,7 @@ const make = {
 const makeTest = mock<typeof make>({
   generateAuthenticationOptions: () =>
     Effect.succeed({ json: 'hi', challenge: 'challenge' }),
-  generateRegistrationOptions: (props: {
-    userId: string
-    userName: string
-  }) =>
+  generateRegistrationOptions: (props: { userId: string; userName: string }) =>
     Effect.succeed(
       mock({
         challenge: 'challenge',

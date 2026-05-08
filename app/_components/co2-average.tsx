@@ -1,8 +1,8 @@
-import type { Co2Average } from '@/domain/co2'
-import { format } from '@/lib/utils'
 import convert from 'convert'
 import Link from 'next/link'
 import { Fragment } from 'react'
+import type { Co2Average } from '@/domain/co2'
+import { format } from '@/lib/utils'
 
 const formatter = new Intl.NumberFormat('en', {
   style: 'unit',

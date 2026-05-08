@@ -1,4 +1,4 @@
-import type { AuthenticatorTransport } from '@simplewebauthn/types'
+import type { AuthenticatorTransport } from '@simplewebauthn/server'
 import { type InferSelectModel, relations, sql } from 'drizzle-orm'
 import {
   blob,
@@ -8,7 +8,6 @@ import {
   sqliteTable,
   sqliteView,
   text,
-  unique,
 } from 'drizzle-orm/sqlite-core'
 import { nanoid } from 'nanoid'
 

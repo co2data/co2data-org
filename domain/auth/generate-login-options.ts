@@ -1,6 +1,6 @@
+import { Effect } from 'effect'
 import { AuthError, PassKey } from '@/adapter/pass-key'
 import { UserRepository } from '@/domain/user/repository'
-import { Effect } from 'effect'
 import { NoUserFound } from '../../app/(auth)/errors'
 
 export function generateLoginOptionsEffect(username: string) {

@@ -1,9 +1,9 @@
-import { DB } from '@/adapter/db'
-import type { Source } from '@/domain/source'
-import { makeSource } from '@/domain/source/example-data'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it } from 'vitest'
+import { DB } from '@/adapter/db'
+import type { Source } from '@/domain/source'
+import { makeSource } from '@/domain/source/example-data'
 import { SourceRepository } from './repository'
 
 describe('source repository', () => {

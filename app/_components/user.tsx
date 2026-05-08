@@ -1,6 +1,6 @@
+import { Effect } from 'effect'
 import runtime from '@/adapter/effect/runtime'
 import { Session } from '@/adapter/session'
-import { Effect } from 'effect'
 import UserClient from './user-client'
 
 export default function User(props: { className?: string }) {

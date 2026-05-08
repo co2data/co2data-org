@@ -1,14 +1,14 @@
-import type { DbError } from '@/adapter/db'
-import OgImageFrame from '@/components/og-image-frame'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
-import type { BaseError } from '@/lib/types'
 import convert from 'convert'
 import { Data, Effect } from 'effect'
 import { ImageResponse } from 'next/og'
 import { Fragment, type JSX } from 'react'
+import type { DbError } from '@/adapter/db'
+import OgImageFrame from '@/components/og-image-frame'
+import { type Co2Average, Co2Repository } from '@/domain/co2'
+import type { BaseError } from '@/lib/types'
 
 export function createOgImageResponse(
-  request: Request,
+  _request: Request,
   { params }: { params: { slug: string | undefined } },
 ) {
   return parseSlug(params.slug).pipe(

@@ -1,10 +1,10 @@
-import Footer from '@/components/footer'
-import Header from '@/components/header'
-import { cn } from '@/lib/utils'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from 'next-themes'
+import Footer from '@/components/footer'
+import Header from '@/components/header'
+import { cn } from '@/lib/utils'
 import { Toaster } from './_components/ui/sonner'
 import { baseUrl } from './config'
 import './globals.css'
@@ -30,12 +30,7 @@ export default function RootLayout({
         data-host-url="https://co2data.org"
       />
       <body className="flex min-h-screen flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          scriptProps={{ type: 'application/json' }}
-          enableSystem
-        >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
           <div className="container flex-1 pt-4 pb-16">{children}</div>
           <Footer />

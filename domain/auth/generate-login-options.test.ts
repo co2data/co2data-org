@@ -1,9 +1,9 @@
-import { DB } from '@/adapter/db'
-import { PassKey } from '@/adapter/pass-key'
-import { UserRepository } from '@/domain/user/repository'
 import { Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import { describe, expect, it } from 'vitest'
+import { DB } from '@/adapter/db'
+import { PassKey } from '@/adapter/pass-key'
+import { UserRepository } from '@/domain/user/repository'
 import { NoUserFound } from '../../app/(auth)/errors'
 import { generateLoginOptionsEffect } from './generate-login-options'
 

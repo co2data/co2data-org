@@ -8,7 +8,7 @@ import {
   Layer,
   Array as ReadonlyArray,
 } from 'effect'
-import { describe, expect, it, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { DbError } from '../db'
 
 describe('effect basics', () => {
