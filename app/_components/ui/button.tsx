@@ -45,29 +45,48 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  useFormStatus?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const { pending } = useFormStatus()
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      useFormStatus: shouldUseFormStatus = true,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    // Only check form status if explicitly enabled and we have a type="submit" or are in a form
+    const formStatus = useFormStatus()
+    const isInFormContext =
+      props.type === 'submit' || formStatus.action !== null
+    const isPending =
+      shouldUseFormStatus && isInFormContext ? formStatus.pending : false
 
     const Comp = asChild ? Slot : 'button'
+    const ariaDisabled = isPending || props['aria-disabled'] || undefined
+
     return (
       <Comp
         className={cn(
           buttonVariants({
             variant,
             size,
-            state: pending ? 'disabled' : 'enabled',
+            state: isPending ? 'disabled' : 'enabled',
             className,
           }),
         )}
-        aria-disabled={pending || props['aria-disabled']}
+        aria-disabled={ariaDisabled}
         ref={ref}
         {...props}
       >
         <Slottable>{children}</Slottable>
-        {pending && <Spinner className="h-4 w-4" />}
+        {isPending && <Spinner className="h-4 w-4" />}
       </Comp>
     )
   },
