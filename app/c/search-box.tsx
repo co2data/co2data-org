@@ -50,7 +50,7 @@ export default function SearchBox({
           autoComplete="one-time-code"
         />
         {isPending && (
-          <div className="-right-10 -my-4 absolute top-1/2 bottom-1/2">
+          <div className="absolute top-1/2 -right-10 bottom-1/2 -my-4">
             <Spinner />
           </div>
         )}

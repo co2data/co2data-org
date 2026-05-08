@@ -8,7 +8,7 @@ const About = () => {
           <h1 className="font-extrabold text-4xl">
             About CO<sub>2</sub> Data
           </h1>
-          <blockquote className="my-4 border-l-4 bg-card px-4 py-3 text-border text-lg italic text-balance dark:text-white/70">
+          <blockquote className="my-4 text-balance border-l-4 bg-card px-4 py-3 text-border text-lg italic dark:text-white/70">
             What are the CO2 emissions of things?
           </blockquote>
           <p>

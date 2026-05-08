@@ -13,7 +13,7 @@ const Avatar = ({
   <AvatarPrimitive.Root
     ref={ref}
     className={cn(
-      '-m-1 relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full',
+      'relative -m-1 flex h-8 w-8 shrink-0 overflow-hidden rounded-full',
       className,
     )}
     {...props}

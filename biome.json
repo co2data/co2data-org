@@ -8,6 +8,7 @@
       "complexity": { "noStaticOnlyClass": "off" },
       "nursery": {
         "useSortedClasses": {
+          "level": "warn",
           "options": {
             "functions": ["cn", "cva"]
           }

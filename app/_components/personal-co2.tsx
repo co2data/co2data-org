@@ -144,7 +144,7 @@ export default function PersonalCo2({
               of a{' '}
               <svg
                 viewBox="0 -2 20 55"
-                className="-translate-y-1 inline-block h-6 w-2 fill-current"
+                className="inline-block h-6 w-2 -translate-y-1 fill-current"
               >
                 <title>Person</title>
                 <circle cx="9" cy="9" r="4" />
@@ -161,7 +161,7 @@ export default function PersonalCo2({
                   The average{' '}
                   <svg
                     viewBox="0 -2 20 55"
-                    className="-translate-y-1 inline-block h-6 w-2 fill-current"
+                    className="inline-block h-6 w-2 -translate-y-1 fill-current"
                   >
                     <title>Person</title>
                     <circle cx="9" cy="9" r="4" />
