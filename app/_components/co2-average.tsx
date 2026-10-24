@@ -16,7 +16,7 @@ const Co2AverageComponent = ({ co2Average }: Props) => {
   return (
     <li
       key={co2Average.slug}
-      className="rounded border-4 border-border bg-card"
+      className="border-border bg-card rounded border-4"
     >
       <p className="bg-border px-4 py-2 font-bold text-white">
         <Link href={`/c/${co2Average.slug}`}>{co2Average.title}</Link>
@@ -55,13 +55,13 @@ function formatAvgPerYear(avgPerYear: number) {
         return <Fragment key={type + value} />
       case 'integer':
         return (
-          <span key={type + value} className="font-extrabold text-4xl">
+          <span key={type + value} className="text-4xl font-extrabold">
             {value}
           </span>
         )
       default:
         return (
-          <span key={type + value} className="font-extrabold text-sm">
+          <span key={type + value} className="text-sm font-extrabold">
             {value}
           </span>
         )

@@ -6,7 +6,7 @@ exports[`render  1`] = `
     class="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-4"
   >
     <li
-      class="rounded border-4 border-border bg-card"
+      class="border-border bg-card rounded border-4"
     >
       <p
         class="bg-border px-4 py-2 font-bold text-white"
@@ -30,17 +30,17 @@ exports[`render  1`] = `
         class="px-4 text-right"
       >
         <span
-          class="font-extrabold text-4xl"
+          class="text-4xl font-extrabold"
         >
           500
         </span>
         <span
-          class="font-extrabold text-sm"
+          class="text-sm font-extrabold"
         >
           .
         </span>
         <span
-          class="font-extrabold text-sm"
+          class="text-sm font-extrabold"
         >
           000
         </span>
@@ -83,7 +83,7 @@ exports[`render no contributor found 1`] = `
     class="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-4"
   />
   <div
-    class="mx-auto max-w-xs text-foreground/50"
+    class="text-foreground/50 mx-auto max-w-xs"
   >
     <h2
       class="mb-2 text-2xl"

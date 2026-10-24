@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
   "files": {
     "includes": [
       "**",
@@ -9,7 +9,8 @@
       "!**/public",
       "!**/next-env.d.ts",
       "!**/playwright-report",
-      "!**/test-results"
+      "!**/test-results",
+      "!**/pnpm-lock.yaml"
     ]
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
@@ -18,12 +19,10 @@
     "rules": {
       "preset": "recommended",
       "complexity": { "noStaticOnlyClass": "off" },
+      "correctness": { "noComponentHookFactories": "off" },
       "nursery": {
-        "useSortedClasses": {
-          "level": "warn",
-          "options": {
-            "functions": ["cn", "cva"]
-          }
+        "useTailwindSortedClasses": {
+          "level": "warn"
         }
       }
     }
@@ -43,5 +42,6 @@
     "parser": {
       "tailwindDirectives": true
     }
-  }
+  },
+  "tailwind": { "mergeFunctions": ["cn"], "variantFunctions": ["cva"] }
 }

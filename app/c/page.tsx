@@ -10,7 +10,7 @@ export default async function ContributorPage(props: {
     <main className="py-6 md:py-10">
       <div className="min-h-screen space-y-16 md:space-y-20">
         <div className="space-y-12 text-center md:space-y-16">
-          <h1 className="font-extrabold text-6xl text-foreground">
+          <h1 className="text-foreground text-6xl font-extrabold">
             CO<sub>2</sub> Data
           </h1>
           <SearchBox searchParams={await props.searchParams} />

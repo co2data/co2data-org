@@ -33,10 +33,10 @@ export default function PersonalCo2({
   const { isLeft, angleMask } = calculateAngles(factorOfPersonYearFootprint)
 
   return (
-    <div className="rounded-lg border border-border bg-card p-8">
+    <div className="border-border bg-card rounded-lg border p-8">
       <div className="flex flex-col justify-between gap-x-24 gap-y-8 lg:flex-row">
         <div className="flex-1">
-          <h2 className="font-bold text-lg">
+          <h2 className="text-lg font-bold">
             Personal CO<sub>2</sub> footprint
           </h2>
 
@@ -194,7 +194,7 @@ function calculateAngles(factorOfPersonYearFootprint: number) {
 
 function PieChart({ state }: { state: 'partial' | 'full' }) {
   return (
-    <div className="-mx-36 text-primary">
+    <div className="text-primary -mx-36">
       <svg className="w-full" viewBox="0 0 300 200">
         <title>Additional pie chart for 100%</title>
         <circle
@@ -213,7 +213,7 @@ function PieChart({ state }: { state: 'partial' | 'full' }) {
         />
         <g
           transform="translate(135,50) scale(1.8)"
-          className="fill-white stroke-1 stroke-gray-800 stroke-linejoin-round"
+          className="stroke-linejoin-round fill-white stroke-gray-800 stroke-1"
         >
           <circle cx="9" cy="9" r="4" />
           <path d="M9,32l0,19l4,0l0,-30l1,0l0,13l3,0l0,-18l-18,0l0,18l3,0l0,-13l1,0l-0,30l4,0l0,-19" />

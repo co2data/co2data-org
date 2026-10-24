@@ -3,7 +3,7 @@
 import 'server-only'
 
 import type {
-  AuthenticatorAssertionResponseJSON,
+  AuthenticationResponseJSON,
   RegistrationResponseJSON,
 } from '@simplewebauthn/server'
 import { Effect, flow, Option } from 'effect'
@@ -25,14 +25,11 @@ export const generateLoginOptions = flow(
   generateLoginOptionsEffect,
   runServerAction('generateLoginOptions'),
 )
-export async function verifyLogin(body: {
-  id: string
-  rawId: string
-  response: AuthenticatorAssertionResponseJSON
-  clientExtensionResults: AuthenticationExtensionsClientOutputs
-  type: 'public-key'
-  username: string
-}) {
+export async function verifyLogin(
+  body: AuthenticationResponseJSON & {
+    username: string
+  },
+) {
   return Effect.gen(function* () {
     const userRepo = yield* UserRepository
 

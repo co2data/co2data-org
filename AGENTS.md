@@ -9,6 +9,5 @@ Before any Next.js work, find and read the relevant doc in `node_modules/next/di
 Project is deployed on coolify using railpack.
 
 After each task run:
-
 - `biome check .`
 - `pnpm test`

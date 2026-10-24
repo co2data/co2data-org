@@ -34,7 +34,7 @@ function render(co2Averages: Co2Average[]) {
         ))}
       </ul>
       {co2Averages.length === 0 && (
-        <div className="mx-auto max-w-xs text-foreground/50">
+        <div className="text-foreground/50 mx-auto max-w-xs">
           <h2 className="mb-2 text-2xl">Nothing found 🙁</h2>
           <p>
             Thank you for searching! Sadly this data is not available yet. Get

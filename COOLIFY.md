@@ -42,7 +42,7 @@ pnpm install && pnpm build
 
 No environment variables are required for the build process!
 
-**Note**: 
+**Note**:
 - `CI=true` is automatically set by the build script
 - `SESSION_PASSWORD` is set to a dummy value for E2E tests in the build script
 - `BASE_URL` is set to "https://co2data.org" by the build script
@@ -65,9 +65,9 @@ The build script will automatically:
 ### 4. Alternative: Skip E2E Tests During Build
 
 If you want to run E2E tests separately (e.g., post-deploy), you can:
-
 1. Use `pnpm build` as your build command instead
 2. Set up a post-deploy webhook or cron job to run:
+
    ```bash
    pnpm test:e2e
    ```

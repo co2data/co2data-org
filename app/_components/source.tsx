@@ -14,7 +14,7 @@ const SourceComponent = ({
   unit: string
 }) => {
   return (
-    <li className="max-w-sm list-none overflow-hidden rounded border-4 border-border bg-card">
+    <li className="border-border bg-card max-w-sm list-none overflow-hidden rounded border-4">
       <h3 className="bg-border px-4 py-2 text-white">
         {source.name}
         <Opt>
@@ -38,7 +38,7 @@ const SourceComponent = ({
         CO<sub>2</sub>e for {source.per} {unit}
       </p>
       <p className="px-4 pb-2 text-right">
-        <span className="font-bold text-3xl">
+        <span className="text-3xl font-bold">
           {format(convert(source.gCo2e, 'grams').to('kg'), {
             trialingZeros: false,
           })}
@@ -47,7 +47,7 @@ const SourceComponent = ({
           kg CO<sub>2</sub>e
         </span>
       </p>
-      <p className="px-4 pt-2 font-bold text-xs">Description</p>
+      <p className="px-4 pt-2 text-xs font-bold">Description</p>
       <div
         className="prose prose-sm dark:prose-invert prose-li:my-0 prose-p:my-1 prose-ul:my-1 px-4 pb-2"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: description is sanitised
@@ -56,7 +56,7 @@ const SourceComponent = ({
       <Opt>
         {Option.map(source.links, (links) => (
           <>
-            <p className="px-4 pt-2 font-bold text-xs">
+            <p className="px-4 pt-2 text-xs font-bold">
               Links{' '}
               <ExternalLink
                 strokeWidth={3}
@@ -79,7 +79,7 @@ const SourceComponent = ({
                     </a>{' '}
                     {extension && (
                       <>
-                        <span className="inline-block rounded border px-1 font-bold font-mono text-xs opacity-60">
+                        <span className="inline-block rounded border px-1 font-mono text-xs font-bold opacity-60">
                           {extension}
                         </span>{' '}
                       </>

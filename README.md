@@ -20,5 +20,4 @@ The website is open source under the MIT license. Contributions are welcome. Ple
 ### Pull request
 
 If you want to make a pull request, please check the following list:
-
 - [ ] Write a unit and/or e2e test

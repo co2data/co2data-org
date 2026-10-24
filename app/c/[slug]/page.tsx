@@ -41,11 +41,11 @@ export default async function ContributorPage(props: Props) {
               <li className="ml-2 list-['>'] pl-2">{co2Average.title}</li>
             </ol>
           </nav>
-          <div className="space-y-4 rounded-lg border border-border bg-card p-8">
+          <div className="border-border bg-card space-y-4 rounded-lg border p-8">
             <div className="flex flex-wrap items-baseline gap-4">
-              <h1 className="font-extrabold text-4xl">
+              <h1 className="text-4xl font-extrabold">
                 <div>{co2Average.title}</div>
-                <div className="font-normal text-sm">
+                <div className="text-sm font-normal">
                   CO<sub>2</sub> emissions
                 </div>
               </h1>
@@ -86,7 +86,7 @@ export default async function ContributorPage(props: Props) {
             />
           </section>
           <section className="space-y-4">
-            <h2 className="font-bold text-xl">Sources</h2>
+            <h2 className="text-xl font-bold">Sources</h2>
             {sources.map((source) => (
               <Source key={source.id} source={source} unit={co2Average.unit} />
             ))}
