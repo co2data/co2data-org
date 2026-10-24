@@ -9,8 +9,8 @@ import { generateLoginOptionsEffect } from './generate-login-options'
 
 describe('generateLoginOptions', () => {
   it('runs happy path', async () =>
-    Effect.gen(function* ($) {
-      const actual = yield* $(generateLoginOptionsEffect('philip@co2data.org'))
+    Effect.gen(function* () {
+      const actual = yield* generateLoginOptionsEffect('philip@co2data.org')
       expect(actual).toMatchInlineSnapshot(`
         {
           "challenge": "challenge",
@@ -37,9 +37,8 @@ describe('generateLoginOptions', () => {
     ))
 
   it("can't find the user", () =>
-    Effect.gen(function* ($) {
-      const actual = yield* $(
-        generateLoginOptionsEffect('unknown@user.org'),
+    Effect.gen(function* () {
+      const actual = yield* generateLoginOptionsEffect('unknown@user.org').pipe(
         Effect.flip,
       )
 

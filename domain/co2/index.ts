@@ -1,6 +1,11 @@
 import type { Option } from 'effect'
 
-export { Co2Repository } from '@/domain/co2/repository'
+export {
+  Co2Repository,
+  getAllCo2Averages,
+  getCo2AverageBySlug,
+} from '@/domain/co2/repository'
+
 export type Unit =
   | 'gram'
   | 'hour'

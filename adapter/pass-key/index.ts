@@ -10,7 +10,7 @@ import {
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers'
-import { Data, Effect, Layer } from 'effect'
+import { Context, Data, Effect, Layer } from 'effect'
 import { mock } from 'testtriple'
 import type { Authenticator } from '@/domain/user'
 import type { BaseError } from '@/lib/types'
@@ -102,10 +102,39 @@ const makeTest = mock<typeof make>({
     ),
 })
 
-export class PassKey extends Effect.Tag('@services/PassKey')<
-  PassKey,
-  typeof make
->() {
+export class PassKey extends Context.Service<PassKey, typeof make>()(
+  '@services/PassKey',
+) {
   static Live = Layer.succeed(this, make)
   static Test = Layer.succeed(this, makeTest)
+
+  static generateAuthenticationOptions(props: {
+    userAuthenticators: Authenticator[]
+  }) {
+    return PassKey.use((passKey) =>
+      passKey.generateAuthenticationOptions(props),
+    )
+  }
+
+  static verifyAuthenticationResponse(props: {
+    body: AuthenticationResponseJSON
+    expectedChallenge: string
+    authenticator: Authenticator
+  }) {
+    return PassKey.use((passKey) => passKey.verifyAuthenticationResponse(props))
+  }
+
+  static generateRegistrationOptions(props: {
+    userId: string
+    userName: string
+  }) {
+    return PassKey.use((passKey) => passKey.generateRegistrationOptions(props))
+  }
+
+  static verifyRegistrationResponse(props: {
+    responseBody: RegistrationResponseJSON
+    currentChallenge: string
+  }) {
+    return PassKey.use((passKey) => passKey.verifyRegistrationResponse(props))
+  }
 }

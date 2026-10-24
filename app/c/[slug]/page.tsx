@@ -8,8 +8,8 @@ import { baseUrl } from '@/app/config'
 import Opt from '@/components/opt'
 import PersonalCo2 from '@/components/personal-co2'
 import Source from '@/components/source'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
-import { SourceRepository } from '@/domain/source'
+import { type Co2Average, getCo2AverageBySlug } from '@/domain/co2'
+import { getAllSourcesByCo2ProducerId } from '@/domain/source'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 
 type Props = {
@@ -24,14 +24,11 @@ type Props = {
 export default async function ContributorPage(props: Props) {
   const params = await props.params
   const searchParams = await props.searchParams
-  return Effect.gen(function* (_) {
-    const co2Average = yield* _(
-      Co2Repository.getCo2AverageBySlug(params.slug),
+  return Effect.gen(function* () {
+    const co2Average = yield* getCo2AverageBySlug(params.slug).pipe(
       Effect.map(Option.getOrElse(notFound)),
     )
-    const sources = yield* _(
-      SourceRepository.getAllSourcesByCo2ProducerId(co2Average.id),
-    )
+    const sources = yield* getAllSourcesByCo2ProducerId(co2Average.id)
 
     return (
       <main className="overflow-hidden">
@@ -85,7 +82,7 @@ export default async function ContributorPage(props: Props) {
         <div className="mt-4 space-y-16">
           <section>
             <PersonalCo2
-              co2Average={pipe(co2Average, Struct.omit('description'))}
+              co2Average={pipe(co2Average, Struct.omit(['description']))}
             />
           </section>
           <section className="space-y-4">
@@ -114,8 +111,7 @@ export async function generateMetadata(props: Props) {
   const params = await props.params
   const searchParams = await props.searchParams
   return Effect.gen(function* () {
-    const co2AverageRepo = yield* Co2Repository
-    const co2Average = yield* co2AverageRepo.getCo2AverageBySlug(params.slug)
+    const co2Average = yield* getCo2AverageBySlug(params.slug)
     if (Option.isNone(co2Average)) {
       notFound()
     }

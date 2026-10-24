@@ -1,6 +1,9 @@
 import type { Option } from 'effect'
 
-export { SourceRepository } from '@/domain/source/repository'
+export {
+  getAllSourcesByCo2ProducerId,
+  SourceRepository,
+} from '@/domain/source/repository'
 export type Source = {
   id: string
   region: Option.Option<string>

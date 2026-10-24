@@ -1,9 +1,8 @@
 import * as NodeSdk from '@effect/opentelemetry/NodeSdk'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { Context, Layer } from 'effect'
+import { Context, Effect, Layer } from 'effect'
 import { seconds } from 'effect/Duration'
-import * as Effect from 'effect/Effect'
 import { pipe } from 'effect/Function'
 
 /*
@@ -17,7 +16,7 @@ export interface Random {
   readonly next: Effect.Effect<number>
 }
 
-export const Random = Context.GenericTag<Random>('@services/Random')
+export const Random = Context.Service<Random>('@services/Random')
 
 const _RandomLive = Layer.succeed(
   Random,
@@ -42,15 +41,15 @@ const task = (
   delay: number,
   children: ReadonlyArray<Effect.Effect<void>> = [],
 ) =>
-  Effect.gen(function* (_) {
-    // const random = yield* _(Random)
-    // const n = yield* _(random.next)
-    yield* _(Effect.log(name))
-    yield* _(Effect.sleep(`${delay} millis`))
+  Effect.gen(function* () {
+    // const random = yield* Random
+    // const n = yield* random.next
+    yield* Effect.log(name)
+    yield* Effect.sleep(`${delay} millis`)
     for (const child of children) {
-      yield* _(child)
+      yield* child
     }
-    yield* _(Effect.sleep(`${delay} millis`))
+    yield* Effect.sleep(`${delay} millis`)
   }).pipe(Effect.withSpan(name))
 
 const poll = task('/poll', 1)
@@ -62,7 +61,7 @@ const program = task('client', 2, [
     task('/payment Gateway', 6, [task('DB', 7), task('Ext. Merchant', 8)]),
     task('/dispatch', 9, [
       task('/dispatch/search', 10),
-      Effect.all([poll, poll, poll], { concurrency: 'inherit' }),
+      Effect.all([poll, poll, poll], { concurrency: 'unbounded' }),
       task('/pollDriver/{id}', 11),
     ]),
   ]),
@@ -71,6 +70,6 @@ const program = task('client', 2, [
 pipe(
   Effect.delay(program, seconds(1)),
   Effect.provide(NodeSdkLive),
-  Effect.catchAllCause(Effect.logError),
+  Effect.catchCause(Effect.logError),
   Effect.runPromise,
 )

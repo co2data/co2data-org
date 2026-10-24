@@ -1,4 +1,4 @@
-import { Option, Array as ReadonlyArray } from 'effect'
+import { Option } from 'effect'
 import type { Source } from '@/domain/source'
 
 type QueryResult = {
@@ -29,13 +29,12 @@ export function combineLinks(d: QueryResult[]) {
         ...acc.filter((e) => e.id !== source.id),
         {
           ...existing,
-          links: Option.map(
-            existing.links,
-            ReadonlyArray.appendAll(ReadonlyArray.fromNullable(source.links)),
+          links: Option.map(existing.links, (links) =>
+            source.links ? [...links, source.links] : links,
           ).pipe(
             Option.orElse(() =>
-              Option.fromNullable(source.links).pipe(
-                Option.map(ReadonlyArray.of),
+              Option.fromNullOr(source.links).pipe(
+                Option.map((link) => [link]),
               ),
             ),
           ),
@@ -44,11 +43,9 @@ export function combineLinks(d: QueryResult[]) {
     }
     acc.push({
       ...source,
-      region: Option.fromNullable(source.region),
-      year: Option.fromNullable(source.year),
-      links: Option.fromNullable(source.links).pipe(
-        Option.map(ReadonlyArray.of),
-      ),
+      region: Option.fromNullOr(source.region),
+      year: Option.fromNullOr(source.year),
+      links: Option.fromNullOr(source.links).pipe(Option.map((link) => [link])),
     })
     return acc
   }, [])

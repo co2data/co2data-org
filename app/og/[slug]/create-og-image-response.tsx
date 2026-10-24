@@ -1,10 +1,10 @@
 import convert from 'convert'
-import { Data, Effect } from 'effect'
+import { Data, Effect, Option } from 'effect'
 import { ImageResponse } from 'next/og'
 import { Fragment, type JSX } from 'react'
 import type { DbError } from '@/adapter/db'
 import OgImageFrame from '@/components/og-image-frame'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
+import { type Co2Average, getCo2AverageBySlug } from '@/domain/co2'
 import type { BaseError } from '@/lib/types'
 
 export function createOgImageResponse(
@@ -14,7 +14,7 @@ export function createOgImageResponse(
   return parseSlug(params.slug).pipe(
     Effect.flatMap(getCo2Average),
     Effect.flatMap(renderImageAsResponse),
-    Effect.catchAll(handleErrors),
+    Effect.catch(handleErrors),
   ) satisfies Effect.Effect<ImageResponse, never, unknown>
 }
 
@@ -92,14 +92,19 @@ const formatter = new Intl.NumberFormat('en', {
 })
 
 function parseSlug(slug: string | undefined) {
-  return Effect.fromNullable(slug).pipe(
+  return Effect.fromNullishOr(slug).pipe(
     Effect.mapError(() => new NoParamError()),
   )
 }
 
 function getCo2Average(slug: string) {
-  return Co2Repository.getCo2AverageBySlug(slug).pipe(
-    Effect.flatMap(Effect.orElseFail(notFound(slug))),
+  return getCo2AverageBySlug(slug).pipe(
+    Effect.flatMap((co2Average) =>
+      Option.match(co2Average, {
+        onNone: () => Effect.fail(notFound(slug)()),
+        onSome: Effect.succeed,
+      }),
+    ),
   )
 }
 function notFound(slug: string | undefined) {

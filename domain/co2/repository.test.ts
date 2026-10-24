@@ -3,11 +3,11 @@ import { mock } from 'testtriple'
 import { describe, expect, test } from 'vitest'
 import { DB } from '@/adapter/db'
 import type * as schema from '@/adapter/db/schema'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
+import { type Co2Average, Co2Repository, getAllCo2Averages } from '@/domain/co2'
 
 describe('co2-repository', () => {
   test('getAllCo2Averages (mock DB)', () =>
-    Effect.gen(function* ($) {
+    Effect.gen(function* () {
       const expected: Co2Average = {
         id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
         title: 'Grains',
@@ -24,7 +24,7 @@ describe('co2-repository', () => {
         timesPerYearAverage: 500,
       }
 
-      const actual = yield* $(Co2Repository.getAllCo2Averages)
+      const actual = yield* getAllCo2Averages
 
       expect(actual).toStrictEqual([expected])
     }).pipe(
@@ -46,7 +46,7 @@ describe('co2-repository', () => {
     ))
 
   test('getCo2AveragesBySlug (mock DB)', () =>
-    Effect.gen(function* ($) {
+    Effect.gen(function* () {
       const expected: Co2Average = {
         id: 'f71d3153-3746-44f1-bc0b-0a7d92565efe',
         title: 'Grains',
@@ -63,8 +63,8 @@ describe('co2-repository', () => {
         timesPerYearAverage: 500,
       }
 
-      const repo = yield* $(Co2Repository)
-      const actual = yield* $(repo.getCo2AverageBySlug('test'))
+      const repo = yield* Co2Repository
+      const actual = yield* repo.getCo2AverageBySlug('test')
 
       expect(actual).toStrictEqual(Option.some(expected))
     }).pipe(

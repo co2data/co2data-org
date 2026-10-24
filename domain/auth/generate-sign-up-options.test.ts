@@ -22,8 +22,8 @@ const userAuthenticator = {
 }
 describe('generateSignUpOptionsEffect', () => {
   it('registers new users', () =>
-    Effect.gen(function* ($) {
-      const actual = yield* $(generateSignUpOptionsEffect('user'))
+    Effect.gen(function* () {
+      const actual = yield* generateSignUpOptionsEffect('user')
 
       expect(actual).toEqual({
         challenge: 'challenge',
@@ -37,8 +37,8 @@ describe('generateSignUpOptionsEffect', () => {
     ))
 
   it('registers existing users without authenticators', () =>
-    Effect.gen(function* ($) {
-      const actual = yield* $(generateSignUpOptionsEffect('user'))
+    Effect.gen(function* () {
+      const actual = yield* generateSignUpOptionsEffect('user')
 
       expect(actual).toEqual({
         challenge: 'challenge',
@@ -52,8 +52,10 @@ describe('generateSignUpOptionsEffect', () => {
     ))
 
   it('fails with already registered user', () =>
-    Effect.gen(function* ($) {
-      const actual = yield* $(generateSignUpOptionsEffect('user'), Effect.flip)
+    Effect.gen(function* () {
+      const actual = yield* generateSignUpOptionsEffect('user').pipe(
+        Effect.flip,
+      )
       expect(actual).toBeInstanceOf(AlreadyRegistered)
     }).pipe(
       runTest({

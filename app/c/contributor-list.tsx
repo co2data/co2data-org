@@ -4,7 +4,8 @@ import Link from 'next/link'
 import type { JSX } from 'react'
 import runtime from '@/adapter/effect/runtime'
 import Co2AverageCmp from '@/components/co2-average'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
+import type { Co2Average } from '@/domain/co2'
+import { getAllCo2Averages } from '@/domain/co2/repository'
 import { setLogLevelFromSearchParams } from '@/lib/utils'
 
 export default async function ContributorList(props: {
@@ -15,7 +16,7 @@ export default async function ContributorList(props: {
 }
 
 export function ContributorListEffect(props: { searchParams: SearchParams }) {
-  return Co2Repository.getAllCo2Averages.pipe(
+  return getAllCo2Averages.pipe(
     Effect.map(filter(props.searchParams.search)),
     Effect.map(render),
     Effect.withSpan('Render /c/'),

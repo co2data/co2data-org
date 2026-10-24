@@ -4,13 +4,13 @@ import type {
 } from '@simplewebauthn/server'
 import { isoBase64URL } from '@simplewebauthn/server/helpers'
 import { eq } from 'drizzle-orm'
-import { Effect, Layer, Option, Predicate } from 'effect'
+import { Context, Effect, Layer, Option, Predicate } from 'effect'
 import { DB, DbError } from '@/adapter/db'
 import * as schema from '@/adapter/db/schema'
 import { Base64String, type User } from '.'
 
-const make = Effect.gen(function* ($) {
-  const database = yield* $(DB)
+const make = Effect.gen(function* () {
+  const database = yield* DB
 
   return {
     createUser: (username: string) =>
@@ -25,7 +25,7 @@ const make = Effect.gen(function* ($) {
             ),
           ),
           Effect.filterOrFail(
-            Predicate.isNotNullable,
+            Predicate.isNotNullish,
             (_) =>
               new DbError({ cause: `Could not find created user ${username}` }),
           ),
@@ -46,7 +46,7 @@ const make = Effect.gen(function* ($) {
           }),
         )
         .pipe(
-          Effect.map(Option.fromNullable),
+          Effect.map(Option.fromNullishOr),
           Effect.map(Option.map(userFromDbToDomain)),
           Effect.tap((_) => Effect.logTrace(`id: ${username}`)),
           Effect.withSpan('getUserByName'),
@@ -94,10 +94,10 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export class UserRepository extends Effect.Tag('@services/UserRepository')<
+export class UserRepository extends Context.Service<
   UserRepository,
-  Effect.Effect.Success<typeof make>
->() {
+  Effect.Success<typeof make>
+>()('@services/UserRepository') {
   static Live = Layer.effect(this, make).pipe(Layer.provide(DB.Live))
   static Test = (DbTest: Layer.Layer<DB>) =>
     Layer.effect(this, make).pipe(Layer.provide(DbTest))
@@ -121,7 +121,7 @@ type UserWithAuthenticators = {
 function userFromDbToDomain(user: UserWithAuthenticators): User {
   return {
     ...user,
-    currentChallenge: Option.fromNullable(user.currentChallenge),
+    currentChallenge: Option.fromNullOr(user.currentChallenge),
     authenticators: user.authenticators.map((_) => ({
       counter: _.counter as unknown as number,
       credentialBackedUp: _.credentialBackedUp,

@@ -19,22 +19,22 @@ import Warning from '../warning'
 const onLogin = async (_prevState: unknown, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
-    return { _tag: 'Left', left: new MissingUserName() } as const
+    return { _tag: 'Failure', failure: new MissingUserName() } as const
   }
   const resp = await generateLoginOptions(username.toString())
 
-  if (resp._tag === 'Left') {
+  if (resp._tag === 'Failure') {
     return resp
   }
 
   let asseResp: AuthenticationResponseJSON
   try {
-    asseResp = await startAuthentication({ optionsJSON: resp.right })
+    asseResp = await startAuthentication({ optionsJSON: resp.value })
   } catch (error) {
     console.error('Error at starting authentication:', error)
     return {
-      _tag: 'Left',
-      left: new AuthError({ cause: `StartAuthenticationFailed: ${error}` }),
+      _tag: 'Failure',
+      failure: new AuthError({ cause: `StartAuthenticationFailed: ${error}` }),
     } as const
   }
 
@@ -54,7 +54,7 @@ export default function Form(props: {
 }) {
   const [state, formAction] = useActionState(onLogin, undefined)
 
-  if (state && state._tag === 'Right') {
+  if (state && state._tag === 'Success') {
     toastId = toast(
       <>
         <Check
@@ -73,10 +73,10 @@ export default function Form(props: {
     <form action={formAction}>
       <CardContent>
         {props.children}
-        {state && state._tag === 'Left' && (
+        {state && state._tag === 'Failure' && (
           <Warning className="mt-4">
             {pipe(
-              state.left,
+              state.failure,
               valueTags({
                 MissingUserNameError: (_cause) =>
                   'User name is empty. Please insert your user name.',

@@ -4,15 +4,13 @@ import { describe, expect, it } from 'vitest'
 import { DB } from '@/adapter/db'
 import type { Source } from '@/domain/source'
 import { makeSource } from '@/domain/source/example-data'
-import { SourceRepository } from './repository'
+import { getAllSourcesByCo2ProducerId, SourceRepository } from './repository'
 
 describe('source repository', () => {
   describe('getAllByProducerId', () => {
     it('takes happy path', () =>
-      Effect.gen(function* ($) {
-        const actual = yield* $(
-          SourceRepository.getAllSourcesByCo2ProducerId('1'),
-        )
+      Effect.gen(function* () {
+        const actual = yield* getAllSourcesByCo2ProducerId('1')
         expect(actual).toMatchInlineSnapshot(`
           [
             {
@@ -51,10 +49,8 @@ describe('source repository', () => {
       }).pipe(runTest(makeSource())))
 
     it('transforms markdown to html in description', () =>
-      Effect.gen(function* ($) {
-        const actual = yield* $(
-          SourceRepository.getAllSourcesByCo2ProducerId('1'),
-        )
+      Effect.gen(function* () {
+        const actual = yield* getAllSourcesByCo2ProducerId('1')
         expect(actual).toMatchInlineSnapshot(`
           [
             {

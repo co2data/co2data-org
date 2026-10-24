@@ -1,33 +1,26 @@
-import {
-  Config,
-  ConfigProvider,
-  Data,
-  Effect,
-  Exit,
-  HashSet,
-  Layer,
-  Array as ReadonlyArray,
-} from 'effect'
+import { Config, ConfigProvider, Effect, Equal, Exit, HashSet } from 'effect'
 import { describe, expect, test } from 'vitest'
 import { DbError } from '../db'
 
 describe('effect basics', () => {
   test('error handling', async () => {
-    const actual = await Effect.tryPromise({
-      try: () => Promise.reject('test'),
-      catch: (cause) => new DbError({ cause }),
-    }).pipe(Effect.runPromiseExit)
+    const actual = await Effect.runPromiseExit(
+      Effect.tryPromise({
+        try: () => Promise.reject('test'),
+        catch: (cause) => new DbError({ cause }),
+      }),
+    )
 
     expect(actual).toStrictEqual(Exit.fail(new DbError({ cause: 'test' })))
   })
 
   test('get config that is provided', () => {
-    const mockConfigProvider = ConfigProvider.fromMap(
-      new Map([['MY_ENV_VAR', 'localhost']]),
-    )
-    const layer = Layer.setConfigProvider(mockConfigProvider)
+    const mockConfigProvider = ConfigProvider.fromEnvRecord({
+      MY_ENV_VAR: 'localhost',
+    })
+    const layer = ConfigProvider.layer(mockConfigProvider)
 
-    const actual = Config.string('MY_ENV_VAR').pipe(
+    const actual = Config.String('MY_ENV_VAR').pipe(
       Effect.provide(layer),
       Effect.runSync,
     )
@@ -42,49 +35,27 @@ describe('effect basics', () => {
       { devices: [{ token: 'more' }] },
       { devices: [{ token: 'hi' }, { token: 'more' }] },
     ]
-    const tokens = HashSet.fromIterable(testData).pipe(
-      HashSet.flatMap((guardian) =>
-        HashSet.fromIterable(guardian.devices ?? []),
-      ),
-      HashSet.map((device) => device.token),
-      ReadonlyArray.fromIterable,
-    )
-    expect(tokens).toMatchInlineSnapshot(`
-      [
-        "ho",
-        "hi",
-        "more",
-      ]
-    `)
+    const tokens = testData
+      .flatMap((guardian) => guardian.devices ?? [])
+      .reduce(
+        (acc, device) => acc.pipe(HashSet.add(device)),
+        HashSet.empty<{ token: string }>(),
+      )
+      .pipe(
+        HashSet.map((device) => device.token),
+        Array.from,
+      )
+    expect(tokens.sort()).toStrictEqual(['hi', 'ho', 'more'])
   })
 
   test('HashSet equality with devices', () => {
     const guardian = { devices: [{ token: 'hi' }, { token: 'more' }] }
 
-    const devices = HashSet.fromIterable(
-      guardian.devices.map(Data.struct) ?? [],
-    ).pipe(
-      HashSet.add(Data.struct({ token: 'more' })),
-      ReadonlyArray.fromIterable,
-    )
-    expect(devices).toMatchInlineSnapshot(`
-      [
-        {
-          "token": "more",
-        },
-        {
-          "token": "hi",
-        },
-      ]
-    `)
-  })
-  test('Equality with devices without HashSet', () => {
-    const guardian = { devices: [{ token: 'hi' }, { token: 'more' }] }
-
     const devices = HashSet.fromIterable(guardian.devices ?? []).pipe(
       HashSet.add({ token: 'more' }),
-      ReadonlyArray.fromIterable,
+      Array.from,
     )
-    expect(devices.length).toBe(3)
+    expect(devices.length).toBe(2)
+    expect(Equal.equals(devices[0], { token: 'more' })).toBe(true)
   })
 })

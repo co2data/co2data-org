@@ -1,7 +1,8 @@
 import { cx } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
-import { identity, Logger, LogLevel, Option } from 'effect'
-import { dual } from 'effect/Function'
+import { Effect, Option, References } from 'effect'
+import { dual, identity } from 'effect/Function'
+import { type LogLevel, values as logLevelValues } from 'effect/LogLevel'
 
 export function cn(...inputs: ClassValue[]) {
   return cx(inputs)
@@ -24,18 +25,19 @@ export function format(
 export function setLogLevelFromSearchParams(searchParams: {
   logLevel?: string | undefined
 }) {
-  const logLevel = searchParams.logLevel as LogLevel.Literal
+  const logLevel = searchParams.logLevel
 
-  if (
-    logLevel === undefined ||
-    !LogLevel.allLevels.some((ll) => ll._tag === logLevel)
-  ) {
+  if (logLevel === undefined || !isLogLevel(logLevel)) {
     return identity
   }
 
-  return Logger.withMinimumLogLevel(LogLevel.fromLiteral(logLevel))
+  return <A, E, R>(effect: Effect.Effect<A, E, R>) =>
+    Effect.provideService(effect, References.MinimumLogLevel, logLevel)
 }
 
+function isLogLevel(value: string): value is LogLevel {
+  return (logLevelValues as ReadonlyArray<string>).includes(value)
+}
 export const mapGetOrNull: {
   <T, R>(onSome: (arg: T) => R): (option: Option.Option<T>) => R | null
   <T, R>(option: Option.Option<T>, onSome: (arg: T) => R): R | null

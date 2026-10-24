@@ -16,9 +16,9 @@ const makeOrmClient = () => {
   return ormClient
 }
 
-export class OrmClient extends Context.Tag('@adapter/db/orm-client')<
+export class OrmClient extends Context.Service<
   OrmClient,
   LibSQLDatabase<typeof schema>
->() {
+>()('@adapter/db/orm-client') {
   static LibSqlDrizzle = Layer.succeed(this, makeOrmClient())
 }

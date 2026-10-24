@@ -1,18 +1,18 @@
-import { Config, Effect, Layer, Secret } from 'effect'
+import { Config, Context, Effect, Layer, Redacted } from 'effect'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
-const getSessionEffect = (password: Secret.Secret) =>
+const getSessionEffect = (password: Redacted.Redacted) =>
   Effect.tryPromise(async () =>
     // @ts-expect-error
     getIronSession<{ username?: string }>(await cookies(), {
-      password: Secret.value(password),
+      password: Redacted.value(password),
       cookieName: 'user-session',
     }),
   ).pipe(Effect.orDie)
 
-const make = Effect.gen(function* ($) {
-  const sessionPassword = yield* $(Config.secret('SESSION_PASSWORD'))
+const make = Effect.gen(function* () {
+  const sessionPassword = yield* Config.Redacted('SESSION_PASSWORD')
   return {
     getSession: () =>
       getSessionEffect(sessionPassword).pipe(
@@ -39,9 +39,9 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export class Session extends Effect.Tag('@services/Session')<
+export class Session extends Context.Service<
   Session,
-  Effect.Effect.Success<typeof make>
->() {
+  Effect.Success<typeof make>
+>()('@services/Session') {
   static Live = Layer.effect(this, make)
 }

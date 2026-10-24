@@ -1,7 +1,6 @@
 'use client'
 import { startRegistration } from '@simplewebauthn/browser'
 import type { RegistrationResponseJSON } from '@simplewebauthn/server'
-import { pipe } from 'effect/Function'
 import { valueTags } from 'effect/Match'
 import Link from 'next/link'
 import type React from 'react'
@@ -15,18 +14,18 @@ import Warning from '../warning'
 const onSignUp = async (_prevState: unknown, formData: FormData) => {
   const username = formData.get('username')
   if (!username) {
-    return { _tag: 'Left', left: new MissingUserName() } as const
+    return { _tag: 'Failure', failure: new MissingUserName() } as const
   }
 
   const resp = await generateSignUpOptions(username.toString())
 
-  if (resp._tag === 'Left') {
+  if (resp._tag === 'Failure') {
     return resp
   }
 
   let attResp: RegistrationResponseJSON
   try {
-    attResp = await startRegistration({ optionsJSON: resp.right })
+    attResp = await startRegistration({ optionsJSON: resp.value })
   } catch (error: unknown) {
     console.error('Error:', error)
     if (
@@ -35,9 +34,12 @@ const onSignUp = async (_prevState: unknown, formData: FormData) => {
       'name' in error &&
       error.name === 'InvalidStateError'
     ) {
-      return { _tag: 'Left', left: new AlreadyRegistered() } as const
+      return { _tag: 'Failure', failure: new AlreadyRegistered() } as const
     }
-    return { _tag: 'Left', left: new AuthError({ cause: error }) } as const
+    return {
+      _tag: 'Failure',
+      failure: new AuthError({ cause: error }),
+    } as const
   }
 
   return verifySignUp({
@@ -56,24 +58,21 @@ export default function Form(props: {
     <form action={formAction}>
       <CardContent className="grid gap-4">
         {props.children}
-        {state && state._tag === 'Left' && (
+        {state && state._tag === 'Failure' && (
           <Warning>
-            {pipe(
-              state.left,
-              valueTags({
-                AlreadyRegisteredError: (_) => (
-                  <>
-                    A user with this name already exists. Choose a different
-                    name or <Link href={'/login'}>login</Link> instead.
-                  </>
-                ),
-                AuthError: (_) => {
-                  console.error('Auth error', _)
-                  return 'Ooops, that did not work. Try again later.'
-                },
-                MissingUserNameError: (_) => 'User name is missing.',
-              }),
-            )}
+            {valueTags(state.failure, {
+              AlreadyRegisteredError: (_) => (
+                <>
+                  A user with this name already exists. Choose a different name
+                  or <Link href={'/login'}>login</Link> instead.
+                </>
+              ),
+              AuthError: (_) => {
+                console.error('Auth error', _)
+                return 'Ooops, that did not work. Try again later.'
+              },
+              MissingUserNameError: (_) => 'User name is missing.',
+            })}
           </Warning>
         )}
       </CardContent>

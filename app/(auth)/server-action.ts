@@ -6,9 +6,9 @@ import type {
   AuthenticatorAssertionResponseJSON,
   RegistrationResponseJSON,
 } from '@simplewebauthn/server'
-import { Effect, Either, flow, Option } from 'effect'
+import { Effect, flow, Option } from 'effect'
 import { redirect } from 'next/navigation'
-import { runServerAction } from '@/adapter/effect'
+import { runServerAction, type ServerActionPayload } from '@/adapter/effect'
 import { AuthError, PassKey } from '@/adapter/pass-key'
 import { Session } from '@/adapter/session'
 import { generateLoginOptionsEffect } from '@/domain/auth/generate-login-options'
@@ -33,16 +33,19 @@ export async function verifyLogin(body: {
   type: 'public-key'
   username: string
 }) {
-  return Effect.gen(function* ($) {
-    const userRepo = yield* $(UserRepository)
+  return Effect.gen(function* () {
+    const userRepo = yield* UserRepository
 
-    const user = yield* $(
-      userRepo.findByUsername(body.username),
-      Effect.flatMap(Effect.mapError(() => new NoUserFound())),
-    )
+    const maybeUser = yield* userRepo
+      .findByUsername(body.username)
+      .pipe(Effect.mapError(() => new NoUserFound()))
+    if (Option.isNone(maybeUser)) {
+      return yield* new NoUserFound()
+    }
+    const user = maybeUser.value
 
     if (Option.isNone(user.currentChallenge)) {
-      return yield* $(new NoChallengeOnUser())
+      return yield* new NoChallengeOnUser()
     }
 
     const authenticator = user.authenticators.find(
@@ -50,26 +53,24 @@ export async function verifyLogin(body: {
     )
 
     if (!authenticator) {
-      return yield* $(new CouldNotFindAuthenticator())
+      return yield* new CouldNotFindAuthenticator()
     }
 
-    const verification = yield* $(
-      PassKey.verifyAuthenticationResponse({
-        body: body,
-        expectedChallenge: user.currentChallenge.value,
-        authenticator,
-      }),
-    )
+    const verification = yield* PassKey.verifyAuthenticationResponse({
+      body: body,
+      expectedChallenge: user.currentChallenge.value,
+      authenticator,
+    })
 
     const { verified } = verification
 
     if (verified) {
       const { authenticationInfo } = verification
-      yield* $(userRepo.updateCounter(user.id, authenticationInfo.newCounter))
-      yield* $(Session.setSession(user.username))
+      yield* userRepo.updateCounter(user.id, authenticationInfo.newCounter)
+      yield* Session.use((session) => session.setSession(user.username))
       return { verified }
     }
-    return yield* $(new NotVerified())
+    return yield* new NotVerified()
   }).pipe(
     Effect.catchTags({
       DbError: (cause) => new AuthError({ cause }),
@@ -90,38 +91,39 @@ export const generateSignUpOptions = flow(
 export async function verifySignUp(
   body: RegistrationResponseJSON & { username: string },
 ) {
-  return Effect.gen(function* ($) {
-    const userRepo = yield* $(UserRepository)
-    const user = yield* $(
-      userRepo.findByUsername(body.username),
-      Effect.flatMap(Effect.mapError(() => new NoUserFound())),
-    )
+  return Effect.gen(function* () {
+    const userRepo = yield* UserRepository
+    const maybeUser = yield* userRepo
+      .findByUsername(body.username)
+      .pipe(Effect.mapError(() => new NoUserFound()))
+    if (Option.isNone(maybeUser)) {
+      return yield* new NoUserFound()
+    }
+    const user = maybeUser.value
 
     if (Option.isNone(user.currentChallenge)) {
-      return yield* $(new NoChallengeOnUser())
+      return yield* new NoChallengeOnUser()
     }
 
-    const verification = yield* $(
-      PassKey.verifyRegistrationResponse({
-        responseBody: body,
-        currentChallenge: user.currentChallenge.value,
-      }),
-    )
+    const verification = yield* PassKey.verifyRegistrationResponse({
+      responseBody: body,
+      currentChallenge: user.currentChallenge.value,
+    })
 
     const { verified, registrationInfo } = verification
 
     if (verified && registrationInfo) {
-      yield* $(userRepo.addAuthenticator(user.id, registrationInfo))
+      yield* userRepo.addAuthenticator(user.id, registrationInfo)
       return { verified }
     }
-    return yield* $(new NotVerified())
+    return yield* new NotVerified()
   })
     .pipe(
       Effect.catchTags({
         DbError: (cause) => new AuthError({ cause }),
         NoChallengeOnUserError: (cause) => new AuthError({ cause }),
         NoUserFoundError: (cause) => new AuthError({ cause }),
-        UnknownException: (cause) => new AuthError({ cause }),
+        UnknownError: (cause) => new AuthError({ cause }),
         NotVerifiedError: (cause) => new AuthError({ cause }),
       }),
       runServerAction('verifySignUp'),
@@ -129,9 +131,14 @@ export async function verifySignUp(
     .then(redirectRight('/sign-up-success', (_) => _.verified))
 }
 
-function redirectRight<R, L>(to: string, predicate?: (p: R) => boolean) {
-  return (result: Either.Either<R, L>) => {
-    if (Either.isRight(result) && predicate ? predicate(result.right) : true) {
+function redirectRight<A, E>(
+  to: string,
+  predicate?: (p: A) => boolean,
+): (
+  result: ServerActionPayload<A, E>,
+) => Promise<never> | ServerActionPayload<A, E> {
+  return (result) => {
+    if (result._tag === 'Success' && (!predicate || predicate(result.value))) {
       return redirect(to)
     }
     return result

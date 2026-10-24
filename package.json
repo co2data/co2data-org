@@ -23,7 +23,7 @@
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
-    "@effect/opentelemetry": "^0.63.0",
+    "@effect/opentelemetry": "^4.0.6",
     "@libsql/client": "^0.17.3",
     "@next/bundle-analyzer": "16.2.6",
     "@opentelemetry/exporter-trace-otlp-http": "0.217.0",
@@ -44,7 +44,7 @@
     "class-variance-authority": "^0.7.1",
     "convert": "^7.0.0",
     "drizzle-orm": "^0.45.2",
-    "effect": "3.21.2",
+    "effect": "^4.0.6",
     "geist": "^1.7.0",
     "iron-session": "^8.0.4",
     "lucide-react": "^1.14.0",

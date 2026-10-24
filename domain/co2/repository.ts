@@ -1,13 +1,13 @@
 import { desc, eq } from 'drizzle-orm'
-import { Effect, Layer, Option, Array as ReadonlyArray } from 'effect'
+import { Context, Effect, Layer, Option, Array as ReadonlyArray } from 'effect'
 import { DB } from '@/adapter/db'
 import {
   co2Average,
   type Co2Average as DbCo2Average,
 } from '@/adapter/db/schema'
 
-const make = Effect.gen(function* ($) {
-  const db = yield* $(DB)
+const make = Effect.gen(function* () {
+  const db = yield* DB
 
   return {
     getAllCo2Averages: db.co2Averages
@@ -27,19 +27,26 @@ const make = Effect.gen(function* ($) {
   }
 })
 
-export class Co2Repository extends Effect.Tag('@services/Co2Repository')<
+export class Co2Repository extends Context.Service<
   Co2Repository,
-  Effect.Effect.Success<typeof make>
->() {
+  Effect.Success<typeof make>
+>()('@services/Co2Repository') {
   static Live = Layer.effect(this, make).pipe(Layer.provide(DB.Live))
   static Test = (DbTest: Layer.Layer<DB>) =>
     Layer.effect(this, make).pipe(Layer.provide(DbTest))
 }
 
+export const getAllCo2Averages = Co2Repository.use(
+  (repo) => repo.getAllCo2Averages,
+)
+
+export const getCo2AverageBySlug = (slug: string) =>
+  Co2Repository.use((repo) => repo.getCo2AverageBySlug(slug))
+
 function co2AverageFromDbToDomain(co2Average: DbCo2Average) {
   return {
     ...co2Average,
-    description: Option.fromNullable(co2Average.description),
+    description: Option.fromNullOr(co2Average.description),
     avgPerYear: Number(co2Average.avgPerYear ?? 1),
     avgPerUnit: co2Average.avgPerUnit ?? 1,
   }

@@ -7,8 +7,10 @@ import { UserRepository } from './repository'
 
 describe('user repository', () => {
   it('finds user by email', () =>
-    Effect.gen(function* ($) {
-      const user = yield* $(UserRepository.findByUsername('philip@co2data.org'))
+    Effect.gen(function* () {
+      const user = yield* UserRepository.use((repo) =>
+        repo.findByUsername('philip@co2data.org'),
+      )
       expect(user).toEqual(Option.some(makeUser()))
     }).pipe(
       runTest({
@@ -22,8 +24,10 @@ describe('user repository', () => {
     ))
 
   it('finds no user by email', () =>
-    Effect.gen(function* ($) {
-      const user = yield* $(UserRepository.findByUsername('unknown@user.org'))
+    Effect.gen(function* () {
+      const user = yield* UserRepository.use((repo) =>
+        repo.findByUsername('unknown@user.org'),
+      )
       expect(user).toStrictEqual(Option.none())
     }).pipe(
       runTest({

@@ -44,7 +44,7 @@ type _DB = {
   ) => Effect.Effect<A, DbError>
 }
 
-const make = Effect.gen(function* (_) {
+const make = Effect.gen(function* () {
   const ormClient = yield* OrmClient
 
   const database = ormClient
@@ -141,7 +141,7 @@ const make = Effect.gen(function* (_) {
   })
 })
 
-export class DB extends Context.Tag('@adapter/db')<DB, _DB>() {
+export class DB extends Context.Service<DB, _DB>()('@adapter/db') {
   // Would be needed with Effect.Tag
   // static readonly query = <A>(
   // 	body: (client: DrizzleD1Database<Record<string, never>>) => Promise<A>,

@@ -1,6 +1,6 @@
 import { Effect, Metric } from 'effect'
 import runtime from '@/adapter/effect/runtime'
-import { type Co2Average, Co2Repository } from '@/domain/co2'
+import { type Co2Average, getAllCo2Averages } from '@/domain/co2'
 import { baseUrl } from '../config'
 
 export const dynamic = 'force-dynamic'
@@ -10,10 +10,10 @@ const _dbErrorCount = Metric.counter('db_error_count').pipe(
 )
 
 export async function GET() {
-  return Co2Repository.getAllCo2Averages.pipe(
+  return getAllCo2Averages.pipe(
     Effect.map(renderResponse),
     // Metric.trackErrorWith(dbErrorCount, constant(1)),  // I don't know how Metrics work...
-    Effect.catchAll((error) =>
+    Effect.catch((error) =>
       Effect.succeed(new Response(error._tag, { status: 500 })),
     ),
     runtime.runPromise,

@@ -4,29 +4,26 @@ import { UserRepository } from '@/domain/user/repository'
 import { AlreadyRegistered } from '../../app/(auth)/errors'
 
 export function generateSignUpOptionsEffect(username: string) {
-  return Effect.gen(function* ($) {
-    const userRepo = yield* $(UserRepository)
+  return Effect.gen(function* () {
+    const userRepo = yield* UserRepository
 
-    const existingUser = yield* $(userRepo.findByUsername(username))
+    const existingUser = yield* userRepo.findByUsername(username)
 
     if (
       Option.isSome(existingUser) &&
       existingUser.value.authenticators.length > 0
     ) {
-      yield* $(new AlreadyRegistered())
+      yield* new AlreadyRegistered()
     }
 
     const user = Option.isSome(existingUser)
       ? existingUser.value
-      : yield* $(userRepo.createUser(username))
-
-    const options = yield* $(
-      PassKey.generateRegistrationOptions({
-        userId: user.id,
-        userName: user.username,
-      }),
-    )
-    yield* $(userRepo.setCurrentChallenge(user.id, options.challenge))
+      : yield* userRepo.createUser(username)
+    const options = yield* PassKey.generateRegistrationOptions({
+      userId: user.id,
+      userName: user.username,
+    })
+    yield* userRepo.setCurrentChallenge(user.id, options.challenge)
     return options
   }).pipe(
     Effect.catchTags({
