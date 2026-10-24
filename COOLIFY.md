@@ -3,21 +3,24 @@
 ## Railpack: pnpm native module workaround
 
 Railpack (as of Coolify's current version) installs pnpm as a **standalone
-binary via mise**. That binary runs on an old embedded Node (18.5.0 for
-pnpm 8.10.5, 20.11.1 for pnpm 10.x) instead of the project's Node 24. During
+binary via mise**. That binary can run against an embedded Node that differs
+from the project's Node 24 (this previously happened with pnpm 8/10: pnpm 8 ran
+on Node 18.5.0, pnpm 10 on Node 20.11.1). During
 `pnpm install --frozen-lockfile` it silently skips optional native packages
-whose `engines` don't match that embedded Node — which drops
+whose `engines` don't match the reported Node — which can drop
 `@rolldown/binding-linux-x64-gnu` (needed by vite/vitest), `sharp`,
-and `@tailwindcss/oxide-*`, and breaks the build with:
+and `@tailwindcss/oxide-*`, and break the build with:
 
 ```
 Error: Cannot find native binding.
 Cannot find module '@rolldown/binding-linux-x64-gnu'
 ```
 
-`railpack.json` fixes this by installing pnpm **on the real Node 24** via npm
-and running the frozen install with that pnpm (same behavior as pre-0.38
-Railpack). If Railpack changes the install step again, revisit this file.
+`railpack.json` avoids any doubt by installing pnpm **on the real Node 24** via
+npm and running the frozen install with that pnpm. The pinned pnpm version
+(pnpm 12.x, matching `packageManager` in `package.json` and `pnpm_12` in
+`flake.nix`) must be updated in all three places together. If Railpack changes
+the install step again, revisit this file.
 
 ## Setup Instructions
 

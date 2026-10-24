@@ -53,8 +53,11 @@
 
           devShells.default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
-              nodejs
-              pnpm
+              # Explicit stable majors: Node 24 (active LTS) and pnpm 12 (latest stable line).
+              # Avoid bare `nodejs`/`pnpm` aliases so both dev shell and Coolify/railpack
+              # builds (via package.json engines/packageManager) stay on the same versions.
+              nodejs_24
+              pnpm_12
               biome
               playwright-test
             ];

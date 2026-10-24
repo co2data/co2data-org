@@ -1,0 +1,14 @@
+autoInstallPeers: true
+excludeLinksFromLockfile: false
+
+# Allow selected packages to run their build scripts (pnpm >= 11: allowBuilds replaces onlyBuiltDependencies)
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  msgpackr-extract: true
+  protobufjs: true
+  sharp: true
+
+overrides:
+  '@types/react': 19.2.14
+  '@types/react-dom': 19.2.3

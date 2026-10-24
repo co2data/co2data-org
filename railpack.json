@@ -4,7 +4,7 @@
     "install": {
       "commands": [
         {
-          "cmd": "npm install -g --prefix /npmpnpm pnpm@8.10.5",
+          "cmd": "npm install -g --prefix /npmpnpm pnpm@12.9.0",
           "customName": "install pnpm on real node (native optional deps fix)"
         },
         { "path": "/npmpnpm/bin" },

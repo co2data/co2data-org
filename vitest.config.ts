@@ -4,7 +4,6 @@ import { defineConfig } from 'vitest/config'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // @ts-ignore
   plugins: [react()],
   test: {
     setupFiles: ['./setup.ts'],

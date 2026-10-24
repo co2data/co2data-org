@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test('has search', async ({ page }) => {
   await page.goto('/')
@@ -12,7 +12,7 @@ test('finds a contributor', async ({ page }) => {
   await page.getByLabel('Search').fill('Pork')
 
   await expect(
-    page.getByRole('main').getByRole('link', { name: 'Pork' })
+    page.getByRole('main').getByRole('link', { name: 'Pork' }),
   ).toBeInViewport()
 })
 
@@ -23,6 +23,6 @@ test('opens a contributor', async ({ page }) => {
 
   await expect(page).toHaveURL(/pork/i)
   await expect(
-    page.getByRole('heading', { level: 1, name: /pork/i })
+    page.getByRole('heading', { level: 1, name: /pork/i }),
   ).toBeVisible()
 })
