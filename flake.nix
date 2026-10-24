@@ -58,7 +58,6 @@
               # builds (via package.json engines/packageManager) stay on the same versions.
               nodejs_24
               pnpm_12
-              biome
               playwright-test
             ];
 
