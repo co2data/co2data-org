@@ -13,8 +13,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@/components': path.resolve(__dirname, './app/_components'),
-      '@': path.resolve(__dirname, './'),
+      '@/components': path.resolve(import.meta.dirname, './app/_components'),
+      '@': path.resolve(import.meta.dirname, './'),
     },
   },
 })
